@@ -1,24 +1,17 @@
 <template>
-     <transition name="modal">
+  <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-
-        <!-- 모달 헤더 -->
+          <!-- 모달 헤더 -->
           <div class="modal-header">
-            <slot name="header">
-              default header
-            </slot>
+            <slot name="header">default header</slot>
           </div>
 
-        <!-- 모달 바디 -->
+          <!-- 모달 바디 -->
           <div class="modal-body">
-            <slot name="body">
-              default body
-            </slot>
+            <slot name="body">default body</slot>
           </div>
-
-        
         </div>
       </div>
     </div>
@@ -26,9 +19,7 @@
 </template>
 
 <script>
-export default {
-
-};
+export default {};
 </script>
 
 <style>
@@ -39,9 +30,9 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: table;
-  transition: opacity .3s ease;
+  transition: opacity 0.3s ease;
 }
 
 .modal-wrapper {
@@ -55,8 +46,8 @@ export default {
   padding: 20px 30px;
   background-color: #fff;
   border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
 

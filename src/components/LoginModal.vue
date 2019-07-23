@@ -11,49 +11,73 @@
     </Modal>
 
     <!-- 회원가입 모달 -->
-        <Modal v-if="this.$store.state.ModalRegis" @close="closeRegis"  >
-            <h3 slot="header">
-            회원가입
-            <i class="closeBtn fas fa-times" @click="closeRegis"></i>
-            </h3>
-            <div slot='body' class = 'modalSize'>
-            <form v-on:submit="regisservice">
-                <v-layout align-center justify-center row wrap>
-                    <v-flex xs4 text-xs-center>
-                        <label>아이디</label>
-                    </v-flex>
-                    <v-flex xs8>
-                        <input class ='inputBox' type='text' v-model='email' placeholder="Email"><br/>
-                    </v-flex>
-                    <v-flex xs4 text-xs-center>
-                        <label>이름</label>
-                    </v-flex>
-                    <v-flex xs8>
-                        <input class ='inputBox' type='text' v-model='name' placeholder="Name"><br/>
-                    </v-flex>
-                    <v-flex xs4 text-xs-center>
-                        <label>비밀번호</label>
-                    </v-flex>
-                    <v-flex xs8>
-                    <input class ='inputBox' type='password' v-model='password' placeholder="Password">
-                    </v-flex>
-                    <v-flex xs4 text-xs-center>
-                        <label>비번확인</label>
-                    </v-flex>
-                    <v-flex xs8>
-                        <input class ='inputBox' type='password' v-model='passwordchk' @keyup="chkpassword" placeholder="Password Conform">
-                    </v-flex>
-                    <v-flex>
-                        <input type="submit"  class ='submitbtn' value='가입하기'><br/>
-                    </v-flex>
-                    <v-flex>
-                        <lable class = 'modaltext'>{{ samechk }}</lable>
-                    </v-flex>
-                </v-layout>    
-            </form>
-            </div>
-        </Modal>
-    </div>
+    <Modal v-if="this.$store.state.ModalRegis" @close="closeRegis">
+      <h3 slot="header">
+        회원가입
+        <i class="closeBtn fas fa-times" @click="closeRegis"></i>
+      </h3>
+      <div slot="body" class="modalSize">
+        <form v-on:submit="regisservice">
+          <v-layout align-center justify-center row wrap>
+            <v-flex xs4 text-xs-center>
+              <label>아이디</label>
+            </v-flex>
+            <v-flex xs8>
+              <input
+                class="inputBox"
+                type="text"
+                v-model="email"
+                placeholder="Email"
+              />
+              <br />
+            </v-flex>
+            <v-flex xs4 text-xs-center>
+              <label>이름</label>
+            </v-flex>
+            <v-flex xs8>
+              <input
+                class="inputBox"
+                type="text"
+                v-model="name"
+                placeholder="Name"
+              />
+              <br />
+            </v-flex>
+            <v-flex xs4 text-xs-center>
+              <label>비밀번호</label>
+            </v-flex>
+            <v-flex xs8>
+              <input
+                class="inputBox"
+                type="password"
+                v-model="password"
+                placeholder="Password"
+              />
+            </v-flex>
+            <v-flex xs4 text-xs-center>
+              <label>비번확인</label>
+            </v-flex>
+            <v-flex xs8>
+              <input
+                class="inputBox"
+                type="password"
+                v-model="passwordchk"
+                @keyup="chkpassword"
+                placeholder="Password Conform"
+              />
+            </v-flex>
+            <v-flex>
+              <input type="submit" class="submitbtn" value="가입하기" />
+              <br />
+            </v-flex>
+            <v-flex>
+              <lable class="modaltext">{{ samechk }}</lable>
+            </v-flex>
+          </v-layout>
+        </form>
+      </div>
+    </Modal>
+  </div>
 </template>
 
 <script>
@@ -63,51 +87,51 @@ import FirebaseService from "@/services/FirebaseService";
 import store from "../store.js";
 
 export default {
-	name: "loginModal",
-	components: {
-		LoginService,
-		Modal
-	},
-	data() {
-		return {
-			email: "",
-			password: "",
-			regisModal: false,
-			passwordchk: "",
-			samechk: "",
+  name: "loginModal",
+  components: {
+    LoginService,
+    Modal
+  },
+  data() {
+    return {
+      email: "",
+      password: "",
+      regisModal: false,
+      passwordchk: "",
+      samechk: "",
       name: "",
-      color :false,
-		};
-	},
-	methods: {
-		closeRegis() {
-			store.state.ModalRegis = false;
-		},
-		closeModal() {
-			this.$store.state.ModalLogin = false;
-		},
-		async regisservice(e) {
-			e.preventDefault();
-			if (this.password === this.passwordchk) {
-				FirebaseService.signUpEmail(this.email, this.password, this.name);
-				this.samechk = "가입이 완료되었습니다.";
-				this.$store.state.ModalRegis = false;
-			} else {
-				this.samechk = "비밀번호가 일치하지 않습니다.";
-			}
-		},
-		modal(b) {
-			this.$store.state.ModalLogin = !this.$store.state.ModalLogin;
-			this.$store.state.ModalRegis = !this.$store.state.ModalRegis;
+      color: false
+    };
+  },
+  methods: {
+    closeRegis() {
+      store.state.ModalRegis = false;
     },
-    chkpassword(){
-      if(this.password === this.passwordchk){
+    closeModal() {
+      this.$store.state.ModalLogin = false;
+    },
+    async regisservice(e) {
+      e.preventDefault();
+      if (this.password === this.passwordchk) {
+        FirebaseService.signUpEmail(this.email, this.password, this.name);
+        this.samechk = "가입이 완료되었습니다.";
+        this.$store.state.ModalRegis = false;
+      } else {
+        this.samechk = "비밀번호가 일치하지 않습니다.";
+      }
+    },
+    modal(b) {
+      this.$store.state.ModalLogin = !this.$store.state.ModalLogin;
+      this.$store.state.ModalRegis = !this.$store.state.ModalRegis;
+    },
+    chkpassword() {
+      if (this.password === this.passwordchk) {
         this.samechk = "비밀번호가 일치합니다.";
-      }else{
+      } else {
         this.samechk = "비밀번호가 일치하지 않습니다.";
       }
     }
-	}
+  }
 };
 </script>
 
@@ -141,7 +165,6 @@ a {
   border-radius: 25px;
   margin-bottom: 5px;
   margin-top: 30px;
-  
 }
 
 .modaltext {
@@ -153,18 +176,16 @@ a {
   height: 260px;
 }
 
-.closeBtn{
-    float:right;
+.closeBtn {
+  float: right;
 }
 
- .theme--light .modal-mask .loginBtn{
-	background-color: rgb(223, 74, 49);
-    border-color: rgb(223, 74, 49);
-    width: 100%;
-    border-radius: 25px;
-    color: #fff;
-    font-weight: bold;
-  }
- 
- 
+.theme--light .modal-mask .loginBtn {
+  background-color: rgb(223, 74, 49);
+  border-color: rgb(223, 74, 49);
+  width: 100%;
+  border-radius: 25px;
+  color: #fff;
+  font-weight: bold;
+}
 </style>
