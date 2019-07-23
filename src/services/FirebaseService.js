@@ -7,7 +7,7 @@ import AppHeader from "../components/AppHeader.vue";
 
 const POSTS = "posts";
 const PORTFOLIOS = "portfolios";
-const PERMISSIONS = "permissions";
+const PERM = "permissions";
 
 // Setup Firebase
 const config = {
@@ -27,14 +27,6 @@ var signInLog = firebase.functions().httpsCallable("signInLog");
 var signOutLog = firebase.functions().httpsCallable("signOutLog");
 
 export default {
-  data() {
-    return {
-      myEmail: "123"
-    };
-  },
-  components: {
-    AppHeader
-  },
   getPosts() {
     const postsCollection = firestore.collection(POSTS);
     return postsCollection
@@ -77,7 +69,7 @@ export default {
     });
   },
   getPermission(id) {
-    let idRef = db.collection(PERMISSIONS).doc(id);
+    let idRef = firestore.collection(PERM).doc(id);
     let res = {
       rank: "",
       find: false
@@ -86,9 +78,10 @@ export default {
       .get()
       .then(function(doc) {
         if (doc.exists) {
-          console.log("rank:", doc.data());
-          res.rank = doc.rank;
+          console.log("rank:", doc.data().rank);
+          res.rank = doc.data().rank;
           res.find = true;
+          return res;
         } else {
           // doc.data() will be undefined in this case
           console.log("No rank");
@@ -101,10 +94,36 @@ export default {
   },
   postPermission(id, permission) {
     return firestore
-      .collection(PERMISSIONS)
+      .collection(PERM)
       .doc(id)
       .set({
         rank: permission
+      });
+  },
+  updatePermission(id, permission) {
+    var idRef = firestore.collection(PERM).doc(id);
+    idRef
+      .get()
+      .then(function(doc) {
+        if (doc.data().rank !== "admin") {
+          // 권한 등급이 admin이 아니면 권한 등급 조절 불가!!
+          return;
+        }
+      })
+      .catch(function(error) {
+        console.log("Error getting rank:", error);
+      });
+    // Set the "rank" field of the city 'permission' ( team , visitor )
+    return idRef
+      .update({
+        rank: permission
+      })
+      .then(function() {
+        console.log("rank successfully updated!");
+      })
+      .catch(function(error) {
+        // The document probably doesn't exist.
+        console.error("Error updating rank: ", error);
       });
   },
   loginWithGoogle() {
@@ -114,10 +133,6 @@ export default {
       .signInWithPopup(provider)
       .then(function(result) {
         store.state.ModalLogin = false;
-        let uid = firebase.auth().currentUser.uid;
-        if (!getPermission(uid).find) {
-          postPermission(uid, "visitor");
-        }
 
         let accessToken = result.credential.accessToken;
         let user = result.user;
@@ -135,10 +150,6 @@ export default {
       .auth()
       .signInWithPopup(provider)
       .then(function(result) {
-        let uid = firebase.auth().currentUser.uid;
-        if (!getPermission(uid).find) {
-          postPermission(uid, "visitor");
-        }
         store.state.ModalLogin = false;
         let accessToken = result.credential.accessToken;
         let user = result.user;
@@ -161,10 +172,6 @@ export default {
           .signInWithEmailAndPassword(email, password)
           .then(
             function(result) {
-              let uid = firebase.auth().currentUser.uid;
-              if (!getPermission(uid).find) {
-                postPermission(uid, "visitor");
-              }
               store.state.ModalLogin = false;
               signInLog({ loginMsg: "메일로그인" }).then(function(result) {});
               alert("환영합니다");

@@ -77,6 +77,12 @@ export default {
   methods: {
     async loginWithGoogle() {
       const result = await FirebaseService.loginWithGoogle();
+      const res = await FirebaseService.getPermission(result.user.uid);
+
+      if (!res.find) {
+        await FirebaseService.postPermission(result.user.uid, "visitor");
+      }
+
       this.$store.accessToken = result.credential.accessToken;
       this.$store.user = result.user;
     },
