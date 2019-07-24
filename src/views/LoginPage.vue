@@ -80,7 +80,12 @@ export default {
       const res = await FirebaseService.getPermission(result.user.uid);
 
       if (!res.find) {
-        await FirebaseService.postPermission(result.user.uid, "visitor");
+        console.log(result);
+        await FirebaseService.postPermission(
+          result.user.uid,
+          "visitor",
+          result.user.email
+        );
       }
 
       this.$store.accessToken = result.credential.accessToken;

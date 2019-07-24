@@ -3,7 +3,6 @@ import "firebase/firestore";
 import "firebase/functions";
 import "firebase/auth";
 import store from "../store.js";
-import AppHeader from "../components/AppHeader.vue";
 
 const POSTS = "posts";
 const PORTFOLIOS = "portfolios";
@@ -68,6 +67,19 @@ export default {
       created_at: firebase.firestore.FieldValue.serverTimestamp()
     });
   },
+  getAllusers() {
+    const postsCollection = firestore.collection(PERM);
+    return postsCollection
+      .orderBy("created_at", "desc")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          data.created_at = new Date(data.created_at.toDate());
+          return data;
+        });
+      });
+  },
   getPermission(id) {
     let idRef = firestore.collection(PERM).doc(id);
     let res = {
@@ -92,12 +104,14 @@ export default {
       });
     return res;
   },
-  postPermission(id, permission) {
+  postPermission(id, permission, email) {
     return firestore
       .collection(PERM)
       .doc(id)
       .set({
-        rank: permission
+        id: id,
+        rank: permission,
+        email: email
       });
   },
   updatePermission(id, permission) {
