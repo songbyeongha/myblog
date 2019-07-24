@@ -71,7 +71,7 @@ export default {
     const userCollection = firestore.collection("permissions");
     return userCollection.get().then(docSnapshots => {
       return docSnapshots.docs.map(doc => {
-        console.log(doc.data());
+        // console.log(doc.data());
         let data = doc.data();
         return data;
       });
