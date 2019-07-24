@@ -96,7 +96,8 @@ export default {
         { title: "home", path: "/", icon: "home" },
         { title: "Portfolio", path: "/portfolio", icon: "assignment" },
         { title: "Post", path: "/post", icon: "speaker_notes" },
-        { title: "Git Info", path: "/gitinfopage", icon: "calendar_today" }
+        { title: "Git Info", path: "/gitinfopage", icon: "calendar_today" },
+        { title: "Admin", path: "/MyConfig", icon: "build" }
       ],
       showlogin: true
     };
