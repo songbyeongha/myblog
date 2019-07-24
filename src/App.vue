@@ -35,7 +35,6 @@ export default {
 		ChromeCheck,
 		SlideBtn,
 		Translate
-
 	},
 	data(){
 		return{
