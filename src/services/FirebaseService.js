@@ -68,17 +68,14 @@ export default {
     });
   },
   getAllusers() {
-    const postsCollection = firestore.collection(PERM);
-    return postsCollection
-      .orderBy("created_at", "desc")
-      .get()
-      .then(docSnapshots => {
-        return docSnapshots.docs.map(doc => {
-          let data = doc.data();
-          data.created_at = new Date(data.created_at.toDate());
-          return data;
-        });
+    const userCollection = firestore.collection("permissions");
+    return userCollection.get().then(docSnapshots => {
+      return docSnapshots.docs.map(doc => {
+        console.log(doc.data());
+        let data = doc.data();
+        return data;
       });
+    });
   },
   getPermission(id) {
     let idRef = firestore.collection(PERM).doc(id);
