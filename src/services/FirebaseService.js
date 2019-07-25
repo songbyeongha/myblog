@@ -97,18 +97,12 @@ export default {
   },
   getPermission(id) {
     let idRef = firestore.collection(PERM).doc(id);
-    let res = {
-      rank: "",
-      find: false
-    };
-    idRef
+    return idRef
       .get()
       .then(function(doc) {
         if (doc.exists) {
           console.log("rank:", doc.data().rank);
-          res.rank = doc.data().rank;
-          res.find = true;
-          return res;
+          return doc.data().rank;
         } else {
           // doc.data() will be undefined in this case
           console.log("No rank");
@@ -117,7 +111,6 @@ export default {
       .catch(function(error) {
         console.log("Error getting rank:", error);
       });
-    return res;
   },
   postPermission(id, permission, email, name) {
     return firestore
