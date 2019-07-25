@@ -8,10 +8,15 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
-              <v-flex xs12 sm6 md4>
-                <v-text-field disabled label="User Email"></v-text-field>
+              <v-flex xs12 sm12 md12>
+                <v-text-field
+                  :value="editedItem.email"
+                  label="email"
+                  outlined
+                  readonly
+                ></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm12 md12>
                 <v-autocomplete
                   :items="ranks"
                   v-model="editedItem.rank"
@@ -36,7 +41,7 @@
     >
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.email }}</td>
-        <td class="text-xs-left">{{ props.item.email }}</td>
+        <td class="text-xs-left">{{ props.item.name }}</td>
         <td class="text-xs-left">{{ props.item.rank }}</td>
         <td class="justify-center layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
@@ -67,7 +72,7 @@ export default {
         sortable: false,
         value: "users"
       },
-      { text: "E-mail", value: "email" },
+      { text: "Display Name", value: "display_name" },
       { text: "Permission", value: "rank" },
       { text: "Actions", value: "name", sortable: false }
     ],
@@ -77,12 +82,14 @@ export default {
     editedItem: {
       id: "",
       rank: "",
-      email: ""
+      email: "",
+      name: ""
     },
     defaultItem: {
       id: "",
       rank: "",
-      email: ""
+      email: "",
+      name: ""
     }
   }),
 
@@ -108,7 +115,7 @@ export default {
     },
 
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.users.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
@@ -119,10 +126,11 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       }, 300);
+      window.location.reload();
     },
     save() {
-      Object.assign(this.desserts[this.editedIndex], this.editedItem);
-
+      Object.assign(this.users[this.editedIndex], this.editedItem);
+      fbservice.updatePermission(this.editedItem.id, this.editedItem.rank);
       this.close();
     }
   }

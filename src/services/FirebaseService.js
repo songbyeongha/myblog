@@ -71,7 +71,7 @@ export default {
     const userCollection = firestore.collection("permissions");
     return userCollection.get().then(docSnapshots => {
       return docSnapshots.docs.map(doc => {
-        // console.log(doc.data());
+        //console.log(doc.data());
         let data = doc.data();
         return data;
       });
@@ -101,14 +101,15 @@ export default {
       });
     return res;
   },
-  postPermission(id, permission, email) {
+  postPermission(id, permission, email, name) {
     return firestore
       .collection(PERM)
       .doc(id)
       .set({
         id: id,
         rank: permission,
-        email: email
+        email: email,
+        name: name
       });
   },
   updatePermission(id, permission) {

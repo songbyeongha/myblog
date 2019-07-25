@@ -84,7 +84,8 @@ export default {
         await FirebaseService.postPermission(
           result.user.uid,
           "visitor",
-          result.user.email
+          result.user.email,
+          result.user.displayName
         );
       }
 
