@@ -93,6 +93,16 @@ export default {
     },
     async loginWithFacebook() {
       const result = await FirebaseService.loginWithFacebook();
+      const res = await FirebaseService.getPermission(result.user.uid);
+
+      if (!res) {
+        await FirebaseService.postPermission(
+          result.user.uid,
+          "visitor",
+          result.user.email,
+          result.user.displayName
+        );
+      }
       this.$store.accessToken = result.credential.accessToken;
       this.$store.user = result.user;
     },
@@ -101,6 +111,16 @@ export default {
         this.email,
         this.password
       );
+      const res = await FirebaseService.getPermission(result.user.uid);
+
+      if (!res) {
+        await FirebaseService.postPermission(
+          result.user.uid,
+          "visitor",
+          result.user.email,
+          result.user.displayName
+        );
+      }
     },
     funcregis() {
       this.regis = !this.regis;

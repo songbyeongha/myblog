@@ -101,7 +101,6 @@ export default {
       .get()
       .then(function(doc) {
         if (doc.exists) {
-          console.log("rank:", doc.data().rank);
           return doc.data().rank;
         } else {
           // doc.data() will be undefined in this case
@@ -141,9 +140,7 @@ export default {
       .update({
         rank: permission
       })
-      .then(function() {
-        console.log("rank successfully updated!");
-      })
+      .then(function() {})
       .catch(function(error) {
         // The document probably doesn't exist.
         console.error("Error updating rank: ", error);

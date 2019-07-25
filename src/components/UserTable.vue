@@ -50,7 +50,10 @@
         </td>
       </template>
       <template slot="no-data">
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
+        <v-progress-circular
+          indeterminate
+          color="primary"
+        ></v-progress-circular>
       </template>
     </v-data-table>
   </div>
@@ -128,7 +131,7 @@ export default {
       Object.assign(this.users[this.editedIndex], this.editedItem);
       fbservice.updatePermission(this.editedItem.id, this.editedItem.rank);
       this.close();
-      window.location.reload();
+      this.initialize();
     }
   }
 };

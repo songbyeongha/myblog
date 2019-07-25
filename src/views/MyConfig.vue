@@ -13,19 +13,34 @@
           <h2>총 게시글 수</h2>
         </v-flex>
         <v-flex xs6 mg6 lg6 text-xs-center>
-          <h2>{{ sum }}</h2>
+          <v-progress-circular
+            indeterminate
+            color="primary"
+            v-if="loading"
+          ></v-progress-circular>
+          <h2 v-else>{{ sum }}</h2>
         </v-flex>
         <v-flex xs6 mg6 lg6 text-xs-center>
           <h2>POSTS</h2>
         </v-flex>
         <v-flex xs6 mg6 lg6 text-xs-center>
-          <h2>{{ posts }}</h2>
+          <v-progress-circular
+            indeterminate
+            color="primary"
+            v-if="loading"
+          ></v-progress-circular>
+          <h2 v-else>{{ posts }}</h2>
         </v-flex>
         <v-flex xs6 mg6 lg6 text-xs-center>
           <h2>PORTFOLIOS</h2>
         </v-flex>
         <v-flex xs6 mg6 lg6 text-xs-center>
-          <h2>{{ portfolios }}</h2>
+          <v-progress-circular
+            indeterminate
+            color="primary"
+            v-if="loading"
+          ></v-progress-circular>
+          <h2 v-else>{{ portfolios }}</h2>
         </v-flex>
       </v-layout>
     </v-container>
@@ -36,6 +51,7 @@
 import ImgBanner from "../components/ImgBanner";
 import UserTable from "../components/UserTable";
 import fbservice from "@/services/FirebaseService.js";
+import { clearInterval } from "timers";
 
 export default {
   name: "ConfigPage",
@@ -46,7 +62,8 @@ export default {
   data() {
     return {
       posts: 0,
-      portfolios: 0
+      portfolios: 0,
+      loading: true
     };
   },
   computed: {
@@ -61,6 +78,7 @@ export default {
     async initialize() {
       this.posts = await fbservice.countPost();
       this.portfolios = await fbservice.countPortfolio();
+      this.loading = false;
     }
   }
 };
