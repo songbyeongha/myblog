@@ -18,10 +18,17 @@ exports.signOutLog = functions.https.onCall((data, context) => {
   return true;
 });
 
-exports.sendNotification = functions.firestore
+exports.sendPortflioNotification = functions.firestore
   .document("portfolios/{portfolio}")
   .onCreate(async event => {
     var message = "New Portfolio : " + event.data().title;
+    return pushMessage(message);
+  });
+
+exports.sendPostNotification = functions.firestore
+  .document("posts/{post}")
+  .onCreate(async event => {
+    var message = "New Post : " + event.data().title;
     return pushMessage(message);
   });
 
