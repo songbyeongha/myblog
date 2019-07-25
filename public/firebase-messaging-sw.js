@@ -1,21 +1,23 @@
-// [START initialize_firebase_in_sw]
-// Give the service worker access to Firebase Messaging.
-// Note that you can only use Firebase Messaging here, other Firebase libraries
-// are not available in the service worker.
-importScripts("https://www.gstatic.com/firebasejs/5.5.6/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/5.5.6/firebase-messaging.js");
-// Initialize the Firebase app in the service worker by passing in the messagingSenderId.
-firebase.initializeApp({
-	messagingSenderId: "755312082422" // 4. Get Firebase Configuration
-});
+importScripts("https://www.gstatic.com/firebasejs/3.5.0/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/3.5.0/firebase-messaging.js");
 
-// Retrieve an instance of Firebase Messaging so that it can handle background messages.
+var config = {
+	apiKey: "AIzaSyDQkPEb5SFmvyP9CEqROzUrMy1UAYPz1zQ",
+	authDomain: "project-bf598.firebaseapp.com",
+	databaseURL: "https://project-bf598.firebaseio.com",
+	storageBucket: "project-bf598.appspot.com",
+	messagingSenderId: "755312082422",
+};
+
+firebase.initializeApp(config);
+
 const messaging = firebase.messaging();
-// [END initialize_firebase_in_sw]
+
 messaging.setBackgroundMessageHandler(function(payload) {
-	const title = "Hello World";
+	const title = payload.data.title;
 	const options = {
-		body: payload.data.status
+		body: payload.data.status,
+		icon : "/logo.png"
 	};
-	return event.waitUntil(self.registration.showNotification(title, options));
+	return self.registration.showNotification(title, options);
 });
