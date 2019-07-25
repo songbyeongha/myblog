@@ -3,7 +3,7 @@
     <v-dialog v-model="dialog" max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="headline">User Config</span>
+          <span class="headline">User Permission Config</span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
@@ -12,7 +12,7 @@
                 <v-text-field
                   :value="editedItem.email"
                   label="email"
-                  outlined
+                  outline
                   readonly
                 ></v-text-field>
               </v-flex>
@@ -20,7 +20,7 @@
                 <v-autocomplete
                   :items="ranks"
                   v-model="editedItem.rank"
-                  label="Select"
+                  label="Permission"
                 ></v-autocomplete>
               </v-flex>
             </v-layout>
@@ -28,8 +28,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="close">취소</v-btn>
           <v-btn color="blue darken-1" flat @click.native="save">확인</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="close">취소</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -46,9 +46,6 @@
         <td class="justify-center layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
             <v-icon color="teal">edit</v-icon>
-          </v-btn>
-          <v-btn icon class="mx-0" @click="deleteItem(props.item)">
-            <v-icon color="pink">delete</v-icon>
           </v-btn>
         </td>
       </template>
@@ -74,7 +71,7 @@ export default {
       },
       { text: "Display Name", value: "display_name" },
       { text: "Permission", value: "rank" },
-      { text: "Actions", value: "name", sortable: false }
+      { text: "Edit", value: "name", sortable: false }
     ],
     users: [],
     ranks: ["admin", "team", "visitor"],
@@ -126,12 +123,12 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       }, 300);
-      window.location.reload();
     },
     save() {
       Object.assign(this.users[this.editedIndex], this.editedItem);
       fbservice.updatePermission(this.editedItem.id, this.editedItem.rank);
       this.close();
+      window.location.reload();
     }
   }
 };

@@ -36,6 +36,7 @@ import Editor from "v-markdown-editor";
 import FirebaseService from "@/services/FirebaseService";
 import ImgTool from "../components/ImageTool";
 import store from "../store.js";
+import firebase from "firebase/app";
 
 Vue.use(Editor);
 
@@ -54,13 +55,24 @@ export default {
       imageFile: ""
     };
   },
+  computed: {
+    getUser() {
+      return firebase.auth().currentUser;
+    }
+  },
   methods: {
     getImgURL() {
       this.imageUrl = store.state.imgUrl;
-      console.log(this.imgUrl);
     },
     send() {
-      FirebaseService.postPortfolio(this.title, this.input, this.imageUrl);
+      console.log(this.getUser);
+      FirebaseService.postPortfolio(
+        this.title,
+        this.input,
+        this.imageUrl,
+        this.getUser.email,
+        this.getUser.displayName
+      );
       window.location.href = "/portfolio";
     }
   }

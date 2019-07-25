@@ -111,7 +111,7 @@ export default {
       if (user) {
         // 로그인됨
         instance_this.userCheck();
-        let displayName =
+        let displayName = 
           user.displayName == null ? "아무개" : user.displayName;
         instance_this.modifyName(displayName);
       }

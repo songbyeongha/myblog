@@ -46,6 +46,14 @@ export default {
       created_at: firebase.firestore.FieldValue.serverTimestamp()
     });
   },
+  countPost() {
+    return firestore
+      .collection(POSTS)
+      .get()
+      .then(snap => {
+        return snap.size;
+      });
+  },
   getPortfolios() {
     const postsCollection = firestore.collection(PORTFOLIOS);
     return postsCollection
@@ -59,13 +67,23 @@ export default {
         });
       });
   },
-  postPortfolio(title, body, img) {
+  postPortfolio(title, body, img, email, name) {
     return firestore.collection(PORTFOLIOS).add({
       title,
       body,
       img,
+      email,
+      name,
       created_at: firebase.firestore.FieldValue.serverTimestamp()
     });
+  },
+  countPortfolio() {
+    return firestore
+      .collection(PORTFOLIOS)
+      .get()
+      .then(snap => {
+        return snap.size;
+      });
   },
   getAllusers() {
     const userCollection = firestore.collection("permissions");
