@@ -46,6 +46,14 @@ export default {
       created_at: firebase.firestore.FieldValue.serverTimestamp()
     });
   },
+  countPost() {
+    return firestore
+      .collection(POSTS)
+      .get()
+      .then(snap => {
+        return snap.size;
+      });
+  },
   getPortfolios() {
     const postsCollection = firestore.collection(PORTFOLIOS);
     return postsCollection
@@ -59,41 +67,41 @@ export default {
         });
       });
   },
-  postPortfolio(title, body, img) {
+  postPortfolio(title, body, img, email, name) {
     return firestore.collection(PORTFOLIOS).add({
       title,
       body,
       img,
+      email,
+      name,
       created_at: firebase.firestore.FieldValue.serverTimestamp()
     });
   },
-  getAllusers() {
-    const postsCollection = firestore.collection(PERM);
-    return postsCollection
-      .orderBy("created_at", "desc")
+  countPortfolio() {
+    return firestore
+      .collection(PORTFOLIOS)
       .get()
-      .then(docSnapshots => {
-        return docSnapshots.docs.map(doc => {
-          let data = doc.data();
-          data.created_at = new Date(data.created_at.toDate());
-          return data;
-        });
+      .then(snap => {
+        return snap.size;
       });
+  },
+  getAllusers() {
+    const userCollection = firestore.collection("permissions");
+    return userCollection.get().then(docSnapshots => {
+      return docSnapshots.docs.map(doc => {
+        //console.log(doc.data());
+        let data = doc.data();
+        return data;
+      });
+    });
   },
   getPermission(id) {
     let idRef = firestore.collection(PERM).doc(id);
-    let res = {
-      rank: "",
-      find: false
-    };
-    idRef
+    return idRef
       .get()
       .then(function(doc) {
         if (doc.exists) {
-          console.log("rank:", doc.data().rank);
-          res.rank = doc.data().rank;
-          res.find = true;
-          return res;
+          return doc.data().rank;
         } else {
           // doc.data() will be undefined in this case
           console.log("No rank");
@@ -102,16 +110,16 @@ export default {
       .catch(function(error) {
         console.log("Error getting rank:", error);
       });
-    return res;
   },
-  postPermission(id, permission, email) {
+  postPermission(id, permission, email, name) {
     return firestore
       .collection(PERM)
       .doc(id)
       .set({
         id: id,
         rank: permission,
-        email: email
+        email: email,
+        name: name
       });
   },
   updatePermission(id, permission) {
@@ -132,9 +140,7 @@ export default {
       .update({
         rank: permission
       })
-      .then(function() {
-        console.log("rank successfully updated!");
-      })
+      .then(function() {})
       .catch(function(error) {
         // The document probably doesn't exist.
         console.error("Error updating rank: ", error);

@@ -31,6 +31,12 @@
           </v-list-tile-action>
           <v-list-tile-content>{{ item.title }}</v-list-tile-content>
         </v-list-tile>
+        <v-list-tile v-if="userRank == 'admin'" :to="adminLink">
+          <v-list-tile-action>
+            <v-icon>build</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>Admin</v-list-tile-content>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar app color="grey lighten-4">
@@ -53,6 +59,10 @@
         <v-btn flat v-for="item in menuItems" :key="item.title" :to="item.path">
           <v-icon left dark>{{ item.icon }}</v-icon>
           {{ item.title }}
+        </v-btn>
+        <v-btn flat v-if="userRank === 'admin'" :to="adminLink">
+          <v-icon left dark>build</v-icon>
+          Admin
         </v-btn>
         <v-btn
           v-if="showlogin"
@@ -92,12 +102,14 @@ export default {
       appTitle: "MyBlog",
       sidebar: false,
       userName: "",
+      uid: "",
+      userRank: "",
+      adminLink: "/MyConfig",
       menuItems: [
         { title: "home", path: "/", icon: "home" },
         { title: "Portfolio", path: "/portfolio", icon: "assignment" },
         { title: "Post", path: "/post", icon: "speaker_notes" },
-        { title: "Git Info", path: "/gitinfopage", icon: "calendar_today" },
-        { title: "Admin", path: "/MyConfig", icon: "build" }
+        { title: "Git Info", path: "/gitinfopage", icon: "calendar_today" }
       ],
       showlogin: true
     };
@@ -105,25 +117,32 @@ export default {
   components: {
     LoginModal
   },
-  created: function() {
-    let instance_this = this;
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        // 로그인됨
-        instance_this.userCheck();
-        let displayName =
-          user.displayName == null ? "아무개" : user.displayName;
-        instance_this.modifyName(displayName);
-      }
-    });
+  mounted: function() {
+    this.initialize();
   },
   methods: {
+    async initialize() {
+      let instance_this = this;
+      await firebase.auth().onAuthStateChanged(async function(user) {
+        if (user) {
+          // 로그인됨
+          instance_this.userCheck();
+          user.displayName == null ? "아무개" : user.displayName;
+          instance_this.modifyRank(
+            await FirebaseService.getPermission(user.uid)
+          );
+          instance_this.modifyName(user.displayName);
+        }
+      });
+    },
     userCheck: function() {
       this.showlogin = false;
     },
     logout() {
       this.showlogin = true;
       this.userName = "";
+      this.userRank = "";
+      this.uid = "";
       FirebaseService.logout();
     },
     login() {
@@ -131,6 +150,9 @@ export default {
     },
     modifyName(name) {
       this.userName = name;
+    },
+    modifyRank(rank) {
+      this.userRank = rank;
     }
   }
 };
