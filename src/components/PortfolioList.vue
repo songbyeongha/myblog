@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       portfolios: [],
-      limits: 4
+      limits: 6
     };
   },
   components: {
@@ -49,7 +49,7 @@ export default {
       this.portfolios = await FirebaseService.getPortfolios();
     },
     loadMorePortfolios() {
-      this.limits = this.portfolios.length;
+      this.limits = this.limits + 6;
     }
   }
 };

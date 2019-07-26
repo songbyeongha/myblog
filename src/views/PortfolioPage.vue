@@ -32,6 +32,14 @@ export default {
   components: {
     ImgBanner,
     PortfolioList
+  },
+  mounted() {
+    this.initailize();
+  },
+  method: {
+    async initailize() {
+      
+    }
   }
 };
 </script>

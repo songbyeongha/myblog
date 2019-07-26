@@ -102,7 +102,6 @@ export default {
       appTitle: "MyBlog",
       sidebar: false,
       userName: "",
-      uid: "",
       userRank: "",
       adminLink: "/MyConfig",
       menuItems: [
@@ -142,7 +141,6 @@ export default {
       this.showlogin = true;
       this.userName = "";
       this.userRank = "";
-      this.uid = "";
       FirebaseService.logout();
     },
     login() {
