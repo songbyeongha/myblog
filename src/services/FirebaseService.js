@@ -217,6 +217,7 @@ export default {
       .then(function() {
         alert("로그아웃되었습니다.");
         store.state.user = "";
+        window.location.href = "/";
       })
       .catch(function(error) {
         console.log(error);

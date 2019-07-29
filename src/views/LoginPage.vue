@@ -121,7 +121,6 @@ export default {
           result.user.displayName
         );
       }
-
     },
     funcregis() {
       this.regis = !this.regis;

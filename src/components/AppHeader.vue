@@ -31,7 +31,7 @@
           </v-list-tile-action>
           <v-list-tile-content>{{ item.title }}</v-list-tile-content>
         </v-list-tile>
-        <v-list-tile v-if="userRank == 'admin'" :to="adminLink">
+        <v-list-tile v-if="getRank == 'admin'" :to="adminLink">
           <v-list-tile-action>
             <v-icon>build</v-icon>
           </v-list-tile-action>
@@ -60,7 +60,7 @@
           <v-icon left dark>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
-        <v-btn flat v-if="userRank === 'admin'" :to="adminLink">
+        <v-btn flat v-if="getRank === 'admin'" :to="adminLink">
           <v-icon left dark>build</v-icon>
           Admin
         </v-btn>
@@ -119,6 +119,11 @@ export default {
   mounted: function() {
     this.initialize();
   },
+  computed: {
+    getRank() {
+      return this.$store.state.rank;
+    }
+  },
   methods: {
     async initialize() {
       let instance_this = this;
@@ -150,7 +155,7 @@ export default {
       this.userName = name;
     },
     modifyRank(rank) {
-      this.userRank = rank;
+      this.$store.state.rank = rank;
     }
   }
 };

@@ -11,9 +11,14 @@ import store from "./store";
 
 Vue.use(Router);
 
-// const requireAuth = () => (to, from, next) => {
-//   if (store.state.)
-// }
+const requireAuth = () => (to, from, next) => {
+  if (store.state.rank == "admin") {
+    return next();
+  } else {
+    alert("관리자 권한이 필요합니다.");
+    next("/");
+  }
+};
 
 export default new Router({
   mode: "history",
@@ -52,7 +57,8 @@ export default new Router({
     {
       path: "/myconfig",
       name: "myconfig",
-      component: MyConfig
+      component: MyConfig,
+      beforeEnter: requireAuth()
     }
   ]
 });
