@@ -24,25 +24,25 @@ import SlideBtn from "../src/components/SlideBtn.vue";
 import Translate from "../src/components/Translate.vue";
 
 export default {
-  name: "App",
-  store,
-  components: {
-    AppHeader,
-    AppFooter,
-    ChromeCheck,
-    SlideBtn,
-    Translate
-  },
-  data() {
-    return {
-      logout: false
-    };
-  },
-  methods: {
-    gglogin() {
-      this.logout = true;
-    }
-  }
+	name: "App",
+	store,
+	components: {
+		AppHeader,
+		AppFooter,
+		ChromeCheck,
+		SlideBtn,
+		Translate
+	},
+	data(){
+		return{
+			logout : false
+		};
+	},
+	methods:{
+		gglogin(){
+			this.logout = true;	
+		}
+	}
 };
 </script>
 
