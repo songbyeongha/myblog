@@ -104,7 +104,6 @@ export default {
           return doc.data().rank;
         } else {
           // doc.data() will be undefined in this case
-          console.log("No rank");
         }
       })
       .catch(function(error) {
@@ -183,7 +182,7 @@ export default {
       });
   },
   loginEmail(email, password) {
-    firebase
+    return firebase
       .auth()
       .setPersistence(firebase.auth.Auth.Persistence.SESSION)
       .then(function() {
@@ -195,8 +194,8 @@ export default {
               store.state.ModalLogin = false;
               signInLog({ loginMsg: "메일로그인" }).then(function(result) {});
               alert("환영합니다");
-
               store.state.user = firebase.auth().currentUser.displayName;
+              console.log(result);
               return result;
             },
             function(err) {
@@ -223,13 +222,22 @@ export default {
         console.log(error);
       });
   },
-  signUpEmail(email, password) {
+  signUpEmail(email, password, name) {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(
-        function(user) {
+        function(res) {
+          let user = res.user;
+          user
+            .updateProfile({ displayName: name })
+            .then(function() {})
+            .catch(function(error) {
+              console.error("userName 업데이트 실패 : ", error);
+            });
+
           alert("가입등록이 완료되었습니다. 다시로그인해 주세요");
+          window.location.href = "/";
         },
         function(err) {
           alert("실패" + err.message);

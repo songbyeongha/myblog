@@ -7,8 +7,13 @@ import LoginPage from "./views/LoginPage.vue";
 import AddPortfolioPage from "./views/AddPortfolioPage.vue";
 import GitInfoPage from "./views/GitInfoPage.vue";
 import MyConfig from "./views/MyConfig";
+import store from "./store";
 
 Vue.use(Router);
+
+// const requireAuth = () => (to, from, next) => {
+//   if (store.state.)
+// }
 
 export default new Router({
   mode: "history",
