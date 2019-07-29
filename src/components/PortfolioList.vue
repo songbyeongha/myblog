@@ -4,7 +4,7 @@
       v-for="i in portfolios.length > limits ? limits : portfolios.length"
       xs12
       md6
-      lg3
+      lg4
       :key="i"
     >
       <Portfolio

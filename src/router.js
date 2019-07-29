@@ -20,6 +20,15 @@ const requireAuth = () => (to, from, next) => {
   }
 };
 
+const requireLogin = () => (to, from, next) => {
+  if (store.state.rank == "admin" || store.state.rank == "team") {
+    return next();
+  } else {
+    alert("로그인이 필요한 기능입니다.");
+    next("/portfolio");
+  }
+};
+
 export default new Router({
   mode: "history",
   base: process.env.BASE_URL,
@@ -47,7 +56,8 @@ export default new Router({
     {
       path: "/portfolio-add",
       name: "addportfolio",
-      component: AddPortfolioPage
+      component: AddPortfolioPage,
+      beforeEnter: requireLogin()
     },
     {
       path: "/gitinfopage",
