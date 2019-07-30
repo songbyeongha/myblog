@@ -7,6 +7,7 @@ import LoginPage from "./views/LoginPage.vue";
 import AddPortfolioPage from "./views/AddPortfolioPage.vue";
 import GitInfoPage from "./views/GitInfoPage.vue";
 import MyConfig from "./views/MyConfig";
+import ViewPortfolio from "./views/PortfolioViewPage";
 import store from "./store";
 
 Vue.use(Router);
@@ -24,7 +25,7 @@ const requireLogin = () => (to, from, next) => {
   if (store.state.rank == "admin" || store.state.rank == "team") {
     return next();
   } else {
-    alert("로그인이 필요한 기능입니다.");
+    alert("방문자는 사용할 수 없는 기능입니다.");
     next("/portfolio");
   }
 };
@@ -69,6 +70,11 @@ export default new Router({
       name: "myconfig",
       component: MyConfig,
       beforeEnter: requireAuth()
+    },
+    {
+      path: "/viewPortfolio",
+      name: "viewPortfolio",
+      component: ViewPortfolio
     }
   ]
 });

@@ -3,6 +3,7 @@ import "firebase/firestore";
 import "firebase/functions";
 import "firebase/auth";
 import store from "../store.js";
+import router from "../router";
 
 const POSTS = "posts";
 const PORTFOLIOS = "portfolios";
@@ -218,7 +219,7 @@ export default {
         alert("로그아웃되었습니다.");
         store.state.user = "";
         store.state.rank = "";
-        window.location.href = "/";
+        router.push("/");
       })
       .catch(function(error) {
         console.log(error);
@@ -239,7 +240,7 @@ export default {
             });
 
           alert("가입등록이 완료되었습니다. 다시로그인해 주세요");
-          window.location.href = "/";
+          router.push("/");
         },
         function(err) {
           alert("실패" + err.message);

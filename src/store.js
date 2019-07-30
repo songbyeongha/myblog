@@ -17,6 +17,7 @@ export default new Vuex.Store({
     GitFindMember: [],
     GitMember: ["신민석", "송병하", "이대경", "Yoon,EunSol"],
     ModalGitMember: [],
-    rank: ""
+    rank: "",
+    portfoilio: null
   }
 });

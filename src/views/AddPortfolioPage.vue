@@ -73,7 +73,7 @@ export default {
         this.getUser.email,
         this.getUser.displayName
       );
-      window.location.href = "/portfolio";
+      this.$route.push("/portfolio");
     }
   }
 };

@@ -13,6 +13,7 @@
         :title="portfolios[i - 1].title"
         :body="portfolios[i - 1].body"
         :imgSrc="portfolios[i - 1].img"
+        @click.native="viewThis(portfolios[i - 1])"
       ></Portfolio>
     </v-flex>
 
@@ -26,6 +27,7 @@
 <script>
 import Portfolio from "@/components/Portfolio";
 import FirebaseService from "@/services/FirebaseService";
+import store from "../store";
 
 export default {
   name: "PortfoliosList",
@@ -50,6 +52,10 @@ export default {
     },
     loadMorePortfolios() {
       this.limits = this.limits + 6;
+    },
+    viewThis(portfolio) {
+      store.state.portfolio = portfolio;
+      this.$router.push("/viewPortfolio");
     }
   }
 };
