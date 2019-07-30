@@ -1,21 +1,18 @@
 <template>
-  <v-layout class="portfolio" justify-center>
+  <v-layout class="portfolio" justify-center row wrap>
     <v-flex xs11>
       <v-card>
-        <v-img class="white--text" aspect-ratio="1.7" :src="getPortfolio.img">
-          <v-container fill-height fluid>
-            <v-layout fill-height>
-              <v-flex xs12 align-content-center flexbox>
-                <span class="headline">{{ getPortfolio.title }}</span>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-img>
+        <v-img
+          class="white--text"
+          aspect-ratio="1.7"
+          :src="getPortfolio.img"
+        ></v-img>
         <v-card-title>
           <div>
+            <div class="headline">{{ getPortfolio.title }}</div>
             <span class="grey--text">{{ getPortfolio.name }}</span>
             <br />
-            <span v-html="compiledMarkdown">Whitehaven Beach</span>
+            <span v-html="compiledMarkdown"></span>
           </div>
         </v-card-title>
         <v-card-actions>
@@ -23,6 +20,9 @@
           <v-btn flat color="orange">Explore</v-btn>
         </v-card-actions>
       </v-card>
+    </v-flex>
+    <v-flex xs11>
+      <div id="disqus_thread"></div>
     </v-flex>
   </v-layout>
 </template>
