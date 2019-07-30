@@ -11,7 +11,10 @@ import store from "./store";
 import "./registerServiceWorker";
 import vueResource from "vue-resource";
 
+
+
 Vue.config.productionTip = false;
+
 
 Vue.use(Vuetify, {
 	iconfont: "fa",

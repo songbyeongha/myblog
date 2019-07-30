@@ -16,7 +16,7 @@
         </v-tab>
         <v-tab>
           <v-icon left>mdi-access-point</v-icon>
-          Option 3
+          그래프
         </v-tab>
   
         <v-tab-item>
@@ -31,15 +31,16 @@
         <v-tab-item>
           <v-card flat>
             <v-card-text>
+              <!-- Counter -->
               <PostCounter></PostCounter>
-      
             </v-card-text>
           </v-card>
         </v-tab-item>
         <v-tab-item>
           <v-card flat>
             <v-card-text>
-             c
+              <!-- Graph -->
+              <GA></GA>
             </v-card-text>
           </v-card>
         </v-tab-item>
@@ -54,6 +55,7 @@ import ImgBanner from "../components/ImgBanner";
 import UserTable from "../components/UserTable";
 import fbservice from "@/services/FirebaseService.js";
 import PostCounter from '../components/PostCounter.vue';
+import GA from '../components/GoogleAnalystic.vue';
 import { clearInterval } from "timers";
 
 export default {
@@ -61,7 +63,8 @@ export default {
   components: {
     ImgBanner,
     UserTable,
-    PostCounter
+    PostCounter,
+    GA
   },
  
 };
