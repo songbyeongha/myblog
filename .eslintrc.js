@@ -5,7 +5,7 @@ module.exports = {
 		"node": true
 	},
 	"extends": [
-		"eslint:recommended",
+		"plugin:prettier/recommended",
 		"plugin:vue/essential"
 	],
 	"globals": {
@@ -20,21 +20,6 @@ module.exports = {
 		"vue"
 	],
 	"rules": {
-		"indent": [
-			"error",
-			"tab"
-		],
-		"linebreak-style": [
-			"error",
-			"windows"
-		],
-		"quotes": [
-			"error",
-			"double"
-		],
-		"semi": [
-			"error",
-			"always"
-		]
+		
 	}
 };

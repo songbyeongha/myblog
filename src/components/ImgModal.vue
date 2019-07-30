@@ -1,44 +1,43 @@
 <template>
-    <transition name="modal">
-        <div class="modal-mask">
-            <div class="modal-wrapper">
-                <div class="modal-container">
-                    <imgTool mode="banner"></imgTool>
-                    <div class="text-xs-center" style="margin-bottom: 2.5rem;">
-                        <v-btn round color="primary" dark @click="ok">OK</v-btn>
-                        <v-btn round color="pink" dark @click="cancel">Cancel</v-btn>
-                    </div>
-                </div>
-            </div>
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+          <imgTool mode="banner"></imgTool>
+          <div class="text-xs-center" style="margin-bottom: 2.5rem;">
+            <v-btn round color="primary" dark @click="ok">OK</v-btn>
+            <v-btn round color="pink" dark @click="cancel">Cancel</v-btn>
+          </div>
         </div>
-    </transition>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script>
 import imgTool from "../components/ImageTool";
 
 export default {
-	components: {
-		imgTool
-	},
-	data() {
-		return {
-			imgUrl: ""
-		};
-	},
-	methods: {
-		ok() {
-			this.$emit("ok", "ok");
-		},
-		cancel() {
-			this.$emit("cancel", "cancel");
-		}
-	}
+  components: {
+    imgTool
+  },
+  data() {
+    return {
+      imgUrl: ""
+    };
+  },
+  methods: {
+    ok() {
+      this.$emit("ok", "ok");
+    },
+    cancel() {
+      this.$emit("cancel", "cancel");
+    }
+  }
 };
 </script>
 
 <style>
-
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -46,9 +45,9 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: table;
-  transition: opacity .3s ease;
+  transition: opacity 0.3s ease;
 }
 
 .modal-wrapper {
@@ -61,11 +60,10 @@ export default {
   margin: 0px auto;
   background-color: #fff;
   border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
-
 
 /*
  * The following styles are auto-applied to elements with
