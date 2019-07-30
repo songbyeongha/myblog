@@ -16,13 +16,22 @@
           </div>
         </v-card-title>
         <v-card-actions>
-          <v-btn flat color="orange">Share</v-btn>
-          <v-btn flat color="orange">Explore</v-btn>
+          <v-btn flat color="orange">수정</v-btn>
+          <v-btn flat color="orange">삭제</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
     <v-flex xs11>
-      <div id="disqus_thread"></div>
+      <v-card v-for="i in comments.length" :key="i" class="comments">
+        <v-flex>{{ getPortfolio.email }}</v-flex>
+      </v-card>
+    </v-flex>
+    <v-flex xs11 class="input">
+      <v-textarea
+        outline
+        label="Outline textarea"
+        value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
+      ></v-textarea>
     </v-flex>
   </v-layout>
 </template>
@@ -32,18 +41,27 @@ import store from "../store";
 
 export default {
   name: "viewPortfolio",
+  components: {},
   data() {
     return {
-      portfolio: null
+      portfolio: null,
+      comments: [
+        {
+          name: "shin",
+          text: "meme",
+          id: "aasdf",
+          date: "01010"
+        }
+      ]
     };
   },
+  mounted() {},
   methods: {},
   computed: {
     getPortfolio() {
       return store.state.portfolio;
     },
     compiledMarkdown() {
-      console.log(this.getPortfolio);
       return marked(this.getPortfolio.body);
     }
   }
@@ -54,5 +72,12 @@ export default {
 .portfolio {
   margin-top: 5%;
   margin-bottom: 5%;
+}
+.comments,
+.input {
+  margin-top: 1%;
+}
+.comments {
+  padding: 10px;
 }
 </style>

@@ -23,17 +23,14 @@ const config = {
 
 firebase.initializeApp(config);
 const firestore = firebase.firestore();
+const messaging = firebase.messaging();
 
 var signInLog = firebase.functions().httpsCallable("signInLog");
 var signOutLog = firebase.functions().httpsCallable("signOutLog");
 
-let messaging = null;
-if (firebase.messaging.isSupported()) {
-  messaging = firebase.messaging();
-  messaging.usePublicVapidKey(
-    "BByJZMo0kqza2QWuiwjBuwQVsIcbRdPKi07dCquSE6kXXjAUcKAIS8RQ9dvA_uon2BNzRbmvuMNOiwRSb2vhigs"
-  );
-}
+messaging.usePublicVapidKey(
+  "BByJZMo0kqza2QWuiwjBuwQVsIcbRdPKi07dCquSE6kXXjAUcKAIS8RQ9dvA_uon2BNzRbmvuMNOiwRSb2vhigs"
+);
 
 export default {
   getPosts() {
@@ -73,6 +70,7 @@ export default {
         return docSnapshots.docs.map(doc => {
           let data = doc.data();
           data.created_at = new Date(data.created_at.toDate());
+          data.did = doc.id;
           return data;
         });
       });

@@ -55,7 +55,7 @@ export default {
     },
     viewThis(portfolio) {
       store.state.portfolio = portfolio;
-      this.$router.push("/viewPortfolio");
+      this.$router.push("/viewPortfolio/" + portfolio.did);
     }
   }
 };

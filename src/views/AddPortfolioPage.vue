@@ -37,6 +37,7 @@ import FirebaseService from "@/services/FirebaseService";
 import ImgTool from "../components/ImageTool";
 import store from "../store.js";
 import firebase from "firebase/app";
+import router from "../router";
 
 Vue.use(Editor);
 
@@ -65,7 +66,6 @@ export default {
       this.imageUrl = store.state.imgUrl;
     },
     send() {
-      console.log(this.getUser);
       FirebaseService.postPortfolio(
         this.title,
         this.input,
@@ -73,7 +73,7 @@ export default {
         this.getUser.email,
         this.getUser.displayName
       );
-      this.$route.push("/portfolio");
+      this.$router.push("/portfolio");
     }
   }
 };

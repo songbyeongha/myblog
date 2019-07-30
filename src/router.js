@@ -72,7 +72,7 @@ export default new Router({
       beforeEnter: requireAuth()
     },
     {
-      path: "/viewPortfolio",
+      path: "/viewPortfolio/:did",
       name: "viewPortfolio",
       component: ViewPortfolio
     }
