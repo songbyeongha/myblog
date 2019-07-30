@@ -84,8 +84,11 @@ export default {
           result.user.uid,
           "visitor",
           result.user.email,
-          result.user.displayName
+          result.user.displayName,
+          ""
         );
+      }else{
+        await FirebaseService.updateDeviceToken(result.user.uid);
       }
 
       this.$store.accessToken = result.credential.accessToken;
@@ -100,8 +103,11 @@ export default {
           result.user.uid,
           "visitor",
           result.user.email,
-          result.user.displayName
+          result.user.displayName,
+          ""
         );
+      }else{
+        await FirebaseService.updateDeviceToken(result.user.uid);
       }
       this.$store.accessToken = result.credential.accessToken;
       this.$store.user = result.user;
@@ -118,8 +124,11 @@ export default {
           result.user.uid,
           "visitor",
           result.user.email,
-          result.user.displayName
+          result.user.displayName,
+          ""
         );
+      }else{
+        await FirebaseService.updateDeviceToken(result.user.uid);
       }
     },
     funcregis() {
