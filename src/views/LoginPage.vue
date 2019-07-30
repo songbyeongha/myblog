@@ -78,7 +78,7 @@ export default {
     async loginWithGoogle() {
       const result = await FirebaseService.loginWithGoogle();
       const res = await FirebaseService.getPermission(result.user.uid);
-
+      console.log(1111);
       if (!res) {
         await FirebaseService.postPermission(
           result.user.uid,

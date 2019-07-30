@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import { createHash } from 'crypto';
 
-$(function(){
+  window.onload = function(){
+
   // Replace with your client ID from the developer console.
-  var CLIENT_ID = '755312082422-1ofbib5hrgk3ti7pltsfmhgdk60cbk1u.apps.googleusercontent.com';
+  var CLIENT_ID = '1021517105793-im4pa4jpic53t58anbqduhkpvgs80l3m.apps.googleusercontent.com';
 
   // Set authorized scope.
   var SCOPES = ['https://www.googleapis.com/auth/analytics.readonly'];
@@ -26,13 +26,9 @@ $(function(){
       client_id: CLIENT_ID,
       scope: SCOPES,
       immediate: useImmdiate
-
     };
-      
-
 
     gapi.auth.authorize(authData, function(response) {
-    console.log(response)
       var authButton = document.getElementById('auth-button');
       if (response.error) {
         authButton.hidden = false;
@@ -102,11 +98,9 @@ function handleProperties(response) {
 function queryProfiles(accountId, propertyId) {
   // Get a list of all Views (Profiles) for the first property
   // of the first Account.
-  console.log("함수콜1");
   gapi.client.analytics.management.profiles.list({
       'accountId': accountId,
       'webPropertyId': propertyId
-      
   })
   .then(handleProfiles)
   .then(null, function(err) {
@@ -121,7 +115,7 @@ function handleProfiles(response) {
   if (response.result.items && response.result.items.length) {
     // Get the first View (Profile) ID.
     var firstProfileId = response.result.items[0].id;
-    console.log('함수콜')
+
     // Query the Core Reporting API.
     queryCoreReportingApi(firstProfileId);
   } else {
@@ -141,7 +135,6 @@ function queryCoreReportingApi(profileId) {
   })
   .then(function(response) {
     var formattedJson = JSON.stringify(response.result, null, 2);
-    console.log("실행 : " +response);
     document.getElementById('query-output').value = formattedJson;
   })
   .then(null, function(err) {
@@ -151,8 +144,10 @@ function queryCoreReportingApi(profileId) {
 }
 
   // Add an event listener to the 'auth-button'.
-  document.getElementById('auth-button').addEventListener('click', authorize);
-});
+   var el =  document.getElementById('auth-button');
+   if(el)el.addEventListener('click', authorize);
+
+}
 
 export default {
 
