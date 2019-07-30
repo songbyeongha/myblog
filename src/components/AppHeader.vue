@@ -93,7 +93,6 @@
 <script>
 import LoginModal from "./LoginModal.vue";
 import FirebaseService from "@/services/FirebaseService";
-import PushMessageService from "@/services/PushMessageService.js";
 import firebase from "firebase/app";
 
 export default {
