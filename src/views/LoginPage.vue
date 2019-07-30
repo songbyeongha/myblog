@@ -118,7 +118,6 @@ export default {
         this.password
       );
       const res = await FirebaseService.getPermission(result.user.uid);
-
       if (!res) {
         await FirebaseService.postPermission(
           result.user.uid,
