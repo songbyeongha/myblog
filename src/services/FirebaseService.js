@@ -1,9 +1,9 @@
 import firebase from "firebase/app";
+import "@firebase/messaging";
 import "firebase/firestore";
 import "firebase/functions";
 import "firebase/auth";
 import store from "../store.js";
-import AppHeader from "../components/AppHeader.vue";
 
 const POSTS = "posts";
 const PORTFOLIOS = "portfolios";
@@ -25,6 +25,13 @@ const firestore = firebase.firestore();
 
 var signInLog = firebase.functions().httpsCallable("signInLog");
 var signOutLog = firebase.functions().httpsCallable("signOutLog");
+let messaging = null;
+if (firebase.messaging.isSupported()) {
+  messaging = firebase.messaging();
+  messaging.usePublicVapidKey(
+    "BByJZMo0kqza2QWuiwjBuwQVsIcbRdPKi07dCquSE6kXXjAUcKAIS8RQ9dvA_uon2BNzRbmvuMNOiwRSb2vhigs"
+  );
+}
 
 export default {
   getPosts() {
@@ -112,7 +119,7 @@ export default {
         console.log("Error getting rank:", error);
       });
   },
-  postPermission(id, permission, email, name) {
+  postPermission(id, permission, email, name, deviceToken) {
     return firestore
       .collection(PERM)
       .doc(id)
@@ -120,7 +127,8 @@ export default {
         id: id,
         rank: permission,
         email: email,
-        name: name
+        name: name,
+        deviceToken: deviceToken
       });
   },
   updatePermission(id, permission) {
@@ -154,7 +162,6 @@ export default {
       .signInWithPopup(provider)
       .then(function(result) {
         store.state.ModalLogin = false;
-
         let accessToken = result.credential.accessToken;
         let user = result.user;
         signInLog({ loginMsg: "Google로그인" }).then(function(result) {});
@@ -259,5 +266,29 @@ export default {
   },
   getToken() {
     return store.state.accessToken;
+  },
+  updateDeviceToken(id) {
+    var idRef = firestore.collection(PERM).doc(id);
+    var deviceToken = "";
+    messaging
+      .requestPermission()
+      .then(function() {
+        messaging.getToken().then(token => {
+          deviceToken = token;
+          return idRef
+            .update({
+              deviceToken: deviceToken
+            })
+            .then(function() {
+              console.log(deviceToken);
+            })
+            .catch(function(error) {
+              console.error("Error updating deviceToken: ", error);
+            });
+        });
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
   }
 };

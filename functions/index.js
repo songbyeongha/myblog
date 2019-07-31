@@ -33,22 +33,29 @@ exports.sendPostNotification = functions.firestore
   });
 
 function pushMessage(message) {
-  var token =
-    "fS4NHsU-9JA:APA91bF3S5In8MuQYPlrme1jhovxnjviCRB4_UuBdUAif_1CJ1-jEcgJrSkje8LfWdM6TMo0B84LpjweqK-56HK4I9C_gyDPptBvSlFE4Bi0PqJd0vlUif2i23S5UNhDMcjjWUvz4skx";
-  console.log(message);
+  // var token =
+  //   "fS4NHsU-9JA:APA91bF3S5In8MuQYPlrme1jhovxnjviCRB4_UuBdUAif_1CJ1-jEcgJrSkje8LfWdM6TMo0B84LpjweqK-56HK4I9C_gyDPptBvSlFE4Bi0PqJd0vlUif2i23S5UNhDMcjjWUvz4skx";
+  // console.log(message);
   var payload = {
     notification: {
       title: message
     }
   };
-  admin
-    .messaging()
-    .sendToDevice(token, payload)
-    // eslint-disable-next-line promise/always-return
-    .then(response => {
-      console.log("Successfully sent message:", response);
-    })
-    .catch(error => {
-      console.log("Error sending message:", error);
+  const users = admin.firestore().collection('permissions');
+  users.get()
+  .then(snapshot => {
+    snapshot.forEach(doc => {
+      if (doc.data().rank == "team") {
+        token = doc.data().deviceToken;
+        console.log("전송 : ",token);
+        admin.messaging().sendToDevice(token, payload);
+      }else{
+        console.log(doc.data().rank)
+      }
     });
+    return 'sent message to all users';
+  })
+  .catch(err => {
+    console.log('Error getting documents', err);
+  });
 }

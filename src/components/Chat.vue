@@ -1,6 +1,6 @@
 <template>
     <div id="frogue-container" class="position-right-bottom"
-      data-chatbot="bdf98444-2784-48aa-90e9-c3c1ed65cddd"
+      data-chatbot="a82d9cfa-e98b-4c7b-ba58-25d92aabe926"
       data-user="azsw7797@gmail.com"
       data-init-key="value"
       ></div>

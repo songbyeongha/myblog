@@ -95,7 +95,6 @@
 import LoginModal from "./LoginModal.vue";
 import Chat from "./Chat.vue";
 import FirebaseService from "@/services/FirebaseService";
-import PushMessageService from "@/services/PushMessageService.js";
 import firebase from "firebase/app";
 
 export default {
