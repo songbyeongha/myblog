@@ -21,6 +21,10 @@
         <v-tab>
           Seesion
         </v-tab>
+
+        <v-tab>
+          Country
+        </v-tab>
   
         <v-tab-item>
           <v-card flat>
@@ -62,6 +66,15 @@
           </v-card>
         </v-tab-item>
 
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>
+              <!-- 나라차트 -->
+                <GaCountryChart></GaCountryChart>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+
       </v-tabs>
     </v-card>
   </v-app>
@@ -75,6 +88,7 @@ import fbservice from "@/services/FirebaseService.js";
 import PostCounter from "../components/PostCounter.vue";
 import GoogleAnalytics from "../components/GoogleAnalytics.vue";
 import GaSessionChart from "../components/GoogleAnalysticsSession.vue";
+import GaCountryChart from "../components/GoogleAnalyticsCountry.vue";
 import { clearInterval } from "timers";
 
 export default {
@@ -85,6 +99,7 @@ export default {
     PostCounter,
     GoogleAnalytics,
     GaSessionChart,
+    GaCountryChart
   },
   
 };
