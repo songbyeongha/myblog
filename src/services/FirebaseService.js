@@ -301,12 +301,16 @@ export default {
       });
   },
   getComments() {},
-  postComment(name, email, text) {
-    return firebase.collection(COMMENTS).add({
-      name,
-      email,
-      text,
-      created_at: firebase.firestore.FieldValue.serverTimestamp()
-    });
+  postComment(docname, docid, name, email, text) {
+    return firebase
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .add({
+        name,
+        email,
+        text,
+        created_at: firebase.firestore.FieldValue.serverTimestamp()
+      });
   }
 };
