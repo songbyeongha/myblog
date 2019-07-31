@@ -28,18 +28,20 @@ const firestore = firebase.firestore();
 var signInLog = firebase.functions().httpsCallable("signInLog");
 var signOutLog = firebase.functions().httpsCallable("signOutLog");
 
-firebase.firestore().enablePersistence()
+firebase
+  .firestore()
+  .enablePersistence()
   .catch(function(err) {
-  if (err.code == 'failed-precondition') {
-  // Multiple tabs open, persistence can only be enabled
-  // in one tab at a a time.
-  // ...
-  } else if (err.code == 'unimplemented') {
-  // The current browser does not support all of the
-  // features required to enable persistence
-  // ...
-  }
-});
+    if (err.code == "failed-precondition") {
+      // Multiple tabs open, persistence can only be enabled
+      // in one tab at a a time.
+      // ...
+    } else if (err.code == "unimplemented") {
+      // The current browser does not support all of the
+      // features required to enable persistence
+      // ...
+    }
+  });
 
 let messaging = null;
 if (firebase.messaging.isSupported()) {
@@ -119,6 +121,23 @@ export default {
         return data;
       });
     });
+  },
+  getOnePortfolio(id) {
+    let idRef = firestore.collection(PORTFOLIOS).doc(id);
+    return idRef
+      .get()
+      .then(function(doc) {
+        if (doc.exists) {
+          let data = doc.data();
+          data.created_at = new Date(data.created_at.toDate());
+          return data;
+        } else {
+          // doc.data() will be undefined in this case
+        }
+      })
+      .catch(function(error) {
+        console.log("Error getting portfolio:", error);
+      });
   },
   getPermission(id) {
     let idRef = firestore.collection(PERM).doc(id);
@@ -315,7 +334,7 @@ export default {
   },
   getComments() {},
   postComment(docname, docid, name, email, text) {
-    return firebase
+    return firestore
       .collection(docname)
       .doc(docid)
       .collection(COMMENTS)

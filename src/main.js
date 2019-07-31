@@ -4,6 +4,8 @@ import "vuetify/dist/vuetify.min.css";
 import VueSimplemde from "vue-simplemde";
 import "simplemde/dist/simplemde.min.css";
 import "font-awesome/css/font-awesome.min.css";
+import moment from "moment";
+import VueMomentJS from "vue-momentjs";
 
 import App from "./App.vue";
 import router from "./router";
@@ -25,6 +27,7 @@ Vue.use(Vuetify, {
 
 Vue.use(VueSimplemde);
 Vue.use(vueResource);
+Vue.use(VueMomentJS, moment);
 
 new Vue({
 	router,

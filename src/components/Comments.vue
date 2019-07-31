@@ -1,17 +1,21 @@
 <template>
   <v-container>
-    <v-layout>
-      <v-flex xs11>
-        <v-card v-for="i in comments.length" :key="i" class="comments">
+    <v-layout row wrap>
+      <v-flex xs12>
+        <v-card v-for="i in comments" :key="i" class="comments">
           <v-flex>{{ comments[i - 1] }}</v-flex>
         </v-card>
       </v-flex>
-      <v-flex xs11 class="input">
+      <v-flex xs12 class="input">
         <v-textarea
+          height="100"
           outline
-          label="Outline textarea"
-          value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
+          label="Add Comment"
+          v-model="text"
         ></v-textarea>
+      </v-flex>
+      <v-flex xs2 offset-xs10>
+        <v-btn color="primary" @click="addComment()">작성</v-btn>
       </v-flex>
     </v-layout>
   </v-container>
@@ -19,7 +23,7 @@
 
 <script>
 import store from "../store";
-import fbstore from "../services/FirebaseService";
+import fbservice from "../services/FirebaseService";
 
 export default {
   name: "Comments",
@@ -28,7 +32,8 @@ export default {
   },
   data() {
     return {
-      canWrite: false
+      canWrite: false,
+      text: ""
     };
   },
   mounted() {
@@ -36,7 +41,16 @@ export default {
   },
   methods: {
     initialize() {
-
+      console.log(this.comments);
+    },
+    addComment() {
+      fbservice.postComment(
+        "portfolios",
+        this.$route.params.did,
+        store.state.userName,
+        store.state.userEmail,
+        this.text
+      );
     }
   },
   computed: {}

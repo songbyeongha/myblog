@@ -54,7 +54,6 @@ export default {
       this.limits = this.limits + 6;
     },
     viewThis(portfolio) {
-      store.state.portfolio = portfolio;
       this.$router.push("/viewPortfolio/" + portfolio.did);
     }
   }
