@@ -135,6 +135,7 @@ export default {
       store.state.userName = "";
       store.state.rank = "";
       store.state.userEmail = "";
+      alert("로그아웃되었습니다.");
       FirebaseService.logout();
     },
     login() {

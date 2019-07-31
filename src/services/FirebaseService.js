@@ -24,11 +24,11 @@ const config = {
 
 firebase.initializeApp(config);
 const firestore = firebase.firestore();
-const messaging = firebase.messaging();
 
 var signInLog = firebase.functions().httpsCallable("signInLog");
 var signOutLog = firebase.functions().httpsCallable("signOutLog");
 
+let messaging = null;
 if (firebase.messaging.isSupported()) {
   messaging = firebase.messaging();
   messaging.usePublicVapidKey(
@@ -225,10 +225,6 @@ export default {
       .auth()
       .signOut()
       .then(function() {
-        alert("로그아웃되었습니다.");
-        store.state.userEmail = "";
-        store.state.userName = "";
-        store.state.rank = "";
         router.push("/");
       })
       .catch(function(error) {
@@ -304,15 +300,13 @@ export default {
         console.log(err);
       });
   },
-  getComments() {
-
-  },
+  getComments() {},
   postComment(name, email, text) {
     return firebase.collection(COMMENTS).add({
       name,
       email,
       text,
       created_at: firebase.firestore.FieldValue.serverTimestamp()
-    })
+    });
   }
 };
