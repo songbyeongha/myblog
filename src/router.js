@@ -7,8 +7,28 @@ import LoginPage from "./views/LoginPage.vue";
 import AddPortfolioPage from "./views/AddPortfolioPage.vue";
 import GitInfoPage from "./views/GitInfoPage.vue";
 import MyConfig from "./views/MyConfig";
+import ViewPortfolio from "./views/PortfolioViewPage";
+import store from "./store";
 
 Vue.use(Router);
+
+const requireAuth = () => (to, from, next) => {
+  if (store.state.rank == "admin") {
+    return next();
+  } else {
+    alert("관리자 권한이 필요합니다.");
+    next("/");
+  }
+};
+
+const requireLogin = () => (to, from, next) => {
+  if (store.state.rank == "admin" || store.state.rank == "team") {
+    return next();
+  } else {
+    alert("포트폴리오는 팀원이나 관리자만 작성이 가능합니다.");
+    next("/portfolio");
+  }
+};
 
 export default new Router({
   mode: "history",
@@ -37,7 +57,8 @@ export default new Router({
     {
       path: "/portfolio-add",
       name: "addportfolio",
-      component: AddPortfolioPage
+      component: AddPortfolioPage,
+      beforeEnter: requireLogin()
     },
     {
       path: "/gitinfopage",
@@ -47,7 +68,13 @@ export default new Router({
     {
       path: "/myconfig",
       name: "myconfig",
-      component: MyConfig
+      component: MyConfig,
+      beforeEnter: requireAuth()
+    },
+    {
+      path: "/viewPortfolio/:did",
+      name: "viewPortfolio",
+      component: ViewPortfolio
     }
   ]
 });

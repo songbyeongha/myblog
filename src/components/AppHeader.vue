@@ -31,7 +31,7 @@
           </v-list-tile-action>
           <v-list-tile-content>{{ item.title }}</v-list-tile-content>
         </v-list-tile>
-        <v-list-tile v-if="userRank == 'admin'" :to="adminLink">
+        <v-list-tile v-if="getRank == 'admin'" :to="adminLink">
           <v-list-tile-action>
             <v-icon>build</v-icon>
           </v-list-tile-action>
@@ -60,12 +60,11 @@
           <v-icon left dark>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
-        <v-btn flat v-if="userRank === 'admin'" :to="adminLink">
-          <v-icon left dark>build</v-icon>
-          Admin
+        <v-btn flat v-if="getRank === 'admin'" :to="adminLink">
+          <v-icon left dark>build</v-icon>Admin
         </v-btn>
         <v-btn
-          v-if="showlogin"
+          v-if="!userName"
           fab
           dark
           small
@@ -75,7 +74,7 @@
           <v-icon>lock_open</v-icon>
         </v-btn>
         <v-btn
-          v-if="!showlogin"
+          v-if="userName"
           fab
           dark
           small
@@ -96,6 +95,7 @@ import LoginModal from "./LoginModal.vue";
 import Chat from "./Chat.vue";
 import FirebaseService from "@/services/FirebaseService";
 import firebase from "firebase/app";
+import store from "../store";
 
 export default {
   name: "AppHeader",
@@ -103,9 +103,6 @@ export default {
     return {
       appTitle: "MyBlog",
       sidebar: false,
-      userName: "",
-      uid: "",
-      userRank: "",
       adminLink: "/MyConfig",
       menuItems: [
         { title: "home", path: "/", icon: "home" },
@@ -120,42 +117,29 @@ export default {
     LoginModal,
     Chat
   },
-  mounted: function() {
-    this.initialize();
+  mounted: function() {},
+  computed: {
+    getRank() {
+      return this.$store.state.rank;
+    },
+    userName() {
+      return this.$store.state.userName;
+    }
   },
   methods: {
-    async initialize() {
-      let instance_this = this;
-      await firebase.auth().onAuthStateChanged(async function(user) {
-        if (user) {
-          // 로그인됨
-          instance_this.userCheck();
-          user.displayName == null ? "아무개" : user.displayName;
-          instance_this.modifyRank(
-            await FirebaseService.getPermission(user.uid)
-          );
-          instance_this.modifyName(user.displayName);
-        }
-      });
-    },
     userCheck: function() {
       this.showlogin = false;
     },
     logout() {
       this.showlogin = true;
-      this.userName = "";
-      this.userRank = "";
-      this.uid = "";
+      store.state.userName = "";
+      store.state.rank = "";
+      store.state.userEmail = "";
+      alert("로그아웃되었습니다.");
       FirebaseService.logout();
     },
     login() {
       this.$store.state.ModalLogin = true;
-    },
-    modifyName(name) {
-      this.userName = name;
-    },
-    modifyRank(rank) {
-      this.userRank = rank;
     }
   }
 };

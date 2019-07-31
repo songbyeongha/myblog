@@ -4,7 +4,7 @@
       v-for="i in portfolios.length > limits ? limits : portfolios.length"
       xs12
       md6
-      lg3
+      lg4
       :key="i"
     >
       <Portfolio
@@ -13,6 +13,7 @@
         :title="portfolios[i - 1].title"
         :body="portfolios[i - 1].body"
         :imgSrc="portfolios[i - 1].img"
+        @click.native="viewThis(portfolios[i - 1])"
       ></Portfolio>
     </v-flex>
 
@@ -26,6 +27,7 @@
 <script>
 import Portfolio from "@/components/Portfolio";
 import FirebaseService from "@/services/FirebaseService";
+import store from "../store";
 
 export default {
   name: "PortfoliosList",
@@ -35,7 +37,7 @@ export default {
   data() {
     return {
       portfolios: [],
-      limits: 4
+      limits: 6
     };
   },
   components: {
@@ -49,7 +51,11 @@ export default {
       this.portfolios = await FirebaseService.getPortfolios();
     },
     loadMorePortfolios() {
-      this.limits = this.portfolios.length;
+      this.limits = this.limits + 6;
+    },
+    viewThis(portfolio) {
+      store.state.portfolio = portfolio;
+      this.$router.push("/viewPortfolio/" + portfolio.did);
     }
   }
 };

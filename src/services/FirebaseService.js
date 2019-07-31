@@ -4,10 +4,12 @@ import "firebase/firestore";
 import "firebase/functions";
 import "firebase/auth";
 import store from "../store.js";
+import router from "../router";
 
 const POSTS = "posts";
 const PORTFOLIOS = "portfolios";
 const PERM = "permissions";
+const COMMENTS = "comments";
 
 // Setup Firebase
 const config = {
@@ -25,6 +27,7 @@ const firestore = firebase.firestore();
 
 var signInLog = firebase.functions().httpsCallable("signInLog");
 var signOutLog = firebase.functions().httpsCallable("signOutLog");
+
 let messaging = null;
 if (firebase.messaging.isSupported()) {
   messaging = firebase.messaging();
@@ -71,6 +74,7 @@ export default {
         return docSnapshots.docs.map(doc => {
           let data = doc.data();
           data.created_at = new Date(data.created_at.toDate());
+          data.did = doc.id;
           return data;
         });
       });
@@ -112,7 +116,6 @@ export default {
           return doc.data().rank;
         } else {
           // doc.data() will be undefined in this case
-          console.log("No rank");
         }
       })
       .catch(function(error) {
@@ -165,7 +168,7 @@ export default {
         let accessToken = result.credential.accessToken;
         let user = result.user;
         signInLog({ loginMsg: "Google로그인" }).then(function(result) {});
-        store.state.user = firebase.auth().currentUser.displayName;
+
         return result;
       })
       .catch(function(error) {
@@ -183,7 +186,6 @@ export default {
         let user = result.user;
         signInLog({ loginMsg: "Facebook로그인" }).then(function(result) {});
 
-        store.state.user = firebase.auth().currentUser.displayName;
         return result;
       })
       .catch(function(error) {
@@ -191,7 +193,7 @@ export default {
       });
   },
   loginEmail(email, password) {
-    firebase
+    return firebase
       .auth()
       .setPersistence(firebase.auth.Auth.Persistence.SESSION)
       .then(function() {
@@ -204,7 +206,6 @@ export default {
               signInLog({ loginMsg: "메일로그인" }).then(function(result) {});
               alert("환영합니다");
 
-              store.state.user = firebase.auth().currentUser.displayName;
               return result;
             },
             function(err) {
@@ -224,20 +225,28 @@ export default {
       .auth()
       .signOut()
       .then(function() {
-        alert("로그아웃되었습니다.");
-        store.state.user = "";
+        router.push("/");
       })
       .catch(function(error) {
         console.log(error);
       });
   },
-  signUpEmail(email, password) {
+  signUpEmail(email, password, name) {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(
-        function(user) {
+        function(res) {
+          let user = res.user;
+          user
+            .updateProfile({ displayName: name })
+            .then(function() {})
+            .catch(function(error) {
+              console.error("userName 업데이트 실패 : ", error);
+            });
+
           alert("가입등록이 완료되었습니다. 다시로그인해 주세요");
+          router.push("/");
         },
         function(err) {
           alert("실패" + err.message);
@@ -290,5 +299,14 @@ export default {
       .catch(function(err) {
         console.log(err);
       });
+  },
+  getComments() {},
+  postComment(name, email, text) {
+    return firebase.collection(COMMENTS).add({
+      name,
+      email,
+      text,
+      created_at: firebase.firestore.FieldValue.serverTimestamp()
+    });
   }
 };

@@ -131,7 +131,6 @@ export default {
       Object.assign(this.users[this.editedIndex], this.editedItem);
       fbservice.updatePermission(this.editedItem.id, this.editedItem.rank);
       this.close();
-      this.initialize();
     }
   }
 };
