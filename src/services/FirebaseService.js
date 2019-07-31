@@ -29,9 +29,12 @@ const messaging = firebase.messaging();
 var signInLog = firebase.functions().httpsCallable("signInLog");
 var signOutLog = firebase.functions().httpsCallable("signOutLog");
 
-messaging.usePublicVapidKey(
-  "BByJZMo0kqza2QWuiwjBuwQVsIcbRdPKi07dCquSE6kXXjAUcKAIS8RQ9dvA_uon2BNzRbmvuMNOiwRSb2vhigs"
-);
+if (firebase.messaging.isSupported()) {
+  messaging = firebase.messaging();
+  messaging.usePublicVapidKey(
+    "BByJZMo0kqza2QWuiwjBuwQVsIcbRdPKi07dCquSE6kXXjAUcKAIS8RQ9dvA_uon2BNzRbmvuMNOiwRSb2vhigs"
+  );
+}
 
 export default {
   getPosts() {
