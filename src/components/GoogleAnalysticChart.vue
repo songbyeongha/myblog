@@ -2,7 +2,7 @@
     <div>
         <div id="embed-api-auth-container"></div>
         <div id="chart-container"></div>
-        <div id="view-selector-container"></div>
+        <div hidden id="view-selector-container"></div>
     </div>
 </template>
 

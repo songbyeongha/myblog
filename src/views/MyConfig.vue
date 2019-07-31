@@ -21,9 +21,19 @@
 
         <v-tab>
           <v-icon left>mdi-access-point</v-icon>
-          차트
+          SessionChart
         </v-tab>
   
+        <v-tab>
+          <v-icon left>mdi-access-point</v-icon>
+          VisitCounter
+        </v-tab>
+
+        <v-tab>
+          <v-icon left>mdi-access-point</v-icon>
+          Country
+        </v-tab>
+
         <v-tab-item>
           <v-card flat>
             <v-card-text>
@@ -59,6 +69,25 @@
             </v-card-text>
           </v-card>
         </v-tab-item>
+
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>
+              <!-- Graph -->
+              <GaVisCounter></GaVisCounter>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>
+              <!-- Graph -->
+              <GaCountry></GaCountry>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+
       </v-tabs>
     </v-card>
   </v-app>
@@ -73,6 +102,8 @@ import PostCounter from '../components/PostCounter.vue';
 import GA from '../components/GoogleAnalystic.vue';
 import GaChart from '../components/GoogleAnalysticChart.vue';
 import { clearInterval } from "timers";
+import GaVisCounter from '../components/GoogleAnalysticVisitCounter.vue';
+import GaCountry from '../components/GoogleAnalysticCountry.vue';
 
 export default {
   name: "ConfigPage",
@@ -82,6 +113,8 @@ export default {
     PostCounter,
     GA,
     GaChart,
+    GaVisCounter,
+    GaCountry,
   },
  
 };
