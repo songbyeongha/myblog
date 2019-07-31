@@ -8,37 +8,25 @@
       <v-tabs vertical>
         <v-tab>
           <v-icon left>mdi-account</v-icon>
-          계정권한설정
+          사용자목록
         </v-tab>
         <v-tab>
           <v-icon left>mdi-lock</v-icon>
-          카운터
+          전체게시글
         </v-tab>
         <v-tab>
           <v-icon left>mdi-access-point</v-icon>
-         AnalysticJson
-        </v-tab>
-
-        <v-tab>
-          <v-icon left>mdi-access-point</v-icon>
-          SessionChart
+          Option 3
         </v-tab>
   
-        <v-tab>
-          <v-icon left>mdi-access-point</v-icon>
-          VisitCounter
-        </v-tab>
-
-        <v-tab>
-          <v-icon left>mdi-access-point</v-icon>
-          Country
-        </v-tab>
-
         <v-tab-item>
           <v-card flat>
             <v-card-text>
               <!-- Table -->
-              <UserTable></UserTable>
+      <v-flex xs12 mg12 lg12 text-xs-center>
+        <h2>사용자 권한 설정</h2>
+      </v-flex>
+      <UserTable></UserTable>
               
             </v-card-text>
           </v-card>
@@ -46,48 +34,52 @@
         <v-tab-item>
           <v-card flat>
             <v-card-text>
-              <!-- Counter -->
-              <PostCounter></PostCounter>
+                <!-- Total Count -->
+      <v-layout row wrap style="margin-top: 20px;">
+        <v-flex xs6 mg6 lg6 text-xs-center>
+          <h2>총 게시글 수</h2>
+        </v-flex>
+        <v-flex xs6 mg6 lg6 text-xs-center>
+          <v-progress-circular
+            indeterminate
+            color="primary"
+            v-if="loading"
+          ></v-progress-circular>
+          <h2 v-else>{{ sum }}</h2>
+        </v-flex>
+        <v-flex xs6 mg6 lg6 text-xs-center>
+          <h2>POSTS</h2>
+        </v-flex>
+        <v-flex xs6 mg6 lg6 text-xs-center>
+          <v-progress-circular
+            indeterminate
+            color="primary"
+            v-if="loading"
+          ></v-progress-circular>
+          <h2 v-else>{{ posts }}</h2>
+        </v-flex>
+        <v-flex xs6 mg6 lg6 text-xs-center>
+          <h2>PORTFOLIOS</h2>
+        </v-flex>
+        <v-flex xs6 mg6 lg6 text-xs-center>
+          <v-progress-circular
+            indeterminate
+            color="primary"
+            v-if="loading"
+          ></v-progress-circular>
+          <h2 v-else>{{ portfolios }}</h2>
+        </v-flex>
+      </v-layout>
             </v-card-text>
           </v-card>
         </v-tab-item>
-
         <v-tab-item>
           <v-card flat>
             <v-card-text>
-              <!-- Graph -->
-              <GA></GA>
+             c
             </v-card-text>
           </v-card>
         </v-tab-item>
-
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <!-- Graph -->
-              <GaChart></GaChart>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <!-- Graph -->
-              <GaVisCounter></GaVisCounter>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <!-- Graph -->
-              <GaCountry></GaCountry>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-
       </v-tabs>
     </v-card>
   </v-app>
@@ -98,25 +90,36 @@
 import ImgBanner from "../components/ImgBanner";
 import UserTable from "../components/UserTable";
 import fbservice from "@/services/FirebaseService.js";
-import PostCounter from '../components/PostCounter.vue';
-import GA from '../components/GoogleAnalystic.vue';
-import GaChart from '../components/GoogleAnalysticChart.vue';
 import { clearInterval } from "timers";
-import GaVisCounter from '../components/GoogleAnalysticVisitCounter.vue';
-import GaCountry from '../components/GoogleAnalysticCountry.vue';
 
 export default {
   name: "ConfigPage",
   components: {
     ImgBanner,
-    UserTable,
-    PostCounter,
-    GA,
-    GaChart,
-    GaVisCounter,
-    GaCountry,
+    UserTable
   },
- 
+  data() {
+    return {
+      posts: 0,
+      portfolios: 0,
+      loading: true
+    };
+  },
+  computed: {
+    sum() {
+      return this.posts + this.portfolios;
+    }
+  },
+  mounted() {
+    this.initialize();
+  },
+  methods: {
+    async initialize() {
+      this.posts = await fbservice.countPost();
+      this.portfolios = await fbservice.countPortfolio();
+      this.loading = false;
+    }
+  }
 };
 </script>
 
