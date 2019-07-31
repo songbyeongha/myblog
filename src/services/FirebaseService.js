@@ -25,7 +25,6 @@ const firestore = firebase.firestore();
 
 var signInLog = firebase.functions().httpsCallable("signInLog");
 var signOutLog = firebase.functions().httpsCallable("signOutLog");
-
 let messaging = null;
 if (firebase.messaging.isSupported()) {
   messaging = firebase.messaging();

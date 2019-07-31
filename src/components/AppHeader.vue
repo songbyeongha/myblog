@@ -87,11 +87,13 @@
       </v-toolbar-items>
     </v-toolbar>
     <LoginModal ref="LModal"></LoginModal>
+    <Chat></Chat>
   </div>
 </template>
 
 <script>
 import LoginModal from "./LoginModal.vue";
+import Chat from "./Chat.vue";
 import FirebaseService from "@/services/FirebaseService";
 import firebase from "firebase/app";
 
@@ -115,7 +117,8 @@ export default {
     };
   },
   components: {
-    LoginModal
+    LoginModal,
+    Chat
   },
   mounted: function() {
     this.initialize();
