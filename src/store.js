@@ -11,12 +11,15 @@ export default new Vuex.Store({
     bannerImgUrl: "https://source.unsplash.com/collection/827743/1600x900",
     ModalLogin: false,
     ModalRegis: false,
-    Username: "Home",
     ModalGit: false,
     ModalIndex: -1,
     GitFindMember: [],
     GitMember: ["신민석", "송병하", "이대경", "Yoon,EunSol"],
     ModalGitMember: [],
-    deviceToken: ""
+    rank: "",
+    portfoilio: null,
+    deviceToken: "",
+    userName: "",
+    userEmail: ""
   }
 });

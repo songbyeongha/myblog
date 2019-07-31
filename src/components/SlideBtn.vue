@@ -49,9 +49,9 @@ export default {
       hover: false,
       tabs: null,
       top: false,
-      right: true,
+      right: false,
       bottom: true,
-      left: false,
+      left: true,
       dialog: false
     };
   },
@@ -70,8 +70,8 @@ export default {
 
 #slidebtn {
   position: fixed;
-  right: 0px;
-  bottom: 0px;
+  left: 0px;
+  bottom: 5px;
   z-index: 9999;
 }
 

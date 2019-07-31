@@ -60,6 +60,8 @@
 
 <script>
 import FirebaseService from "@/services/FirebaseService";
+import store from "../store";
+import firebase from "firebase/app";
 
 export default {
   name: "LoginPage",
@@ -87,7 +89,7 @@ export default {
           result.user.displayName,
           ""
         );
-      }else{
+      } else {
         await FirebaseService.updateDeviceToken(result.user.uid);
       }
 
@@ -106,7 +108,7 @@ export default {
           result.user.displayName,
           ""
         );
-      }else{
+      } else {
         await FirebaseService.updateDeviceToken(result.user.uid);
       }
       this.$store.accessToken = result.credential.accessToken;
@@ -118,7 +120,6 @@ export default {
         this.password
       );
       const res = await FirebaseService.getPermission(result.user.uid);
-
       if (!res) {
         await FirebaseService.postPermission(
           result.user.uid,
@@ -127,7 +128,7 @@ export default {
           result.user.displayName,
           ""
         );
-      }else{
+      } else {
         await FirebaseService.updateDeviceToken(result.user.uid);
       }
     },
