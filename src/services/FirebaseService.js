@@ -9,6 +9,7 @@ import router from "../router";
 const POSTS = "posts";
 const PORTFOLIOS = "portfolios";
 const PERM = "permissions";
+const COMMENTS = "comments";
 
 // Setup Firebase
 const config = {
@@ -164,7 +165,7 @@ export default {
         let accessToken = result.credential.accessToken;
         let user = result.user;
         signInLog({ loginMsg: "Google로그인" }).then(function(result) {});
-        store.state.user = firebase.auth().currentUser.displayName;
+
         return result;
       })
       .catch(function(error) {
@@ -182,7 +183,6 @@ export default {
         let user = result.user;
         signInLog({ loginMsg: "Facebook로그인" }).then(function(result) {});
 
-        store.state.user = firebase.auth().currentUser.displayName;
         return result;
       })
       .catch(function(error) {
@@ -202,8 +202,7 @@ export default {
               store.state.ModalLogin = false;
               signInLog({ loginMsg: "메일로그인" }).then(function(result) {});
               alert("환영합니다");
-              store.state.user = firebase.auth().currentUser.displayName;
-              console.log(result);
+
               return result;
             },
             function(err) {
@@ -224,7 +223,8 @@ export default {
       .signOut()
       .then(function() {
         alert("로그아웃되었습니다.");
-        store.state.user = "";
+        store.state.userEmail = "";
+        store.state.userName = "";
         store.state.rank = "";
         router.push("/");
       })
@@ -300,5 +300,16 @@ export default {
       .catch(function(err) {
         console.log(err);
       });
+  },
+  getComments() {
+
+  },
+  postComment(name, email, text) {
+    return firebase.collection(COMMENTS).add({
+      name,
+      email,
+      text,
+      created_at: firebase.firestore.FieldValue.serverTimestamp()
+    })
   }
 };

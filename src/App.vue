@@ -22,27 +22,40 @@ import Bookmark from "../src/components/Bookmark.vue";
 import ChromeCheck from "../src/components/ChromeCheck.vue";
 import SlideBtn from "../src/components/SlideBtn.vue";
 import Translate from "../src/components/Translate.vue";
+import firebase from "firebase/app";
+import fbservice from "./services/FirebaseService";
 
 export default {
-	name: "App",
-	store,
-	components: {
-		AppHeader,
-		AppFooter,
-		ChromeCheck,
-		SlideBtn,
-		Translate
-	},
-	data(){
-		return{
-			logout : false
-		};
-	},
-	methods:{
-		gglogin(){
-			this.logout = true;	
-		}
-	}
+  name: "App",
+  store,
+  components: {
+    AppHeader,
+    AppFooter,
+    ChromeCheck,
+    SlideBtn,
+    Translate
+  },
+  data() {
+    return {
+      //   logout: false
+    };
+  },
+  methods: {
+    // gglogin() {
+    //   this.logout = true;
+    // }
+  },
+  async mounted() {
+    firebase.auth().onAuthStateChanged(async function(user) {
+      if (user) {
+        // 로그인됨
+        user.displayName == null ? "아무개" : user.displayName;
+        store.state.rank = await fbservice.getPermission(user.uid);
+        store.state.userName = user.displayName;
+        store.state.userEmail = user.email;
+      }
+    });
+  }
 };
 </script>
 

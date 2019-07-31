@@ -25,7 +25,7 @@ const requireLogin = () => (to, from, next) => {
   if (store.state.rank == "admin" || store.state.rank == "team") {
     return next();
   } else {
-    alert("방문자는 사용할 수 없는 기능입니다.");
+    alert("포트폴리오는 팀원이나 관리자만 작성이 가능합니다.");
     next("/portfolio");
   }
 };

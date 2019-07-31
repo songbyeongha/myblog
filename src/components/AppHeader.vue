@@ -61,11 +61,10 @@
           {{ item.title }}
         </v-btn>
         <v-btn flat v-if="getRank === 'admin'" :to="adminLink">
-          <v-icon left dark>build</v-icon>
-          Admin
+          <v-icon left dark>build</v-icon>Admin
         </v-btn>
         <v-btn
-          v-if="showlogin"
+          v-if="!userName"
           fab
           dark
           small
@@ -75,7 +74,7 @@
           <v-icon>lock_open</v-icon>
         </v-btn>
         <v-btn
-          v-if="!showlogin"
+          v-if="userName"
           fab
           dark
           small
@@ -94,6 +93,7 @@
 import LoginModal from "./LoginModal.vue";
 import FirebaseService from "@/services/FirebaseService";
 import firebase from "firebase/app";
+import store from "../store";
 
 export default {
   name: "AppHeader",
@@ -101,8 +101,6 @@ export default {
     return {
       appTitle: "MyBlog",
       sidebar: false,
-      userName: "",
-      userRank: "",
       adminLink: "/MyConfig",
       menuItems: [
         { title: "home", path: "/", icon: "home" },
@@ -116,46 +114,28 @@ export default {
   components: {
     LoginModal
   },
-  mounted: function() {
-    this.initialize();
-  },
+  mounted: function() {},
   computed: {
     getRank() {
       return this.$store.state.rank;
+    },
+    userName() {
+      return this.$store.state.userName;
     }
   },
   methods: {
-    async initialize() {
-      let instance_this = this;
-      await firebase.auth().onAuthStateChanged(async function(user) {
-        if (user) {
-          // 로그인됨
-          instance_this.userCheck();
-          user.displayName == null ? "아무개" : user.displayName;
-          instance_this.modifyRank(
-            await FirebaseService.getPermission(user.uid)
-          );
-          instance_this.modifyName(user.displayName);
-        }
-      });
-    },
     userCheck: function() {
       this.showlogin = false;
     },
     logout() {
       this.showlogin = true;
-      this.userName = "";
-      this.userRank = "";
+      store.state.userName = "";
+      store.state.rank = "";
+      store.state.userEmail = "";
       FirebaseService.logout();
     },
     login() {
       this.$store.state.ModalLogin = true;
-    },
-    modifyName(name) {
-      this.userName = name;
-    },
-    modifyRank(rank) {
-      this.$store.state.rank = rank;
     }
   }
 };

@@ -16,22 +16,10 @@
           </div>
         </v-card-title>
         <v-card-actions>
-          <v-btn flat color="orange">수정</v-btn>
-          <v-btn flat color="orange">삭제</v-btn>
+          <v-btn flat color="orange" v-if="getuser">수정</v-btn>
+          <v-btn flat color="orange" v-if="getuser">삭제</v-btn>
         </v-card-actions>
       </v-card>
-    </v-flex>
-    <v-flex xs11>
-      <v-card v-for="i in comments.length" :key="i" class="comments">
-        <v-flex>{{ getPortfolio.email }}</v-flex>
-      </v-card>
-    </v-flex>
-    <v-flex xs11 class="input">
-      <v-textarea
-        outline
-        label="Outline textarea"
-        value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
-      ></v-textarea>
     </v-flex>
   </v-layout>
 </template>
@@ -44,19 +32,13 @@ export default {
   components: {},
   data() {
     return {
-      portfolio: null,
-      comments: [
-        {
-          name: "shin",
-          text: "meme",
-          id: "aasdf",
-          date: "01010"
-        }
-      ]
+      portfolio: null
     };
   },
   mounted() {},
-  methods: {},
+  methods: {
+    initialize() {}
+  },
   computed: {
     getPortfolio() {
       return store.state.portfolio;

@@ -11,7 +11,6 @@ export default new Vuex.Store({
     bannerImgUrl: "https://source.unsplash.com/collection/827743/1600x900",
     ModalLogin: false,
     ModalRegis: false,
-    Username: "Home",
     ModalGit: false,
     ModalIndex: -1,
     GitFindMember: [],
@@ -19,6 +18,8 @@ export default new Vuex.Store({
     ModalGitMember: [],
     rank: "",
     portfoilio: null,
-    deviceToken: ""
+    deviceToken: "",
+    userName: "",
+    userEmail: ""
   }
 });
