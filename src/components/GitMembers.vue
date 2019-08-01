@@ -46,7 +46,7 @@ export default {
     GitMembers
   },
   mounted() {
-    this.getMembers("6085");
+    this.getMembers("7550");
   },
   methods: {
     async getMembers(teamName) {
