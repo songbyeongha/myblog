@@ -62,11 +62,19 @@
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
     <meta name="theme-color" content="#ffffff" />
     <script src="https://kit.fontawesome.com/7b7ad26452.js"></script>
+    <!-- GA -->
+    <meta name="google-signin-client_id" content="1021517105793-im4pa4jpic53t58anbqduhkpvgs80l3m.apps.googleusercontent.com">
+    <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+    <script src="https://apis.google.com/js/client:platform.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144605722-1"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+
+
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=UA-144605722-1"
-    ></script>
+    
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag() {
@@ -81,10 +89,11 @@
     <noscript>
       <strong
         >We're sorry but ssafy doesn't work properly without JavaScript enabled.
-        Please enable it to continue.</strong
-      >
+        Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </body>
+  <!-- Load the JavaScript API client and Sign-in library. -->
+  <script src="https://apis.google.com/js/client:platform.js"></script>
 </html>
