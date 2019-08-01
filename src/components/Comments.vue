@@ -33,7 +33,7 @@
         <v-textarea
           height="100"
           outline
-          label="Add Comment"
+          label="댓글 쓰기"
           v-model="text"
         ></v-textarea>
         <v-btn color="primary" @click="addComment()">작성</v-btn>
