@@ -67,7 +67,7 @@ export default {
     return firestore.collection(POSTS).add({
       title,
       body,
-      created_at: firebase.firestore.FieldValue.serverTimestamp()
+      created_at: new Date()
     });
   },
   countPost() {
@@ -99,7 +99,7 @@ export default {
       img,
       email,
       name,
-      created_at: firebase.firestore.FieldValue.serverTimestamp()
+      created_at: new Date()
     });
   },
   countPortfolio() {
