@@ -4,7 +4,7 @@
       <div>
         <div class="caption">{{ formatedDate }}</div>
         <div class="headline">{{ title }}</div>
-        <span class="grey--text">{{ body }}</span>
+        <span class="grey--text subText">{{ body }}</span>
       </div>
     </v-card-title>
   </v-card>
@@ -26,20 +26,4 @@ export default {
 };
 </script>
 <style>
-.headline {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-}
-.grey--text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-}
 </style>
