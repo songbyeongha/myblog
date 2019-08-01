@@ -28,18 +28,20 @@ const firestore = firebase.firestore();
 var signInLog = firebase.functions().httpsCallable("signInLog");
 var signOutLog = firebase.functions().httpsCallable("signOutLog");
 
-firebase.firestore().enablePersistence()
+firebase
+  .firestore()
+  .enablePersistence()
   .catch(function(err) {
-  if (err.code == 'failed-precondition') {
-  // Multiple tabs open, persistence can only be enabled
-  // in one tab at a a time.
-  // ...
-  } else if (err.code == 'unimplemented') {
-  // The current browser does not support all of the
-  // features required to enable persistence
-  // ...
-  }
-});
+    if (err.code == "failed-precondition") {
+      // Multiple tabs open, persistence can only be enabled
+      // in one tab at a a time.
+      // ...
+    } else if (err.code == "unimplemented") {
+      // The current browser does not support all of the
+      // features required to enable persistence
+      // ...
+    }
+  });
 
 let messaging = null;
 if (firebase.messaging.isSupported()) {
@@ -119,6 +121,23 @@ export default {
         return data;
       });
     });
+  },
+  getOnePortfolio(id) {
+    let idRef = firestore.collection(PORTFOLIOS).doc(id);
+    return idRef
+      .get()
+      .then(function(doc) {
+        if (doc.exists) {
+          let data = doc.data();
+          data.created_at = new Date(data.created_at.toDate());
+          return data;
+        } else {
+          // doc.data() will be undefined in this case
+        }
+      })
+      .catch(function(error) {
+        console.log("Error getting portfolio:", error);
+      });
   },
   getPermission(id) {
     let idRef = firestore.collection(PERM).doc(id);
@@ -313,9 +332,27 @@ export default {
         console.log(err);
       });
   },
-  getComments() {},
+  getComments(docname, docid) {
+    //docname = post | portfolio , docid = postid | portfolioid
+    const commentsCollection = firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS);
+    return commentsCollection
+      .orderBy("created_at", "desc")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          data.created_at = new Date(data.created_at.toDate());
+          data.cid = doc.id;
+          return data;
+        });
+      });
+  },
   postComment(docname, docid, name, email, text) {
-    return firebase
+    //docname = post | portfolio , docid = postid | portfolioid
+    return firestore
       .collection(docname)
       .doc(docid)
       .collection(COMMENTS)
@@ -323,7 +360,7 @@ export default {
         name,
         email,
         text,
-        created_at: firebase.firestore.FieldValue.serverTimestamp()
+        created_at: new Date()
       });
   }
 };
