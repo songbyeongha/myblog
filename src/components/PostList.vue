@@ -50,7 +50,7 @@ export default {
       this.posts = await FirebaseService.getPosts();
     },
     loadMorePosts() {
-      this.limits = this.posts.length;
+      this.limits = this.limits + 6;
     }
   }
 };

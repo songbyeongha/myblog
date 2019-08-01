@@ -5,6 +5,7 @@ import PostPage from "./views/PostPage.vue";
 import PortfolioPage from "./views/PortfolioPage.vue";
 import LoginPage from "./views/LoginPage.vue";
 import AddPortfolioPage from "./views/AddPortfolioPage.vue";
+import AddPostPage from "./views/AddPostPage.vue";
 import GitInfoPage from "./views/GitInfoPage.vue";
 import MyConfig from "./views/MyConfig";
 import ViewPortfolio from "./views/PortfolioViewPage";
@@ -58,6 +59,12 @@ export default new Router({
       path: "/portfolio-add",
       name: "addportfolio",
       component: AddPortfolioPage,
+      beforeEnter: requireLogin()
+    },
+    {
+      path: "/post-add",
+      name: "addpost",
+      component: AddPostPage,
       beforeEnter: requireLogin()
     },
     {

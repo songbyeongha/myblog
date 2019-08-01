@@ -10,10 +10,10 @@
           ></v-img>
           <v-card-title>
             <div class="headline">{{ getPortfolio.title }}</div>
-            <span class="grey--text">{{ getPortfolio.name }}</span>
+            <span class="grey--text subText">{{ getPortfolio.name }}</span>
             <br />
-            <span v-html="compiledMarkdown"></span>
-            <span class="grey--text">{{ getDate }}</span>
+            <span v-html="compiledMarkdown" class="subText"></span>
+            <span class="grey--text subText">{{ getDate }}</span>
           </v-card-title>
           <v-card-actions>
             <v-btn flat color="orange" v-if="getUser">수정</v-btn>
