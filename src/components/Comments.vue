@@ -1,46 +1,63 @@
 <template>
-  <v-container>
-    <v-layout>
-      <v-flex xs11>
-        <v-card v-for="i in comments.length" :key="i" class="comments">
-          <v-flex>{{ comments[i - 1] }}</v-flex>
-        </v-card>
+  <div>
+    <v-layout row wrap justify-center>
+      <v-flex xs11 v-for="i in comments.length" :key="i.cid" class="comments">
+        <v-card>{{ comments[i - 1] }}</v-card>
       </v-flex>
       <v-flex xs11 class="input">
         <v-textarea
+          height="100"
           outline
-          label="Outline textarea"
-          value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
+          label="Add Comment"
+          v-model="text"
         ></v-textarea>
+        <v-btn color="primary" @click="addComment()">작성</v-btn>
       </v-flex>
     </v-layout>
-  </v-container>
+  </div>
 </template>
 
 <script>
 import store from "../store";
-import fbstore from "../services/FirebaseService";
+import fbservice from "../services/FirebaseService";
 
 export default {
   name: "Comments",
-  props: {
-    comments: []
-  },
   data() {
     return {
-      canWrite: false
+      canWrite: false,
+      text: "",
+      comments: []
     };
   },
   mounted() {
     this.initialize();
   },
   methods: {
-    initialize() {
-
+    async initialize() {
+      this.comments = await fbservice.getComments(
+        "portfolios",
+        this.$route.params.did
+      );
+      console.log(this.comments);
+    },
+    addComment() {
+      fbservice.postComment(
+        "portfolios",
+        this.$route.params.did,
+        store.state.userName,
+        store.state.userEmail,
+        this.text
+      );
     }
   },
   computed: {}
 };
 </script>
 
-<style></style>
+<style>
+.comments,
+.input {
+  padding-top: 5px;
+}
+</style>
