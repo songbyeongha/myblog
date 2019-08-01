@@ -26,6 +26,10 @@
           Country
         </v-tab>
   
+        <v-tab>
+          Vender
+        </v-tab>
+
         <v-tab-item>
           <v-card flat>
             <v-card-text>
@@ -75,6 +79,15 @@
           </v-card>
         </v-tab-item>
 
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>
+              <!-- 벤더통계 -->
+                <GaVender></GaVender>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+
       </v-tabs>
     </v-card>
   </v-app>
@@ -89,6 +102,7 @@ import PostCounter from "../components/PostCounter.vue";
 import GoogleAnalytics from "../components/GoogleAnalytics.vue";
 import GaSessionChart from "../components/GoogleAnalysticsSession.vue";
 import GaCountryChart from "../components/GoogleAnalyticsCountry.vue";
+import GaVender from '../components/GoogleAnalysticsVender.vue';
 import { clearInterval } from "timers";
 
 export default {
@@ -99,7 +113,9 @@ export default {
     PostCounter,
     GoogleAnalytics,
     GaSessionChart,
-    GaCountryChart
+    GaCountryChart,
+    GaVender,
+
   },
   
 };

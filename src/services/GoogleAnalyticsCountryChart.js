@@ -7,7 +7,6 @@ timer2 = setInterval(function(){
     }
 gapi.analytics.ready(function() {
 el2++;
-console.log(el2)
     /**
      * Authorize the user immediately if the user has already granted access.
      * If no access has been created, render an authorize button inside the
@@ -15,7 +14,7 @@ console.log(el2)
      */
     gapi.analytics.auth.authorize({
       container: 'embed-api-auth-container',
-      clientid: 'REPLACE WITH YOUR CLIENT ID'
+      clientid: '1021517105793-im4pa4jpic53t58anbqduhkpvgs80l3m.apps.googleusercontent.com'
     });
   
   
