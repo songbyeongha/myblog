@@ -50,9 +50,11 @@ export default {
       if (user) {
         // 로그인됨
         user.displayName == null ? "아무개" : user.displayName;
-        store.state.rank = await fbservice.getPermission(user.uid);
-        store.state.userName = user.displayName;
-        store.state.userEmail = user.email;
+        store.commit("loginInfo",{
+          rankVal : await fbservice.getPermission(user.uid),
+          userNameVal : user.displayName,
+          userEmailVal : user.email
+        });
       }
     });
   }

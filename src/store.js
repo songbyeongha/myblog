@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);
 
@@ -21,5 +22,13 @@ export default new Vuex.Store({
     deviceToken: "",
     userName: "",
     userEmail: ""
+  },
+  plugins: [createPersistedState()],
+  mutations: {
+    loginInfo: function(state, payload) {
+      state.rank = payload.rankVal;
+      state.userName = payload.userNameVal;
+      state.userEmail = payload.userEmailVal;
+    }
   }
 });

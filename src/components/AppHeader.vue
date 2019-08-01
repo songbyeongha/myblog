@@ -132,9 +132,11 @@ export default {
     },
     logout() {
       this.showlogin = true;
-      store.state.userName = "";
-      store.state.rank = "";
-      store.state.userEmail = "";
+      store.commit("loginInfo",{
+          rankVal : "",
+          userNameVal : "",
+          userEmailVal : ""
+      });
       alert("로그아웃되었습니다.");
       FirebaseService.logout();
     },
