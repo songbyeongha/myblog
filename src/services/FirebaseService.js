@@ -69,7 +69,7 @@ export default {
     return firestore.collection(POSTS).add({
       title,
       body,
-      created_at: firebase.firestore.FieldValue.serverTimestamp()
+      created_at: new Date()
     });
   },
   countPost() {
@@ -101,7 +101,7 @@ export default {
       img,
       email,
       name,
-      created_at: firebase.firestore.FieldValue.serverTimestamp()
+      created_at: new Date()
     });
   },
   countPortfolio() {
@@ -332,8 +332,26 @@ export default {
         console.log(err);
       });
   },
-  getComments() {},
+  getComments(docname, docid) {
+    //docname = post | portfolio , docid = postid | portfolioid
+    const commentsCollection = firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS);
+    return commentsCollection
+      .orderBy("created_at", "desc")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          data.created_at = new Date(data.created_at.toDate());
+          data.cid = doc.id;
+          return data;
+        });
+      });
+  },
   postComment(docname, docid, name, email, text) {
+    //docname = post | portfolio , docid = postid | portfolioid
     return firestore
       .collection(docname)
       .doc(docid)
@@ -342,7 +360,7 @@ export default {
         name,
         email,
         text,
-        created_at: firebase.firestore.FieldValue.serverTimestamp()
+        created_at: new Date()
       });
   }
 };

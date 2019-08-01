@@ -1,24 +1,20 @@
 <template>
-  <v-container>
-    <v-layout row wrap>
-      <v-flex xs12>
-        <v-card v-for="i in comments" :key="i" class="comments">
-          <v-flex>{{ comments[i - 1] }}</v-flex>
-        </v-card>
+  <div>
+    <v-layout row wrap justify-center>
+      <v-flex xs11 v-for="i in comments.length" :key="i.cid" class="comments">
+        <v-card>{{ comments[i - 1] }}</v-card>
       </v-flex>
-      <v-flex xs12 class="input">
+      <v-flex xs11 class="input">
         <v-textarea
           height="100"
           outline
           label="Add Comment"
           v-model="text"
         ></v-textarea>
-      </v-flex>
-      <v-flex xs2 offset-xs10>
         <v-btn color="primary" @click="addComment()">작성</v-btn>
       </v-flex>
     </v-layout>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -27,20 +23,22 @@ import fbservice from "../services/FirebaseService";
 
 export default {
   name: "Comments",
-  props: {
-    comments: []
-  },
   data() {
     return {
       canWrite: false,
-      text: ""
+      text: "",
+      comments: []
     };
   },
   mounted() {
     this.initialize();
   },
   methods: {
-    initialize() {
+    async initialize() {
+      this.comments = await fbservice.getComments(
+        "portfolios",
+        this.$route.params.did
+      );
       console.log(this.comments);
     },
     addComment() {
@@ -57,4 +55,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.comments,
+.input {
+  padding-top: 5px;
+}
+</style>

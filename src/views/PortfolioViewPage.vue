@@ -5,8 +5,8 @@
         <v-card>
           <v-img
             class="white--text"
-            aspect-ratio="2"
-            :lazy-src="getPortfolio.img"
+            aspect-ratio="1.7"
+            :src="getPortfolio.img"
           ></v-img>
           <v-card-title>
             <div>
@@ -72,7 +72,7 @@ export default {
       return this.portfolio.userName;
     },
     getDate() {
-      return this.$moment(this.portfolio.created_at).format("YYYY-MM-DD HH:MM");
+      return this.$moment(this.portfolio.created_at).format("YYYY-MM-DD HH:mm");
     }
   }
 };
@@ -81,13 +81,5 @@ export default {
 <style scoped>
 .portfolio {
   margin-top: 5%;
-  margin-bottom: 5%;
-}
-.comments,
-.input {
-  margin-top: 1%;
-}
-.comments {
-  padding: 10px;
 }
 </style>
