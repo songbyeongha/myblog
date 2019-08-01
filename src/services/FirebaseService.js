@@ -362,5 +362,42 @@ export default {
         text,
         created_at: new Date()
       });
+  },
+  getCommentsPage(docname, docid, lastCreated_at) {
+    let data = firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .orderBy("created_at", "desc")
+      .startAfter(lastCreated_at)
+      .limit(10);
+
+    return data.get().then(function(docSnapshots) {
+      // Get the last visible document
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        data.created_at = new Date(data.created_at.toDate());
+        data.cid = doc.id;
+        return data;
+      });
+    });
+  },
+  getInitComments(docname, docid) {
+    let data = firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .orderBy("created_at", "desc")
+      .limit(10);
+
+    return data.get().then(function(docSnapshots) {
+      // Get the last visible document
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        data.created_at = new Date(data.created_at.toDate());
+        data.cid = doc.id;
+        return data;
+      });
+    });
   }
 };

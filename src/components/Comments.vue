@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     async initialize() {
-      this.comments = await fbservice.getComments(
+      this.comments = await fbservice.getInitComments(
         "portfolios",
         this.$route.params.did
       );
@@ -49,6 +49,7 @@ export default {
         store.state.userEmail,
         this.text
       );
+      this.$router.push(this.$route.params.did);
     }
   },
   computed: {}
