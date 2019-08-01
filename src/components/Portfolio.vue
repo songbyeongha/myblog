@@ -2,10 +2,8 @@
   <v-card>
     <v-img :src="imgSrc" height="200px"></v-img>
     <v-card-title primary-title>
-      <div>
-        <div class="headline">{{ title }}</div>
-        <span class="grey--text">{{ body }}</span>
-      </div>
+      <div class="headline">{{ title }}</div>
+      <span class="grey--text subText">{{ body }}</span>
     </v-card-title>
   </v-card>
 </template>
@@ -32,13 +30,15 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   word-wrap: break-word;
+  width: 100%;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
-.grey--text {
+.subText{
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 100%;
   word-wrap: break-word;
   display: -webkit-box;
   -webkit-line-clamp: 3;
