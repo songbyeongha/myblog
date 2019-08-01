@@ -4,6 +4,7 @@
       <div class="bannerText" slot="text">Post</div>
     </ImgBanner>
     <v-container>
+      <v-btn block color="primary" :to="addlink" dark>Write Post</v-btn>
       <!-- Post -->
       <v-layout>
         <v-flex xs12>
@@ -22,6 +23,11 @@ export default {
   name: "PostPage",
   props: {
     cnt: PostList.limits
+  },
+  data() {
+    return {
+      addlink: "/post-add"
+    };
   },
   components: {
     ImgBanner,
