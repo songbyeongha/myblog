@@ -35,7 +35,7 @@ export default {
     GitCommitEvents
   },
   mounted() {
-    this.getCommitEvents("6085");
+    this.getCommitEvents("7550");
   },
   updated() {
     this.gitGraph();
