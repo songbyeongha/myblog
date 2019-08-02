@@ -1,8 +1,63 @@
 <template>
   <div>
     <v-layout row wrap justify-center>
-      <v-flex xs11 v-for="i in comments.length" :key="i.cid" class="comments">
-        <v-card>{{ comments[i - 1] }}</v-card>
+      <h1>COMMENTS</h1>
+      <v-flex
+        xs11
+        v-for="i in comments.length"
+        :key="i.cid"
+        class="comments"
+        overflow-hidden
+      >
+        <v-layout row wrap>
+          <v-flex d-flex xs4 md2>
+            <v-card>
+              <v-card-title>
+                <div>
+                  <div>{{ comments[i - 1].name }}</div>
+                  <div
+                    class="grey--text"
+                    v-text="getDate(comments[i - 1].created_at)"
+                  ></div>
+                </div>
+              </v-card-title>
+            </v-card>
+          </v-flex>
+          <v-flex d-flex xs8 md10>
+            <v-card :class="{ overflow: overFlowed[i - 1] }">
+              <v-card-title class="commentText">
+                <div
+                  v-html="getText(comments[i - 1].text)"
+                  class="hiddentext"
+                ></div>
+              </v-card-title>
+              <v-card-actions text-xs-right class="commentManage">
+                <v-layout justify-start>
+                  <v-btn
+                    v-if="overFlowed[i - 1]"
+                    small
+                    flat
+                    color="orange"
+                    @click="toggleOverFlow(i - 1)"
+                    >더보기</v-btn
+                  >
+                  <v-btn
+                    v-else
+                    small
+                    flat
+                    color="orange"
+                    @click="toggleOverFlow(i - 1)"
+                    >접기</v-btn
+                  >
+                </v-layout>
+                <v-layout justify-end>
+                  <v-btn small flat color="orange">수정</v-btn>
+                  <v-btn small flat color="orange">삭제</v-btn>
+                </v-layout>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
       </v-flex>
       <v-flex xs11 text-xs-center>
         <v-btn
@@ -54,7 +109,9 @@ export default {
       text: "",
       comments: [],
       currentPage: 1,
-      nextPage: true
+      nextPage: true,
+      overFlowed: [],
+      bool: true
     };
   },
   mounted() {
@@ -66,9 +123,16 @@ export default {
         "portfolios",
         this.$route.params.did
       );
+      for (let i = 0; i < this.comments.length; i++) {
+        this.overFlowed.push(true);
+      }
       this.CanLoadNextComment();
     },
     addComment() {
+      if (!this.canWrite) {
+        alert("로그인이 필요한 기능입니다.");
+        return;
+      }
       fbservice.postComment(
         "portfolios",
         this.$route.params.did,
@@ -114,7 +178,20 @@ export default {
       } else {
         this.nextPage = true;
       }
+    },
+    getDate(date) {
+      return this.$moment(date).format("YYYY-MM-DD HH:mm");
+    },
+    getText(text) {
+      return text.split("\n").join("<br />");
+    },
+    toggleOverFlow(index) {
+      this.$set(this.overFlowed, index, !this.overFlowed[index]);
     }
+    // getOverFlow(index) {
+    //   console.log(this.overFlowed[index]);
+    //   return this.overFlowed[index];
+    // }
   },
   computed: {}
 };
@@ -124,5 +201,20 @@ export default {
 .comments,
 .input {
   padding-top: 5px;
+}
+.overflow .commentText {
+  height: 70px;
+}
+.overflow .commentManage {
+  height: 30px;
+}
+.overflow .commentText .hiddentext {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 </style>
