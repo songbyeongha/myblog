@@ -2,12 +2,11 @@
   <div>
     <ImgBanner>
       <div class="bannerText" slot="text">
-        Write Portfolio
+        {{bannerText}}
         <br />
       </div>
     </ImgBanner>
     <div class="container">
-      <ImgTool mode="port" @imgSelected="getImgURL"></ImgTool>
       <v-layout row wrap>
         <v-flex xs3 mg1 lg1 text-xs-center tit>
           <h2>Title</h2>
@@ -23,7 +22,8 @@
       </v-layout>
       <markdown-editor v-model="input"></markdown-editor>
       <div class="text-xs-center">
-        <v-btn round color="primary" dark @click="send()">Add</v-btn>
+        <v-btn v-if="mode=='write'" round color="primary" dark @click="send()">Add</v-btn>
+        <v-btn v-if="mode=='modify'" round color="primary" dark @click="modify()">modify</v-btn>
       </div>
     </div>
   </div>
@@ -34,7 +34,6 @@ import Vue from "vue";
 import ImgBanner from "../components/ImgBanner";
 import Editor from "v-markdown-editor";
 import FirebaseService from "@/services/FirebaseService";
-import ImgTool from "../components/ImageTool";
 import store from "../store.js";
 import firebase from "firebase/app";
 import router from "../router";
@@ -42,46 +41,68 @@ import router from "../router";
 Vue.use(Editor);
 
 export default {
-  name: "AddPortfolioPage",
-  components: {
-    ImgBanner,
-    ImgTool
+  name: "AddPost",
+    components: {
+    ImgBanner
   },
   data() {
     return {
-      input: "# hello",
+      post: {
+        body: "",
+        email: "",
+        name: "",
+        title: "",
+        created_at: ""
+      },
+      bannerText : "",
+      input: "",
       title: "",
-      imageName: "",
-      imageUrl: "",
-      imageFile: ""
+      mode:""
     };
+  },
+  mounted(){
+    if(this.$route.params.mode=="write"){
+      this.bannerText = "Write Post";
+      this.mode = "write";
+    }else{
+      this.bannerText = "Modify Post";
+      this.mode = "modify";
+      this.initialize();
+    }
   },
   computed: {
     getUser() {
       return firebase.auth().currentUser;
+    },
+    getPost() {
+      return this.post;
     }
   },
   methods: {
-    getImgURL() {
-      this.imageUrl = store.state.imgUrl;
-    },
     send() {
-      if (
-        !(
-          this.$store.state.rank === "admin" ||
-          this.$store.state.rank === "team"
-        )
-      ) {
-        alert("권한이 필요한 기능입니다.");
-      }
-      FirebaseService.postPortfolio(
+      FirebaseService.postPost(
         this.title,
         this.input,
-        this.imageUrl,
         this.getUser.email,
         this.getUser.displayName
       );
-      this.$router.push("/portfolio");
+      this.$router.push("/post");
+    },
+    modify(){
+      FirebaseService.modifyPost(
+        this.$route.params.mode,
+        this.title,
+        this.input,
+        this.getUser.email,
+        this.getUser.displayName
+      );
+      this.$router.push("/post");
+    },
+    async initialize() {
+      let id = this.$route.params.mode;
+      this.post = await FirebaseService.getOnePost(id);
+      this.title = this.post.title;
+      this.input = this.post.body;
     }
   }
 };

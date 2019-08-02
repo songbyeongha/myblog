@@ -1,13 +1,19 @@
 <template>
   <div>
-    <v-img :src="getImgUrl"
-           aspect-ratio="1.7">
+    <v-img :src="getImgUrl" aspect-ratio="1.7">
       <v-layout align-center justify-center row fill-height>
         <v-flex text-xs-center>
           <span class="text-shadow display-2 font-weight-light bannerText">
-            <slot name="text"/>
+            <slot name="text" />
           </span>
-          <v-btn id="changeBtn" right top absolute color="grey lighten-4" @click="showModal = true">
+          <v-btn
+            id="changeBtn"
+            right
+            top
+            absolute
+            color="grey lighten-4"
+            @click="showModal = true"
+          >
             <v-icon>photo</v-icon>
           </v-btn>
         </v-flex>
@@ -22,58 +28,56 @@ import modal from "../components/ImgModal";
 import store from "../store.js";
 
 export default {
-	name: "ImgBanner",
-	data() {
-		return {
-			showModal: false,
-			selected: false
-		};
-	},
-	components: {
-		modal
-	},
-	props: {
-		text: {type: String}
-	},
-	mounted() {
-    
-	},
-	computed: {
-		getImgUrl() {
-			return store.state.bannerImgUrl;
-		}
-	},
-	methods: {
-		ifok() {
-			this.showModal = false;
-		},
-		ifcancel() {
-			this.showModal = false;
-		},
-	},
+  name: "ImgBanner",
+  data() {
+    return {
+      showModal: false,
+      selected: false
+    };
+  },
+  components: {
+    modal
+  },
+  props: {
+    text: { type: String }
+  },
+  mounted() {},
+  computed: {
+    getImgUrl() {
+      return store.state.bannerImgUrl;
+    }
+  },
+  methods: {
+    ifok() {
+      this.showModal = false;
+    },
+    ifcancel() {
+      this.showModal = false;
+    }
+  }
 };
 </script>
 <style>
-  .text-shadow {
-    text-shadow: 0 0 15px rgb(255,255,255);
-  }
-  #changeBtn {
-    margin-top: 40px;
-  }
+.text-shadow {
+  text-shadow: 0 0 15px rgb(255, 255, 255);
+}
+#changeBtn {
+  margin-top: 40px;
+}
 
-  .bannerText {
+.bannerText {
+  transform: translateY(0%);
+  animation: bannerTextAnimation 1s ease;
+}
+
+@keyframes bannerTextAnimation {
+  0% {
+    transform: translateY(-200%);
+    opacity: 0;
+  }
+  100% {
     transform: translateY(0%);
-    animation: bannerTextAnimation 1s ease;
+    opacity: 1;
   }
-
-  @keyframes bannerTextAnimation {
-    0% {
-      transform: translateY(-200%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateY(0%);
-      opacity: 1;
-    }
-  }
+}
 </style>
