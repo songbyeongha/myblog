@@ -61,14 +61,17 @@ export default {
         return docSnapshots.docs.map(doc => {
           let data = doc.data();
           data.created_at = new Date(data.created_at.toDate());
+          data.did = doc.id;
           return data;
         });
       });
   },
-  postPost(title, body) {
+  postPost(title, body, email, name) {
     return firestore.collection(POSTS).add({
       title,
       body,
+      email,
+      name,
       created_at: new Date()
     });
   },
@@ -137,6 +140,23 @@ export default {
       })
       .catch(function(error) {
         console.log("Error getting portfolio:", error);
+      });
+  },
+  getOnePost(id) {
+    let idRef = firestore.collection(POSTS).doc(id);
+    return idRef
+      .get()
+      .then(function(doc) {
+        if (doc.exists) {
+          let data = doc.data();
+          data.created_at = new Date(data.created_at.toDate());
+          return data;
+        } else {
+          // doc.data() will be undefined in this case
+        }
+      })
+      .catch(function(error) {
+        console.log("Error getting post:", error);
       });
   },
   getPermission(id) {

@@ -9,6 +9,7 @@ import AddPostPage from "./views/AddPostPage.vue";
 import GitInfoPage from "./views/GitInfoPage.vue";
 import MyConfig from "./views/MyConfig";
 import ViewPortfolio from "./views/PortfolioViewPage";
+import ViewPost from "./views/PostViewPage";
 import store from "./store";
 
 Vue.use(Router);
@@ -82,6 +83,11 @@ export default new Router({
       path: "/viewPortfolio/:did",
       name: "viewPortfolio",
       component: ViewPortfolio
+    },
+    {
+      path: "/viewPost/:did",
+      name: "viewPost",
+      component: ViewPost
     }
   ]
 });

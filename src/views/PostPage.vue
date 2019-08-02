@@ -4,7 +4,7 @@
       <div class="bannerText" slot="text">Post</div>
     </ImgBanner>
     <v-container>
-      <v-btn block color="primary" :to="addlink" dark>Write Post</v-btn>
+      <v-btn v-if="userCheck" block color="primary" :to="addlink" dark>Write Post</v-btn>
       <!-- Post -->
       <v-layout>
         <v-flex xs12>
@@ -32,6 +32,13 @@ export default {
   components: {
     ImgBanner,
     PostList
+  },
+  computed: {
+    userCheck() {
+      return (
+        this.$store.state.rank == "team" || this.$store.state.rank == "admin"
+      );
+    }
   }
 };
 </script>

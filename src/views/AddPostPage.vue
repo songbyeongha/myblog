@@ -60,6 +60,8 @@ export default {
       FirebaseService.postPost(
         this.title,
         this.input,
+        this.getUser.email,
+        this.getUser.displayName
       );
       this.$router.push("/post");
     }

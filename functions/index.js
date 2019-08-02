@@ -33,9 +33,6 @@ exports.sendPostNotification = functions.firestore
   });
 
 function pushMessage(message) {
-  // var token =
-  //   "fS4NHsU-9JA:APA91bF3S5In8MuQYPlrme1jhovxnjviCRB4_UuBdUAif_1CJ1-jEcgJrSkje8LfWdM6TMo0B84LpjweqK-56HK4I9C_gyDPptBvSlFE4Bi0PqJd0vlUif2i23S5UNhDMcjjWUvz4skx";
-  // console.log(message);
   var payload = {
     notification: {
       title: message

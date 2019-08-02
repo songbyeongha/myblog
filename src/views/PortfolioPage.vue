@@ -4,7 +4,7 @@
       <div class="bannerText" slot="text">Portfolio</div>
     </ImgBanner>
     <v-container>
-      <v-btn block color="primary" :to="addlink" dark>Write Portfolio</v-btn>
+      <v-btn v-if="userCheck" block color="primary" :to="addlink" dark>Write Portfolio</v-btn>
       <!-- Portfolio -->
       <v-layout>
         <v-flex xs12>
@@ -32,6 +32,13 @@ export default {
   components: {
     ImgBanner,
     PortfolioList
+  },
+  computed: {
+    userCheck() {
+      return (
+        this.$store.state.rank == "team" || this.$store.state.rank == "admin"
+      );
+    }
   }
 };
 </script>
