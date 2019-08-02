@@ -4,7 +4,9 @@
       <div class="bannerText" slot="text">Portfolio</div>
     </ImgBanner>
     <v-container>
-      <v-btn block color="primary" :to="addlink" dark>Write Portfolio</v-btn>
+      <v-btn block color="primary" :to="addlink" dark v-if="canPort"
+        >Write Portfolio</v-btn
+      >
       <!-- Portfolio -->
       <v-layout>
         <v-flex xs12>
@@ -28,6 +30,13 @@ export default {
     return {
       addlink: "/portfolio-add"
     };
+  },
+  computed: {
+    canPort() {
+      return (
+        this.$store.state.rank === "admin" || this.$store.state.rank === "team"
+      );
+    }
   },
   components: {
     ImgBanner,

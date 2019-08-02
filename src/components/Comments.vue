@@ -51,8 +51,12 @@
                   >
                 </v-layout>
                 <v-layout justify-end>
-                  <v-btn small flat color="orange">수정</v-btn>
-                  <v-btn small flat color="orange">삭제</v-btn>
+                  <v-btn small flat color="orange" v-if="isWriter(i - 1)"
+                    >수정</v-btn
+                  >
+                  <v-btn small flat color="orange" v-if="isWriter(i - 1)"
+                    >삭제</v-btn
+                  >
                 </v-layout>
               </v-card-actions>
             </v-card>
@@ -91,7 +95,10 @@
           label="댓글 쓰기"
           v-model="text"
         ></v-textarea>
-        <v-btn color="primary" @click="addComment()">작성</v-btn>
+        <v-layout justify-end>
+          <v-btn color="primary" to="/portfolio">목록으로</v-btn>
+          <v-btn color="primary" @click="addComment()">작성</v-btn>
+        </v-layout>
       </v-flex>
     </v-layout>
   </div>
@@ -187,11 +194,10 @@ export default {
     },
     toggleOverFlow(index) {
       this.$set(this.overFlowed, index, !this.overFlowed[index]);
+    },
+    isWriter(i) {
+      return this.$store.state.userEmail === this.comments[i].email;
     }
-    // getOverFlow(index) {
-    //   console.log(this.overFlowed[index]);
-    //   return this.overFlowed[index];
-    // }
   },
   computed: {}
 };
