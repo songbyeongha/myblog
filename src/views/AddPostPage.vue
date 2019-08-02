@@ -2,7 +2,7 @@
   <div>
     <ImgBanner>
       <div class="bannerText" slot="text">
-        Write Post
+        {{bannerText}}
         <br />
       </div>
     </ImgBanner>
@@ -22,7 +22,8 @@
       </v-layout>
       <markdown-editor v-model="input"></markdown-editor>
       <div class="text-xs-center">
-        <v-btn round color="primary" dark @click="send()">Add</v-btn>
+        <v-btn v-if="mode=='write'" round color="primary" dark @click="send()">Add</v-btn>
+        <v-btn v-if="mode=='modify'" round color="primary" dark @click="modify()">modify</v-btn>
       </div>
     </div>
   </div>
@@ -46,13 +47,35 @@ export default {
   },
   data() {
     return {
-      input: "# Post",
+      post: {
+        body: "",
+        email: "",
+        name: "",
+        title: "",
+        created_at: ""
+      },
+      bannerText : "",
+      input: "",
       title: "",
+      mode:""
     };
+  },
+  mounted(){
+    if(this.$route.params.mode=="write"){
+      this.bannerText = "Write Post";
+      this.mode = "write";
+    }else{
+      this.bannerText = "Modify Post";
+      this.mode = "modify";
+      this.initialize();
+    }
   },
   computed: {
     getUser() {
       return firebase.auth().currentUser;
+    },
+    getPost() {
+      return this.post;
     }
   },
   methods: {
@@ -64,6 +87,22 @@ export default {
         this.getUser.displayName
       );
       this.$router.push("/post");
+    },
+    modify(){
+      FirebaseService.modifyPost(
+        this.$route.params.mode,
+        this.title,
+        this.input,
+        this.getUser.email,
+        this.getUser.displayName
+      );
+      this.$router.push("/post");
+    },
+    async initialize() {
+      let id = this.$route.params.mode;
+      this.post = await FirebaseService.getOnePost(id);
+      this.title = this.post.title;
+      this.input = this.post.body;
     }
   }
 };

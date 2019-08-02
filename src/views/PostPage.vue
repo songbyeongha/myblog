@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      addlink: "/post-add"
+      addlink: "/post-add/write"
     };
   },
   components: {

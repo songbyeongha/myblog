@@ -18,7 +18,7 @@
                 <span v-html="compiledMarkdown" class="subText subTextarea"></span>
               </v-card-title>
               <v-card class="buttonPlace">
-                <v-btn color="primary" v-if="userCheck">수정</v-btn>
+                <v-btn color="primary" v-if="userCheck" :to="addlink">수정</v-btn>
                 <v-btn color="primary" v-if="userCheck">삭제</v-btn>
               </v-card>
             </v-card>
@@ -49,7 +49,8 @@ export default {
         title: "",
         created_at: ""
       },
-      loaded: false
+      loaded: false,
+      addlink: "/post-add/"+this.$route.params.did
     };
   },
   mounted() {

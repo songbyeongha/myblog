@@ -63,7 +63,7 @@ export default new Router({
       beforeEnter: requireLogin()
     },
     {
-      path: "/post-add",
+      path: "/post-add/:mode",
       name: "addpost",
       component: AddPostPage,
       beforeEnter: requireLogin()
