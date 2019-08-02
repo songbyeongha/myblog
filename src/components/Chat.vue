@@ -23,5 +23,3 @@ export default {
 <style>
 
 </style>
-
-    //   data-chatbot="a82d9cfa-e98b-4c7b-ba58-25d92aabe926"
