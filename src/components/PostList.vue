@@ -14,6 +14,7 @@
         :date="posts[i - 1].created_at"
         :title="posts[i - 1].title"
         :body="posts[i - 1].body"
+        @click.native="viewThis(posts[i - 1])"
       ></Post>
     </v-flex>
     <v-flex xs12 text-xs-center round my-5 v-if="loadMore">
@@ -51,6 +52,9 @@ export default {
     },
     loadMorePosts() {
       this.limits = this.limits + 6;
+    },
+    viewThis(post) {
+      this.$router.push("/viewPost/" + post.did);
     }
   }
 };
