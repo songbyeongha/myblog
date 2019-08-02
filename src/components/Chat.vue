@@ -1,7 +1,7 @@
 <template>
     <div id="frogue-container" class="position-right-bottom"
-      data-chatbot="a82d9cfa-e98b-4c7b-ba58-25d92aabe926"
-      data-user="azsw7797@gmail.com"
+      data-chatbot="753ffaf9-c37b-4ae6-962e-ab9a7ef2f632"
+      data-user="todal160122@gmail.com"
       data-init-key="value"
       ></div>
 </template>
