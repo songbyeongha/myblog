@@ -340,9 +340,6 @@ export default {
             .update({
               deviceToken: deviceToken
             })
-            .then(function() {
-              console.log(deviceToken);
-            })
             .catch(function(error) {
               console.error("Error updating deviceToken: ", error);
             });
