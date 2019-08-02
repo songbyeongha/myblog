@@ -16,8 +16,8 @@
             <span class="grey--text subText">{{ getDate }}</span>
           </v-card-title>
           <v-card-actions>
-            <v-btn flat color="orange" v-if="getUser">수정</v-btn>
-            <v-btn flat color="orange" v-if="getUser">삭제</v-btn>
+            <v-btn flat color="orange" v-if="canWrite">수정</v-btn>
+            <v-btn flat color="orange" v-if="canWrite">삭제</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -67,10 +67,16 @@ export default {
       return marked(this.portfolio.body);
     },
     getUser() {
-      return this.portfolio.userName;
+      return this.$store.state.userName;
     },
     getDate() {
       return this.$moment(this.portfolio.created_at).format("YYYY-MM-DD HH:mm");
+    },
+    canWrite() {
+      return (
+        this.portfolio.email === this.$store.state.userEmail ||
+        this.$store.state.userRank === "admin"
+      );
     }
   }
 };

@@ -35,7 +35,7 @@ export default {
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
-.subText{
+.subText {
   overflow: hidden;
   text-overflow: ellipsis;
   width: 100%;
