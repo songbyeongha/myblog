@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-layout row wrap justify-center>
+    <v-layout row wrap justify-center v-if="checkLoaded">
       <h1>COMMENTS</h1>
       <v-flex
         xs11
@@ -101,6 +101,10 @@
         </v-layout>
       </v-flex>
     </v-layout>
+    <v-progress-linear
+      :indeterminate="true"
+      v-if="!checkLoaded"
+    ></v-progress-linear>
   </div>
 </template>
 
@@ -118,7 +122,8 @@ export default {
       currentPage: 1,
       nextPage: true,
       overFlowed: [],
-      bool: true
+      bool: true,
+      loaded: false
     };
   },
   mounted() {
@@ -134,6 +139,10 @@ export default {
         this.overFlowed.push(true);
       }
       this.CanLoadNextComment();
+      if (this.$store.state.userName) {
+        this.canWrite = true;
+      }
+      this.loaded = true;
     },
     addComment() {
       if (!this.canWrite) {
@@ -199,7 +208,11 @@ export default {
       return this.$store.state.userEmail === this.comments[i].email;
     }
   },
-  computed: {}
+  computed: {
+    checkLoaded() {
+      return this.loaded;
+    }
+  }
 };
 </script>
 
