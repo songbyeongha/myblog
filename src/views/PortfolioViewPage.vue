@@ -1,29 +1,29 @@
 <template>
-  <div>
-    <v-layout class="portfolio" justify-center row wrap>
-      <v-flex xs11 v-if="loaded">
-        <v-card>
-          <v-img
-            class="white--text"
-            aspect-ratio="1.7"
-            :src="getPortfolio.img"
-          ></v-img>
-          <v-card-title>
-            <div class="headline">{{ getPortfolio.title }}</div>
-            <span class="grey--text subText">{{ getPortfolio.name }}</span>
-            <br />
-            <span v-html="compiledMarkdown" class="subText"></span>
-            <span class="grey--text subText">{{ getDate }}</span>
-          </v-card-title>
-          <v-card-actions>
-            <v-btn flat color="orange" v-if="getUser">수정</v-btn>
-            <v-btn flat color="orange" v-if="getUser">삭제</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-flex>
-    </v-layout>
-    <comment></comment>
-  </div>
+  <v-app>
+    <v-content>
+      <v-container>
+        <v-layout class="portfolio" justify-center row wrap>
+          <v-flex xs11 v-if="loaded">
+            <v-card>
+              <v-img class="white--text" aspect-ratio="1.7" :src="getPortfolio.img"></v-img>
+              <v-card-title>
+                <div class="headline">{{ getPortfolio.title }}</div>
+                <span class="grey--text subText">{{ getPortfolio.name }}</span>
+                <br />
+                <span v-html="compiledMarkdown" class="subText"></span>
+                <span class="grey--text subText">{{ getDate }}</span>
+              </v-card-title>
+              <v-card v-if="userCheck" class="buttonPlace">
+                <v-btn color="primary" :to="addlink">수정</v-btn>
+                <v-btn color="primary">삭제</v-btn>
+              </v-card>
+            </v-card>
+          </v-flex>
+        </v-layout>
+        <comment></comment>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
@@ -44,9 +44,12 @@ export default {
         email: "",
         name: "",
         title: "",
-        created_at: ""
+        created_at: "",
+        modify_at:""
       },
-      loaded: false
+      loaded: false,
+      userCheck: false,
+      addlink: "/portfolio-add/" + this.$route.params.did
     };
   },
   mounted() {
@@ -57,6 +60,9 @@ export default {
     async initialize() {
       let id = this.$route.params.did;
       this.portfolio = await fbservice.getOnePortfolio(id);
+      if(this.portfolio.email == store.state.userEmail || store.state.rank == "admin"){
+        this.userCheck=true;
+      }
     }
   },
   computed: {
@@ -66,11 +72,8 @@ export default {
     compiledMarkdown() {
       return marked(this.portfolio.body);
     },
-    getUser() {
-      return this.portfolio.userName;
-    },
     getDate() {
-      return this.$moment(this.portfolio.created_at).format("YYYY-MM-DD HH:mm");
+      return this.$moment(this.portfolio.modify_at).format("YYYY-MM-DD HH:mm");
     }
   }
 };
@@ -79,5 +82,12 @@ export default {
 <style scoped>
 .portfolio {
   margin-top: 5%;
+}
+.buttonPlace {
+  text-align: center;
+  padding: 15px 0px;
+}
+.buttonPlace button {
+  color: #f5f5f5;
 }
 </style>

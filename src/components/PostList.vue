@@ -11,7 +11,7 @@
     >
       <Post
         class="ma-3"
-        :date="posts[i - 1].created_at"
+        :date="posts[i - 1].modify_at"
         :title="posts[i - 1].title"
         :body="posts[i - 1].body"
         @click.native="viewThis(posts[i - 1])"
@@ -45,6 +45,7 @@ export default {
   },
   mounted() {
     this.getPosts();
+    console.log(FirebaseService.getAuth())
   },
   methods: {
     async getPosts() {

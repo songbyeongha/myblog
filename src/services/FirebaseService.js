@@ -61,6 +61,7 @@ export default {
         return docSnapshots.docs.map(doc => {
           let data = doc.data();
           data.created_at = new Date(data.created_at.toDate());
+          data.modify_at = new Date(data.modify_at.toDate());
           data.did = doc.id;
           return data;
         });
@@ -72,10 +73,11 @@ export default {
       body,
       email,
       name,
-      created_at: new Date()
+      created_at: new Date(),
+      modify_at: new Date()
     });
   },
-  modifyPost(id, title, body, email, name){
+  modifyPost(id, title, body, email, name) {
     var idRef = firestore.collection(POSTS).doc(id);
     return idRef.update({
       title,
@@ -102,6 +104,7 @@ export default {
         return docSnapshots.docs.map(doc => {
           let data = doc.data();
           data.created_at = new Date(data.created_at.toDate());
+          data.modify_at = new Date(data.modify_at.toDate());
           data.did = doc.id;
           return data;
         });
@@ -114,7 +117,19 @@ export default {
       img,
       email,
       name,
-      created_at: new Date()
+      created_at: new Date(),
+      modify_at: new Date()
+    });
+  },
+  modifyPortfolio(id, title, body, img, email, name) {
+    var idRef = firestore.collection(PORTFOLIOS).doc(id);
+    return idRef.update({
+      title,
+      body,
+      img,
+      email,
+      name,
+      modify_at: new Date()
     });
   },
   countPortfolio() {
@@ -143,6 +158,7 @@ export default {
         if (doc.exists) {
           let data = doc.data();
           data.created_at = new Date(data.created_at.toDate());
+          data.modify_at = new Date(data.modify_at.toDate());
           return data;
         } else {
           // doc.data() will be undefined in this case
@@ -160,6 +176,7 @@ export default {
         if (doc.exists) {
           let data = doc.data();
           data.created_at = new Date(data.created_at.toDate());
+          data.modify_at = new Date(data.modify_at.toDate());
           return data;
         } else {
           // doc.data() will be undefined in this case

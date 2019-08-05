@@ -57,7 +57,7 @@ export default new Router({
       component: LoginPage
     },
     {
-      path: "/portfolio-add",
+      path: "/portfolio-add/:mode",
       name: "addportfolio",
       component: AddPortfolioPage,
       beforeEnter: requireLogin()

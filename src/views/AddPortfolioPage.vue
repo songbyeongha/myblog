@@ -2,7 +2,7 @@
   <div>
     <ImgBanner>
       <div class="bannerText" slot="text">
-        Write Portfolio
+        {{bannerText}}
         <br />
       </div>
     </ImgBanner>
@@ -23,7 +23,8 @@
       </v-layout>
       <markdown-editor v-model="input"></markdown-editor>
       <div class="text-xs-center">
-        <v-btn round color="primary" dark @click="send()">Add</v-btn>
+        <v-btn v-if="mode=='write'" round color="primary" dark @click="send()">Add</v-btn>
+        <v-btn v-if="mode=='modify'" round color="primary" dark @click="modify()">modify</v-btn>
       </div>
     </div>
   </div>
@@ -49,12 +50,32 @@ export default {
   },
   data() {
     return {
-      input: "# hello",
+      portfolio: {
+        img: "",
+        body: "",
+        email: "",
+        name: "",
+        title: "",
+        created_at: ""
+      },
+      bannerText : "",
+      input: "",
       title: "",
       imageName: "",
       imageUrl: "",
-      imageFile: ""
+      imageFile: "",
+      mode:""
     };
+  },
+  mounted(){
+    if(this.$route.params.mode=="write"){
+      this.bannerText = "Write Portfolio";
+      this.mode = "write";
+    }else{
+      this.bannerText = "Modify Portfolio";
+      this.mode = "modify";
+      this.initialize();
+    }
   },
   computed: {
     getUser() {
@@ -74,6 +95,24 @@ export default {
         this.getUser.displayName
       );
       this.$router.push("/portfolio");
+    },
+    modify(){
+      FirebaseService.modifyPortfolio(
+        this.$route.params.mode,
+        this.title,
+        this.input,
+        this.imageUrl,
+        this.getUser.email,
+        this.getUser.displayName
+      );
+      this.$router.push("/portfolio");
+    },
+    async initialize() {
+      let id = this.$route.params.mode;
+      this.portfolio = await FirebaseService.getOnePortfolio(id);
+      this.title = this.portfolio.title;
+      this.input = this.portfolio.body;
+      this.imageUrl = this.portfolio.img
     }
   }
 };
