@@ -75,7 +75,7 @@ export default {
       created_at: new Date()
     });
   },
-  modifyPost(id, title, body, email, name){
+  modifyPost(id, title, body, email, name) {
     var idRef = firestore.collection(POSTS).doc(id);
     return idRef.update({
       title,

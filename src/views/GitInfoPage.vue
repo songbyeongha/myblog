@@ -108,10 +108,9 @@ export default {
       return this.$store.state.ModalIndex;
     },
     getName() {
-      this.SaveName[0] = this.$store.state.ModalGitMember[2].name;
-      this.SaveName[1] = this.$store.state.ModalGitMember[1].name;
-      this.SaveName[2] = this.$store.state.ModalGitMember[3].name;
-      this.SaveName[3] = this.$store.state.ModalGitMember[0].name;
+      this.SaveName[0] = this.$store.state.ModalGitMember[1].name;
+      this.SaveName[1] = this.$store.state.ModalGitMember[2].name;
+      this.SaveName[2] = this.$store.state.ModalGitMember[0].name;
       return this.$store.state.ModalGitMember;
     }
   }

@@ -15,7 +15,7 @@ export default new Vuex.Store({
     ModalGit: false,
     ModalIndex: -1,
     GitFindMember: [],
-    GitMember: ["신민석", "송병하", "이대경", "Yoon,EunSol"],
+    GitMember: ["신민석", "송병하", "Yoon,EunSol"],
     ModalGitMember: [],
     rank: "",
     portfoilio: null,

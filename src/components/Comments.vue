@@ -134,6 +134,9 @@ export default {
         this.overFlowed.push(true);
       }
       this.CanLoadNextComment();
+      if (this.$store.state.userName) {
+        this.canWrite = true;
+      }
     },
     addComment() {
       if (!this.canWrite) {

@@ -57,10 +57,8 @@ export default {
             this.membercommitdata[0] += 1;
           } else if (this.gitcommitevents[i].author.name == "송병하") {
             this.membercommitdata[1] += 1;
-          } else if (this.gitcommitevents[i].author.name == "이대경") {
-            this.membercommitdata[2] += 1;
           } else if (this.gitcommitevents[i].author.name == "Yoon,Eunsol") {
-            this.membercommitdata[3] += 1;
+            this.membercommitdata[2] += 1;
           }
         }
       }
@@ -82,7 +80,7 @@ export default {
           type: "donut"
         },
         series: this.membercommitdata,
-        labels: ["신민석", "송병하", "이대경", "Yoon,EunSol"],
+        labels: ["신민석", "송병하", "Yoon,EunSol"],
         responsive: [
           {
             breakpoint: 480,
