@@ -80,8 +80,8 @@
         },
         {
           title: '윤은솔',
-          text: 'Ambient Bass',
-          subtext: 'Chill beats to mellow you out.',
+          text: '안녕하세요 뷰js를 배우고 있는 학생입니다.',
+          subtext: '저는 멋진 개발자로 성장할거에요!!',
           img: 'http://lorempixel.com/output/abstract-q-c-640-480-6.jpg',
         },
       ],
