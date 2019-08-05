@@ -198,21 +198,26 @@ export default {
   },
   updatePermission(id, permission) {
     var idRef = firestore.collection(PERM).doc(id);
-    idRef
-      .get()
-      .then(function(doc) {
-        if (doc.data().rank !== "admin") {
-          // 권한 등급이 admin이 아니면 권한 등급 조절 불가!!
-          return;
-        }
-      })
-      .catch(function(error) {
-        console.log("Error getting rank:", error);
-      });
     // Set the "rank" field of the city 'permission' ( team , visitor )
     return idRef
       .update({
         rank: permission
+      })
+      .then(function() {})
+      .catch(function(error) {
+        // The document probably doesn't exist.
+        console.error("Error updating rank: ", error);
+      });
+  },
+  updatePortfolilo(docid, title, img, body) {
+    var idRef = firestore.collection(PORTFOLIOS).doc(docid);
+    // Set the "rank" field of the city 'permission' ( team , visitor )
+    return idRef
+      .update({
+        title: title,
+        body: body,
+        img: img,
+        created_at: new Date()
       })
       .then(function() {})
       .catch(function(error) {

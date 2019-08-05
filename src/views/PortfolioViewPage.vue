@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-layout class="portfolio" justify-center row wrap>
-      <v-flex xs11 v-if="loaded">
+      <v-flex xs11>
         <v-card>
           <v-img
             class="white--text"
@@ -45,13 +45,11 @@ export default {
         name: "",
         title: "",
         created_at: ""
-      },
-      loaded: false
+      }
     };
   },
   mounted() {
     this.initialize();
-    this.loaded = true;
   },
   methods: {
     async initialize() {
