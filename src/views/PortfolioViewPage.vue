@@ -17,7 +17,13 @@
           </v-card-title>
           <v-card-actions>
             <v-btn flat color="orange" v-if="canWrite">수정</v-btn>
-            <v-btn flat color="orange" v-if="canWrite">삭제</v-btn>
+            <v-btn
+              flat
+              color="orange"
+              v-if="canWrite"
+              @click="deletePortfolio()"
+              >삭제</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -55,6 +61,14 @@ export default {
     async initialize() {
       let id = this.$route.params.did;
       this.portfolio = await fbservice.getOnePortfolio(id);
+    },
+    deletePortfolio() {
+      let conf = confirm("정말로 삭제하시겠습니까?");
+      if (conf) {
+        let path = "portfolios/" + this.$route.params.did;
+        fbservice.deleteAtPath(path);
+        alert("포트폴리오를 삭제했습니다.");
+      }
     }
   },
   computed: {
