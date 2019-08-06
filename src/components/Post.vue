@@ -20,7 +20,8 @@ export default {
   },
   computed: {
     formatedDate() {
-      return `${this.date.getFullYear()}년 ${this.date.getMonth()}월 ${this.date.getDate()}일`;
+      console.log(this.title);
+      return `${this.date.getFullYear()}년 ${this.date.getMonth()+1}월 ${this.date.getDate()}일`;
     }
   }
 };

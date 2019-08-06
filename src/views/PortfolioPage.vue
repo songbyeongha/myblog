@@ -28,7 +28,7 @@ export default {
   },
   data() {
     return {
-      addlink: "/portfolio-add"
+      addlink: "/portfolio-add/write"
     };
   },
   components: {
