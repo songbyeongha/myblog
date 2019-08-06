@@ -75,7 +75,7 @@
         >
           <v-icon>navigate_before</v-icon>
         </v-btn>
-        {{ currentPage }}
+        <div v-if="!nocomments">{{ currentPage }}</div>
         <v-btn
           color="info"
           dark
@@ -123,7 +123,8 @@ export default {
       nextPage: true,
       overFlowed: [],
       bool: true,
-      loaded: false
+      loaded: false,
+      nocomments: false
     };
   },
   mounted() {
@@ -135,6 +136,9 @@ export default {
         "portfolios",
         this.$route.params.did
       );
+      if (this.comments.length === 0) {
+        this.nocomments = true;
+      }
       for (let i = 0; i < this.comments.length; i++) {
         this.overFlowed.push(true);
       }
@@ -165,6 +169,7 @@ export default {
         this.$route.params.did,
         new Date(this.comments[this.comments.length - 1].created_at)
       );
+
       if (temp.length >= 1) {
         this.comments = temp;
         this.currentPage = this.currentPage + 1;
@@ -184,6 +189,10 @@ export default {
       this.nextPage = true;
     },
     async CanLoadNextComment() {
+      if (this.comments.length === 0) {
+        this.nextPage = false;
+        return;
+      }
       let next = await fbservice.getAfterCommentsPage(
         "portfolios",
         this.$route.params.did,
