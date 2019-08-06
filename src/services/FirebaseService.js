@@ -483,5 +483,30 @@ export default {
       .catch(function(err) {
         console.warn(err);
       });
+  },
+  async deleteComment(docname, docid, cid) {
+    let comment = await firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .doc(cid);
+    comment.delete();
+  },
+  updateComment(docname, docid, cid, text) {
+    var commentRef = firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .doc(cid);
+    // Set the "rank" field of the city 'permission' ( team , visitor )
+    return commentRef
+      .update({
+        text: text
+      })
+      .then(function() {})
+      .catch(function(error) {
+        // The document probably doesn't exist.
+        console.error("Error updating rank: ", error);
+      });
   }
 };

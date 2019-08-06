@@ -24,7 +24,10 @@
             </v-card>
           </v-flex>
           <v-flex d-flex xs8 md10>
-            <v-card :class="{ overflow: overFlowed[i - 1] }">
+            <v-card
+              :class="{ overflow: overFlowed[i - 1] }"
+              v-if="!editing[i - 1]"
+            >
               <v-card-title class="commentText">
                 <div
                   v-html="getText(comments[i - 1].text)"
@@ -51,14 +54,44 @@
                   >
                 </v-layout>
                 <v-layout justify-end>
-                  <v-btn small flat color="orange" v-if="isWriter(i - 1)"
+                  <v-btn
+                    small
+                    flat
+                    color="orange"
+                    v-if="isWriter(i - 1)"
+                    @click="toggleEditing(i - 1)"
                     >수정</v-btn
                   >
-                  <v-btn small flat color="orange" v-if="isWriter(i - 1)"
+                  <v-btn
+                    small
+                    flat
+                    color="orange"
+                    v-if="isWriter(i - 1)"
+                    @click="deleteComment(i - 1)"
                     >삭제</v-btn
                   >
                 </v-layout>
               </v-card-actions>
+            </v-card>
+            <v-card v-else>
+              <v-card-title class="commentText">
+                <v-textarea
+                  height="70"
+                  outline
+                  label="댓글 수정"
+                  v-model="editText"
+                ></v-textarea>
+              </v-card-title>
+              <v-layout justify-end>
+                <v-btn
+                  small
+                  flat
+                  color="orange"
+                  v-if="isWriter(i - 1)"
+                  @click="updateComment(i - 1)"
+                  >완료</v-btn
+                >
+              </v-layout>
             </v-card>
           </v-flex>
         </v-layout>
@@ -75,7 +108,7 @@
         >
           <v-icon>navigate_before</v-icon>
         </v-btn>
-        <div v-if="!nocomments">{{ currentPage }}</div>
+        <span v-if="!nocomments">{{ currentPage }}</span>
         <v-btn
           color="info"
           dark
@@ -118,13 +151,15 @@ export default {
     return {
       canWrite: false,
       text: "",
+      editText: "",
       comments: [],
       currentPage: 1,
       nextPage: true,
       overFlowed: [],
       bool: true,
       loaded: false,
-      nocomments: false
+      nocomments: false,
+      editing: []
     };
   },
   mounted() {
@@ -141,6 +176,7 @@ export default {
       }
       for (let i = 0; i < this.comments.length; i++) {
         this.overFlowed.push(true);
+        this.editing.push(false);
       }
       this.CanLoadNextComment();
       if (this.$store.state.userName) {
@@ -161,6 +197,26 @@ export default {
         this.text
       );
       this.text = "";
+      this.initialize();
+    },
+    deleteComment(i) {
+      let conf = confirm("댓글을 삭제하시겠습니까?");
+      if (conf) {
+        fbservice.deleteComment(
+          "portfolios",
+          this.$route.params.did,
+          this.comments[i].cid
+        );
+        this.initialize();
+      }
+    },
+    updateComment(i) {
+      fbservice.updateComment(
+        "portfolios",
+        this.$route.params.did,
+        this.comments[i].cid,
+        this.editText
+      );
       this.initialize();
     },
     async loadAfterComment() {
@@ -213,8 +269,14 @@ export default {
     toggleOverFlow(index) {
       this.$set(this.overFlowed, index, !this.overFlowed[index]);
     },
+    toggleEditing(index) {
+      this.$set(this.editing, index, !this.editing[index]);
+    },
     isWriter(i) {
-      return this.$store.state.userEmail === this.comments[i].email;
+      return (
+        this.$store.state.userEmail === this.comments[i].email &&
+        this.$store.state.userName === this.comments[i].name
+      );
     }
   },
   computed: {

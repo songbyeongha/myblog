@@ -5,7 +5,11 @@
         <v-layout class="portfolio" justify-center row wrap>
           <v-flex xs11>
             <v-card>
-              <v-img class="white--text" aspect-ratio="1.7" :src="getPortfolio.img"></v-img>
+              <v-img
+                class="white--text"
+                aspect-ratio="1.7"
+                :src="getPortfolio.img"
+              ></v-img>
               <v-card-title>
                 <div class="headline">{{ getPortfolio.title }}</div>
                 <span class="grey--text subText">{{ getPortfolio.name }}</span>
@@ -45,7 +49,7 @@ export default {
         name: "",
         title: "",
         created_at: "",
-        modify_at:""
+        modify_at: ""
       },
       loaded: false,
       userCheck: false,
@@ -59,17 +63,23 @@ export default {
     async initialize() {
       let id = this.$route.params.did;
       this.portfolio = await fbservice.getOnePortfolio(id);
-      if(this.portfolio.email == store.state.userEmail || store.state.rank == "admin"){
-        this.userCheck=true;
+      if (
+        this.portfolio.email == store.state.userEmail ||
+        store.state.rank == "admin"
+      ) {
+        this.userCheck = true;
       }
     },
     async deletePortfolio() {
       let conf = confirm("정말로 삭제하시겠습니까?");
       if (conf) {
         let path = "portfolios/" + this.$route.params.did;
-        await fbservice.deleteAtPath(this.$route.params.did,"portfolios/" +this.$route.params.did);
+        await fbservice.deleteAtPath(
+          this.$route.params.did,
+          "portfolios/" + this.$route.params.did
+        );
         alert("포트폴리오를 삭제했습니다.");
-        this.$router.replace("/portfolio");  
+        this.$router.replace("/portfolio");
       }
     }
   },
