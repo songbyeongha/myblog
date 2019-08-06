@@ -3,7 +3,7 @@
     <v-content>
       <v-container>
         <v-layout class="portfolio" justify-center row wrap>
-          <v-flex xs11 v-if="loaded">
+          <v-flex xs11>
             <v-card>
               <v-img class="white--text" aspect-ratio="1.7" :src="getPortfolio.img"></v-img>
               <v-card-title>
@@ -15,7 +15,7 @@
               </v-card-title>
               <v-card v-if="userCheck" class="buttonPlace">
                 <v-btn color="primary" :to="addlink">수정</v-btn>
-                <v-btn color="primary">삭제</v-btn>
+                <v-btn color="primary" @click="deletePortfolio()">삭제</v-btn>
               </v-card>
             </v-card>
           </v-flex>
@@ -54,7 +54,6 @@ export default {
   },
   mounted() {
     this.initialize();
-    this.loaded = true;
   },
   methods: {
     async initialize() {
@@ -62,6 +61,15 @@ export default {
       this.portfolio = await fbservice.getOnePortfolio(id);
       if(this.portfolio.email == store.state.userEmail || store.state.rank == "admin"){
         this.userCheck=true;
+      }
+    },
+    async deletePortfolio() {
+      let conf = confirm("정말로 삭제하시겠습니까?");
+      if (conf) {
+        let path = "portfolios/" + this.$route.params.did;
+        await fbservice.deleteAtPath(this.$route.params.did,"portfolios/" +this.$route.params.did);
+        alert("포트폴리오를 삭제했습니다.");
+        this.$router.replace("/portfolio");  
       }
     }
   },

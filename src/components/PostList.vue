@@ -45,7 +45,6 @@ export default {
   },
   mounted() {
     this.getPosts();
-    console.log(FirebaseService.getAuth())
   },
   methods: {
     async getPosts() {

@@ -215,21 +215,26 @@ export default {
   },
   updatePermission(id, permission) {
     var idRef = firestore.collection(PERM).doc(id);
-    idRef
-      .get()
-      .then(function(doc) {
-        if (doc.data().rank !== "admin") {
-          // 권한 등급이 admin이 아니면 권한 등급 조절 불가!!
-          return;
-        }
-      })
-      .catch(function(error) {
-        console.log("Error getting rank:", error);
-      });
     // Set the "rank" field of the city 'permission' ( team , visitor )
     return idRef
       .update({
         rank: permission
+      })
+      .then(function() {})
+      .catch(function(error) {
+        // The document probably doesn't exist.
+        console.error("Error updating rank: ", error);
+      });
+  },
+  updatePortfolilo(docid, title, img, body) {
+    var idRef = firestore.collection(PORTFOLIOS).doc(docid);
+    // Set the "rank" field of the city 'permission' ( team , visitor )
+    return idRef
+      .update({
+        title: title,
+        body: body,
+        img: img,
+        created_at: new Date()
       })
       .then(function() {})
       .catch(function(error) {
@@ -405,6 +410,78 @@ export default {
         email,
         text,
         created_at: new Date()
+      });
+  },
+  getBeforeCommentsPage(docname, docid, firstCreated_at) {
+    let data = firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .orderBy("created_at", "desc")
+      .endBefore(firstCreated_at)
+      .limit(10);
+
+    return data.get().then(function(docSnapshots) {
+      // Get the last visible document
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        data.created_at = new Date(data.created_at.toDate());
+        data.cid = doc.id;
+        return data;
+      });
+    });
+  },
+
+  getAfterCommentsPage(docname, docid, lastCreated_at) {
+    let data = firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .orderBy("created_at", "desc")
+      .startAfter(lastCreated_at)
+      .limit(10);
+
+    return data
+      .get()
+      .then(function(docSnapshots) {
+        // Get the last visible document
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          data.created_at = new Date(data.created_at.toDate());
+          data.cid = doc.id;
+          return data;
+        });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  },
+  getInitComments(docname, docid) {
+    let data = firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .orderBy("created_at", "desc")
+      .limit(10);
+
+    return data.get().then(function(docSnapshots) {
+      // Get the last visible document
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        data.created_at = new Date(data.created_at.toDate());
+        data.cid = doc.id;
+        return data;
+      });
+    });
+  },
+  async deleteAtPath(path, pathFull) {
+    let item = await firestore.collection(PORTFOLIOS).doc(path);
+    item.delete();
+    var deleteFn = firebase.functions().httpsCallable("recursiveDelete");
+    deleteFn({ path: pathFull })
+      .then(function(result) {})
+      .catch(function(err) {
+        console.warn(err);
       });
   }
 };

@@ -44,7 +44,10 @@ export default {
     Portfolio
   },
   mounted() {
-    this.getPortfolios();
+    // setTimeout(() => {
+      this.getPortfolios();
+      console.log("!@#!@#!@#!@")
+    // }, 100);
   },
   methods: {
     async getPortfolios() {

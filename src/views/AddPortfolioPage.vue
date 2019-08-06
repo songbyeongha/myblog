@@ -87,6 +87,14 @@ export default {
       this.imageUrl = store.state.imgUrl;
     },
     send() {
+      if (
+        !(
+          this.$store.state.rank === "admin" ||
+          this.$store.state.rank === "team"
+        )
+      ) {
+        alert("권한이 필요한 기능입니다.");
+      }
       FirebaseService.postPortfolio(
         this.title,
         this.input,
