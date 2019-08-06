@@ -412,6 +412,20 @@ export default {
         created_at: new Date()
       });
   },
+  postCommentComment(docname, docid, cid, name, email, text) {
+    return firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .doc(cid)
+      .collection(COMMENTS)
+      .add({
+        name,
+        email,
+        text,
+        created_at: new Date()
+      });
+  },
   getBeforeCommentsPage(docname, docid, firstCreated_at) {
     let data = firestore
       .collection(docname)

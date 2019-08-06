@@ -24,10 +24,7 @@
             </v-card>
           </v-flex>
           <v-flex d-flex xs8 md10>
-            <v-card
-              :class="{ overflow: overFlowed[i - 1] }"
-              v-if="!editing[i - 1]"
-            >
+            <v-card :class="{ overflow: overFlowed[i - 1] }">
               <v-card-title class="commentText">
                 <div
                   v-html="getText(comments[i - 1].text)"
@@ -58,8 +55,16 @@
                     small
                     flat
                     color="orange"
+                    v-if="canWrite"
+                    @click="toggleEditing(i - 1, 'comment')"
+                    >답글 달기</v-btn
+                  >
+                  <v-btn
+                    small
+                    flat
+                    color="orange"
                     v-if="isWriter(i - 1)"
-                    @click="toggleEditing(i - 1)"
+                    @click="toggleEditing(i - 1, 'update')"
                     >수정</v-btn
                   >
                   <v-btn
@@ -73,28 +78,30 @@
                 </v-layout>
               </v-card-actions>
             </v-card>
-            <v-card v-else>
-              <v-card-title class="commentText">
-                <v-textarea
-                  height="70"
-                  outline
-                  label="댓글 수정"
-                  v-model="editText"
-                ></v-textarea>
-              </v-card-title>
-              <v-layout justify-end>
-                <v-btn
-                  small
-                  flat
-                  color="orange"
-                  v-if="isWriter(i - 1)"
-                  @click="updateComment(i - 1)"
-                  >완료</v-btn
-                >
-              </v-layout>
-            </v-card>
           </v-flex>
         </v-layout>
+        <v-flex xs12 v-if="editing[i - 1]">
+          <v-card>
+            <v-card-title class="commentText">
+              <v-textarea
+                height="70"
+                outline
+                label="댓글을 입력하세요"
+                v-model="editText"
+              ></v-textarea>
+            </v-card-title>
+            <v-layout justify-end>
+              <v-btn
+                small
+                flat
+                color="orange"
+                v-if="canWrite"
+                @click="updateComment(i - 1)"
+                >완료</v-btn
+              >
+            </v-layout>
+          </v-card>
+        </v-flex>
       </v-flex>
       <v-flex xs11 text-xs-center>
         <v-btn
@@ -121,6 +128,7 @@
           <v-icon>navigate_next</v-icon>
         </v-btn>
       </v-flex>
+      <h2 v-if="nocomments">등록된 댓글이 없습니다.</h2>
       <v-flex xs11 class="input">
         <v-textarea
           height="100"
@@ -159,7 +167,8 @@ export default {
       bool: true,
       loaded: false,
       nocomments: false,
-      editing: []
+      editing: [],
+      mode: ""
     };
   },
   mounted() {
@@ -199,6 +208,12 @@ export default {
       this.text = "";
       this.initialize();
     },
+    addCommentComment(i) {
+      if (!this.canWrite) {
+        alert("로그인이 필요한 기능입니다.");
+        return;
+      }
+    },
     deleteComment(i) {
       let conf = confirm("댓글을 삭제하시겠습니까?");
       if (conf) {
@@ -211,12 +226,23 @@ export default {
       }
     },
     updateComment(i) {
-      fbservice.updateComment(
-        "portfolios",
-        this.$route.params.did,
-        this.comments[i].cid,
-        this.editText
-      );
+      if (this.mode === "update") {
+        fbservice.updateComment(
+          "portfolios",
+          this.$route.params.did,
+          this.comments[i].cid,
+          this.editText
+        );
+      } else if (this.mode === "comment") {
+        fbservice.postCommentComment(
+          "portfolios",
+          this.$route.params.did,
+          this.comments[i].cid,
+          store.state.userName,
+          store.state.userEmail,
+          this.editText
+        );
+      }
       this.initialize();
     },
     async loadAfterComment() {
@@ -269,8 +295,10 @@ export default {
     toggleOverFlow(index) {
       this.$set(this.overFlowed, index, !this.overFlowed[index]);
     },
-    toggleEditing(index) {
+    toggleEditing(index, mode) {
       this.$set(this.editing, index, !this.editing[index]);
+      this.mode = mode;
+      this.editText = "";
     },
     isWriter(i) {
       return (
