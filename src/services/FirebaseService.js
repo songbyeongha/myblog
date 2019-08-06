@@ -474,8 +474,11 @@ export default {
       });
     });
   },
-  async deleteAtPath(path, pathFull) {
-    let item = await firestore.collection(PORTFOLIOS).doc(path);
+  async deleteAtPath(category, path, pathFull) {
+    let item;
+    if (category == "post") item = await firestore.collection(POSTS).doc(path);
+    else if (category == "portfolio")
+      item = await firestore.collection(PORTFOLIOS).doc(path);
     item.delete();
     var deleteFn = firebase.functions().httpsCallable("recursiveDelete");
     deleteFn({ path: pathFull })

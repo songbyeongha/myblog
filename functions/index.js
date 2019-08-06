@@ -44,7 +44,7 @@ function pushMessage(message) {
     .get()
     .then(snapshot => {
       snapshot.forEach(doc => {
-        if (doc.data().rank == "team") {
+        if (doc.data().rank == "team" || doc.data().rank == "admin") {
           token = doc.data().deviceToken;
           console.log("전송 : ", token);
           admin.messaging().sendToDevice(token, payload);
