@@ -1,32 +1,33 @@
 <template>
   <v-app>
-    <v-content>
-      <v-container>
-        <v-layout class="post" justify-center row wrap>
-          <v-flex xs11 v-if="loaded">
-            <v-card>
-              <v-card-title>
-                <v-layout row wrap class="postTitle">
-                  <v-flex xs12 sm12 md8 class="pTitle">{{ getPost.title }}</v-flex>
-                  <v-flex xs12 sm12 md4 class="pWriter">
-                    <span
-                      class="subText subDate"
-                    >{{ getDate }} &nbsp;&nbsp;&nbsp; {{ getPost.name }}</span>
-                  </v-flex>
-                </v-layout>
-                <br />
-                <span v-html="compiledMarkdown" class="subText subTextarea"></span>
-              </v-card-title>
-              <v-card v-if="userCheck" class="buttonPlace">
-                <v-btn color="primary" :to="addlink">수정</v-btn>
-                <v-btn color="primary">삭제</v-btn>
-              </v-card>
+    <v-container>
+      <v-layout class="post" justify-center row wrap>
+        <v-flex xs11>
+          <h1 class="contentHeadTitle">POST</h1>
+        </v-flex>
+        <v-flex xs11>
+          <v-card>
+            <v-card-title>
+              <v-layout row wrap class="postTitle">
+                <v-flex xs12 sm12 md8 class="pTitle">{{ getPost.title }}</v-flex>
+                <v-flex xs12 sm12 md4 class="pWriter">
+                  <span
+                    class="subText subDate"
+                  >{{ getDate }} &nbsp;&nbsp;&nbsp; {{ getPost.name }}</span>
+                </v-flex>
+              </v-layout>
+              <br />
+              <span v-html="compiledMarkdown" class="subText subTextarea"></span>
+            </v-card-title>
+            <v-card v-if="userCheck" class="buttonPlace">
+              <v-btn color="primary" :to="addlink">수정</v-btn>
+              <v-btn color="primary" @click="deletePost()">삭제</v-btn>
             </v-card>
-          </v-flex>
-        </v-layout>
-        <comment></comment>
-      </v-container>
-    </v-content>
+          </v-card>
+        </v-flex>
+      </v-layout>
+      <comment></comment>
+    </v-container>
   </v-app>
 </template>
 
@@ -50,14 +51,12 @@ export default {
         created_at: "",
         modify_at: ""
       },
-      loaded: false,
       userCheck : false,
       addlink: "/post-add/"+this.$route.params.did
     };
   },
   mounted() {
     this.initialize();
-    this.loaded = true;
   },
   methods: {
     async initialize() {
@@ -65,6 +64,15 @@ export default {
       this.post = await fbservice.getOnePost(id);
       if(this.post.email == store.state.userEmail || store.state.rank == "admin"){
         this.userCheck=true;
+      }
+    },
+    async deletePost() {
+      let conf = confirm("정말로 삭제하시겠습니까?");
+      if (conf) {
+        let path = "posts/" + this.$route.params.did;
+        await fbservice.deleteAtPath("post",this.$route.params.did,"posts/" +this.$route.params.did);
+        alert("포스트를 삭제했습니다.");
+        this.$router.replace("/post");  
       }
     }
   },
@@ -83,6 +91,10 @@ export default {
 </script>
 
 <style scoped>
+.contentHeadTitle{
+  text-align: center;
+  margin-bottom: 30px;
+}
 .post {
   margin-top: 5%;
 }
