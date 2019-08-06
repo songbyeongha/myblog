@@ -17,9 +17,9 @@
                 <br />
                 <span v-html="compiledMarkdown" class="subText subTextarea"></span>
               </v-card-title>
-              <v-card class="buttonPlace">
-                <v-btn color="primary" v-if="userCheck" :to="addlink">수정</v-btn>
-                <v-btn color="primary" v-if="userCheck">삭제</v-btn>
+              <v-card v-if="userCheck" class="buttonPlace">
+                <v-btn color="primary" :to="addlink">수정</v-btn>
+                <v-btn color="primary">삭제</v-btn>
               </v-card>
             </v-card>
           </v-flex>
@@ -47,9 +47,11 @@ export default {
         email: "",
         name: "",
         title: "",
-        created_at: ""
+        created_at: "",
+        modify_at: ""
       },
       loaded: false,
+      userCheck : false,
       addlink: "/post-add/"+this.$route.params.did
     };
   },
@@ -61,6 +63,9 @@ export default {
     async initialize() {
       let id = this.$route.params.did;
       this.post = await fbservice.getOnePost(id);
+      if(this.post.email == store.state.userEmail || store.state.rank == "admin"){
+        this.userCheck=true;
+      }
     }
   },
   computed: {
@@ -70,13 +75,8 @@ export default {
     compiledMarkdown() {
       return marked(this.post.body);
     },
-    userCheck() {
-      return (
-        this.post.email == store.state.userEmail || store.state.rank == "admin"
-      );
-    },
     getDate() {
-      return this.$moment(this.post.created_at).format("YYYY-MM-DD HH:mm");
+      return this.$moment(this.post.modify_at).format("YYYY-MM-DD HH:mm");
     }
   }
 };
