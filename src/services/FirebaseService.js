@@ -431,7 +431,7 @@ export default {
       .collection(docname)
       .doc(docid)
       .collection(COMMENTS)
-      .orderBy("created_at", "desc")
+      .orderBy("created_at", "asc")
       .endBefore(firstCreated_at)
       .limit(10);
 
@@ -451,7 +451,7 @@ export default {
       .collection(docname)
       .doc(docid)
       .collection(COMMENTS)
-      .orderBy("created_at", "desc")
+      .orderBy("created_at", "asc")
       .startAfter(lastCreated_at)
       .limit(10);
 
@@ -475,11 +475,29 @@ export default {
       .collection(docname)
       .doc(docid)
       .collection(COMMENTS)
-      .orderBy("created_at", "desc")
+      .orderBy("created_at", "asc")
       .limit(10);
 
     return data.get().then(function(docSnapshots) {
       // Get the last visible document
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        data.created_at = new Date(data.created_at.toDate());
+        data.cid = doc.id;
+        return data;
+      });
+    });
+  },
+  getCommentsComments(docname, docid, cid) {
+    let data = firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .doc(cid)
+      .collection(COMMENTS)
+      .orderBy("created_at", "asc");
+
+    return data.get().then(function(docSnapshots) {
       return docSnapshots.docs.map(doc => {
         let data = doc.data();
         data.created_at = new Date(data.created_at.toDate());
@@ -509,6 +527,16 @@ export default {
       .doc(cid);
     comment.delete();
   },
+  async deleteCommentComment(docname, docid, cid, cid2) {
+    let commentcomment = await firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .doc(cid)
+      .collection(COMMENTS)
+      .doc(cid2);
+    commentcomment.delete();
+  },
   updateComment(docname, docid, cid, text) {
     var commentRef = firestore
       .collection(docname)
@@ -523,7 +551,23 @@ export default {
       .then(function() {})
       .catch(function(error) {
         // The document probably doesn't exist.
-        console.error("Error updating rank: ", error);
+        console.error("Error updating Comments: ", error);
+      });
+  },
+  updateCommentComment(docname, docid, cid, cid2, text) {
+    var commentRef = firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .doc(cid)
+      .collection(COMMENTS)
+      .doc(cid2);
+
+    return commentRef
+      .update({ text: text })
+      .then(function() {})
+      .catch(function(error) {
+        console.error("Error updating Comments:", error);
       });
   }
 };

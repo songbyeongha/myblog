@@ -80,7 +80,7 @@
             </v-card>
           </v-flex>
         </v-layout>
-        <v-flex xs12 v-if="editing[i - 1]">
+        <v-flex xs12 v-if="originEditing[i - 1]">
           <v-card>
             <v-card-title class="commentText">
               <v-textarea
@@ -102,6 +102,91 @@
             </v-layout>
           </v-card>
         </v-flex>
+        <template v-if="comments[i - 1].comments">
+          <!--대댓글 -->
+          <template>
+            <v-flex
+              xs11
+              offset-xs1
+              v-for="j in comments[i - 1].comments.length"
+              :key="j.cid"
+              class="comments"
+            >
+              <v-layout row wrap>
+                <v-flex xs1>
+                  <v-icon large>subdirectory_arrow_right</v-icon>
+                </v-flex>
+                <v-flex d-flex xs3 md2>
+                  <v-card>
+                    <v-card-title>
+                      <div>
+                        <div>{{ comments[i - 1].comments[j - 1].name }}</div>
+                        <div
+                          class="grey--text"
+                          v-text="
+                            getDate(comments[i - 1].comments[j - 1].created_at)
+                          "
+                        ></div>
+                      </div>
+                    </v-card-title>
+                  </v-card>
+                </v-flex>
+                <v-flex d-flex xs8 md9>
+                  <v-card>
+                    <v-card-title class="commentText">
+                      <div
+                        v-html="getText(comments[i - 1].comments[j - 1].text)"
+                        class="hiddentext"
+                      ></div>
+                    </v-card-title>
+                    <v-card-actions text-xs-right class="commentManage">
+                      <v-layout justify-end>
+                        <v-btn
+                          small
+                          flat
+                          color="orange"
+                          v-if="isCommentWriter(i - 1, j - 1)"
+                          @click="toggleCommentEditing(i - 1, j - 1, 'update')"
+                          >수정</v-btn
+                        >
+                        <v-btn
+                          small
+                          flat
+                          color="orange"
+                          v-if="isCommentWriter(i - 1, j - 1)"
+                          @click="deleteCommentComment(i - 1, j - 1)"
+                          >삭제</v-btn
+                        >
+                      </v-layout>
+                    </v-card-actions>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+              <v-flex xs12 v-if="editing[i - 1].editing[j - 1]">
+                <v-card>
+                  <v-card-title class="commentText">
+                    <v-textarea
+                      height="70"
+                      outline
+                      label="댓글을 입력하세요"
+                      v-model="editText"
+                    ></v-textarea>
+                  </v-card-title>
+                  <v-layout justify-end>
+                    <v-btn
+                      small
+                      flat
+                      color="orange"
+                      v-if="canWrite"
+                      @click="updateCommentComment(i - 1, j - 1)"
+                      >완료</v-btn
+                    >
+                  </v-layout>
+                </v-card>
+              </v-flex>
+            </v-flex>
+          </template>
+        </template>
       </v-flex>
       <v-flex xs11 text-xs-center>
         <v-btn
@@ -167,6 +252,7 @@ export default {
       bool: true,
       loaded: false,
       nocomments: false,
+      originEditing: [],
       editing: [],
       mode: ""
     };
@@ -176,17 +262,18 @@ export default {
   },
   methods: {
     async initialize() {
+      this.editText = "";
       this.comments = await fbservice.getInitComments(
         "portfolios",
         this.$route.params.did
       );
       if (this.comments.length === 0) {
         this.nocomments = true;
+        this.loaded = true;
+        this.nextPage = false;
+        return;
       }
-      for (let i = 0; i < this.comments.length; i++) {
-        this.overFlowed.push(true);
-        this.editing.push(false);
-      }
+      await this.getCommentsComments();
       this.CanLoadNextComment();
       if (this.$store.state.userName) {
         this.canWrite = true;
@@ -194,6 +281,7 @@ export default {
       this.loaded = true;
     },
     addComment() {
+      this.loaded = false;
       if (!this.canWrite) {
         alert("로그인이 필요한 기능입니다.");
         return;
@@ -208,15 +296,10 @@ export default {
       this.text = "";
       this.initialize();
     },
-    addCommentComment(i) {
-      if (!this.canWrite) {
-        alert("로그인이 필요한 기능입니다.");
-        return;
-      }
-    },
     deleteComment(i) {
       let conf = confirm("댓글을 삭제하시겠습니까?");
       if (conf) {
+        this.loaded = false;
         fbservice.deleteComment(
           "portfolios",
           this.$route.params.did,
@@ -225,7 +308,20 @@ export default {
         this.initialize();
       }
     },
-    updateComment(i) {
+    deleteCommentComment(i, j) {
+      let conf = confirm("댓글을 삭제하시겠습니까?");
+      if (conf) {
+        this.loaded = false;
+        fbservice.deleteCommentComment(
+          "portfolios",
+          this.$route.params.did,
+          this.comments[i].cid,
+          this.comments[i].comments[j].cid
+        );
+        this.initialize();
+      }
+    },
+    async updateComment(i) {
       if (this.mode === "update") {
         fbservice.updateComment(
           "portfolios",
@@ -243,7 +339,23 @@ export default {
           this.editText
         );
       }
-      this.initialize();
+      this.loaded = false;
+      this.originEditing[i] = false;
+      await this.initialize();
+    },
+    async updateCommentComment(i, j) {
+      if (this.mode === "update") {
+        fbservice.updateCommentComment(
+          "portfolios",
+          this.$route.params.did,
+          this.comments[i].cid,
+          this.comments[i].comments[j].cid,
+          this.editText
+        );
+      }
+      this.loaded = false;
+      this.editing[i].editing[j] = false;
+      await this.initialize();
     },
     async loadAfterComment() {
       let temp = await fbservice.getAfterCommentsPage(
@@ -255,6 +367,7 @@ export default {
       if (temp.length >= 1) {
         this.comments = temp;
         this.currentPage = this.currentPage + 1;
+        this.getCommentsComments();
       }
       this.CanLoadNextComment();
     },
@@ -267,6 +380,7 @@ export default {
         this.$route.params.did,
         new Date(this.comments[0].created_at)
       );
+      this.getCommentsComments();
       this.currentPage = this.currentPage - 1;
       this.nextPage = true;
     },
@@ -286,6 +400,30 @@ export default {
         this.nextPage = true;
       }
     },
+    async getCommentsComments() {
+      this.overFlowed = [];
+      this.editing = [];
+      for (let i = 0; i < this.comments.length; i++) {
+        this.overFlowed.push(true);
+        this.editing.push({ editing: [] });
+        this.originEditing.push(false);
+      }
+      for (let i = 0; i < this.comments.length; i++) {
+        let commentcomment = await fbservice.getCommentsComments(
+          "portfolios",
+          this.$route.params.did,
+          this.comments[i].cid
+        );
+        if (commentcomment.length > 0) {
+          let temp = [];
+          for (let j = 0; j < commentcomment.length; j++) {
+            temp.push(false);
+          }
+          this.editing[i].editing = temp;
+          this.comments[i].comments = commentcomment;
+        }
+      }
+    },
     getDate(date) {
       return this.$moment(date).format("YYYY-MM-DD HH:mm");
     },
@@ -296,7 +434,12 @@ export default {
       this.$set(this.overFlowed, index, !this.overFlowed[index]);
     },
     toggleEditing(index, mode) {
-      this.$set(this.editing, index, !this.editing[index]);
+      this.$set(this.originEditing, index, !this.originEditing[index]);
+      this.mode = mode;
+      this.editText = "";
+    },
+    toggleCommentEditing(i, j, mode) {
+      this.$set(this.editing[i].editing, j, !this.editing[i].editing[j]);
       this.mode = mode;
       this.editText = "";
     },
@@ -304,6 +447,12 @@ export default {
       return (
         this.$store.state.userEmail === this.comments[i].email &&
         this.$store.state.userName === this.comments[i].name
+      );
+    },
+    isCommentWriter(i, j) {
+      return (
+        this.$store.state.userName === this.comments[i].comments[j].name &&
+        this.$store.state.userEmail === this.comments[i].comments[j].email
       );
     }
   },
