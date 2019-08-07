@@ -76,10 +76,7 @@ export default {
       if (conf) {
         let path = "portfolios/" + this.$route.params.did;
         await fbservice.deleteAtPath(
-<<<<<<< HEAD
-=======
           "portfolio",
->>>>>>> bbe3f8afcf64af7f1bfafc20998c96ddf9fd70d7
           this.$route.params.did,
           "portfolios/" + this.$route.params.did
         );
