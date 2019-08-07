@@ -25,6 +25,15 @@
       <img :src="imageUrl" height="150" v-if="imageUrl" />
     </v-flex>
     <v-flex
+      v-if="selectedRadio === 'Default'"
+      xs12
+      md12
+      lg12
+      class="text-xs-center text-sm-center text-md-center text-lg-center"
+    >
+      <img :src="defaultImg" height="150" />
+    </v-flex>
+    <v-flex
       v-if="selectedRadio === 'From Album'"
       xs12
       md12
@@ -86,10 +95,16 @@ export default {
       albumId: "UlUclkt",
       Imgurdata: null,
       Album: [],
-      selected: false
+      selected: false,
+      defaultImg: ""
     };
   },
   mounted() {
+    if (this.mode === "modify") {
+      this.radioItems.push("Default");
+      this.defaultImg = store.state.defaultImg;
+      this.selectedRadio = "Default";
+    }
     let form = new FormData();
 
     var settings = {
@@ -132,12 +147,14 @@ export default {
             "https://source.unsplash.com/collection/827743/" +
             Math.floor(Math.random() * 1600) +
             900;
-        } else {
+        } else if (this.mode === "write") {
           store.state.imgUrl = "";
           store.state.imgUrl =
             "https://source.unsplash.com/random/" +
             Math.floor(Math.random() * 600) +
             800;
+        } else if (this.mode === "modify") {
+          store.state.imgUrl = this.defaultImg;
         }
         this.imageUrl = this.getImgUrl;
         this.selected = false;
@@ -205,8 +222,10 @@ export default {
     selectImg(img) {
       if (this.mode === "banner") {
         store.state.bannerImgUrl = img.link;
-      } else {
+      } else if (this.mode === "write") {
         store.state.imgUrl = img.link;
+      } else if (this.mode === "modify") {
+        store.state.imgUrl = this.defaultImg;
       }
       this.imageUrl = this.getImgUrl;
       this.selected = true;

@@ -7,7 +7,7 @@
       </div>
     </ImgBanner>
     <div class="container">
-      <ImgTool mode="port" @imgSelected="getImgURL"></ImgTool>
+      <ImgTool :mode="returnMode" @imgSelected="getImgURL"></ImgTool>
       <v-layout row wrap>
         <v-flex xs3 mg1 lg1 text-xs-center tit>
           <h2>Title</h2>
@@ -89,6 +89,13 @@ export default {
   computed: {
     getUser() {
       return firebase.auth().currentUser;
+    },
+    returnMode() {
+      if (this.mode === "write") {
+        return "write";
+      } else {
+        return "modify";
+      }
     }
   },
   methods: {
@@ -131,7 +138,7 @@ export default {
       this.title = this.portfolio.title;
       this.input = this.portfolio.body;
       this.imageUrl = this.portfolio.img;
-      console.log(this.imageUrl);
+      store.state.defaultImg = this.portfolio.img;
     }
   }
 };
