@@ -9,14 +9,21 @@
           <v-card>
             <v-card-title>
               <v-layout row wrap class="portfolioTitle">
-                <v-flex xs12 sm12 md8 class="pTitle">{{ getPortfolio.title }}</v-flex>
+                <v-flex xs12 sm12 md8 class="pTitle">{{
+                  getPortfolio.title
+                }}</v-flex>
                 <v-flex xs12 sm12 md4 class="pWriter">
-                  <span
-                    class="subText subDate"
-                  >{{ getDate }} &nbsp;&nbsp;&nbsp; {{ getPortfolio.name }}</span>
+                  <span class="subText subDate"
+                    >{{ getDate }} &nbsp;&nbsp;&nbsp;
+                    {{ getPortfolio.name }}</span
+                  >
                 </v-flex>
               </v-layout>
-              <v-img class="white--text bannerImg" aspect-ratio="1.7" :src="getPortfolio.img"></v-img>
+              <v-img
+                class="white--text bannerImg"
+                aspect-ratio="1.7"
+                :src="getPortfolio.img"
+              ></v-img>
               <br />
               <div v-html="compiledMarkdown" class="subTextarea"></div>
             </v-card-title>
@@ -27,7 +34,7 @@
           </v-card>
         </v-flex>
       </v-layout>
-      <comment></comment>
+      <comment page="portfolios"></comment>
     </v-container>
   </v-app>
 </template>
@@ -100,12 +107,12 @@ export default {
 </script>
 
 <style scoped>
-.bannerImg{
+.bannerImg {
   width: 97%;
   margin: 0 auto;
   margin-bottom: 20px;
 }
-.contentHeadTitle{
+.contentHeadTitle {
   text-align: center;
   margin-bottom: 30px;
 }
@@ -134,11 +141,11 @@ export default {
 .subName {
   text-align: right;
   font-size: 15px;
-} 
-.subTextarea{
+}
+.subTextarea {
   width: 100%;
 }
-.subTextarea >>> img{
+.subTextarea >>> img {
   width: 100%;
 }
 .buttonPlace {

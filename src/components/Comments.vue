@@ -240,6 +240,9 @@ import fbservice from "../services/FirebaseService";
 
 export default {
   name: "Comments",
+  props: {
+    page: { type: String }
+  },
   data() {
     return {
       canWrite: false,
@@ -264,30 +267,33 @@ export default {
     async initialize() {
       this.editText = "";
       this.comments = await fbservice.getInitComments(
-        "portfolios",
+        this.page,
         this.$route.params.did
       );
+      if (this.$store.state.userName) {
+        this.canWrite = true;
+      }
       if (this.comments.length === 0) {
         this.nocomments = true;
         this.loaded = true;
         this.nextPage = false;
         return;
       }
-      await this.getCommentsComments();
-      this.CanLoadNextComment();
-      if (this.$store.state.userName) {
-        this.canWrite = true;
+      if (this.comments.length > 0) {
+        await this.getCommentsComments();
       }
+      this.CanLoadNextComment();
       this.loaded = true;
     },
     addComment() {
       this.loaded = false;
       if (!this.canWrite) {
         alert("로그인이 필요한 기능입니다.");
+        this.loaded = true;
         return;
       }
       fbservice.postComment(
-        "portfolios",
+        this.page,
         this.$route.params.did,
         store.state.userName,
         store.state.userEmail,
@@ -301,7 +307,7 @@ export default {
       if (conf) {
         this.loaded = false;
         fbservice.deleteComment(
-          "portfolios",
+          this.page,
           this.$route.params.did,
           this.comments[i].cid
         );
@@ -313,7 +319,7 @@ export default {
       if (conf) {
         this.loaded = false;
         fbservice.deleteCommentComment(
-          "portfolios",
+          this.page,
           this.$route.params.did,
           this.comments[i].cid,
           this.comments[i].comments[j].cid
@@ -324,14 +330,14 @@ export default {
     async updateComment(i) {
       if (this.mode === "update") {
         fbservice.updateComment(
-          "portfolios",
+          this.page,
           this.$route.params.did,
           this.comments[i].cid,
           this.editText
         );
       } else if (this.mode === "comment") {
         fbservice.postCommentComment(
-          "portfolios",
+          this.page,
           this.$route.params.did,
           this.comments[i].cid,
           store.state.userName,
@@ -346,7 +352,7 @@ export default {
     async updateCommentComment(i, j) {
       if (this.mode === "update") {
         fbservice.updateCommentComment(
-          "portfolios",
+          this.page,
           this.$route.params.did,
           this.comments[i].cid,
           this.comments[i].comments[j].cid,
@@ -359,7 +365,7 @@ export default {
     },
     async loadAfterComment() {
       let temp = await fbservice.getAfterCommentsPage(
-        "portfolios",
+        this.page,
         this.$route.params.did,
         new Date(this.comments[this.comments.length - 1].created_at)
       );
@@ -376,7 +382,7 @@ export default {
         return;
       }
       this.comments = await fbservice.getBeforeCommentsPage(
-        "portfolios",
+        this.page,
         this.$route.params.did,
         new Date(this.comments[0].created_at)
       );
@@ -390,7 +396,7 @@ export default {
         return;
       }
       let next = await fbservice.getAfterCommentsPage(
-        "portfolios",
+        this.page,
         this.$route.params.did,
         new Date(await this.comments[this.comments.length - 1].created_at)
       );
@@ -410,7 +416,7 @@ export default {
       }
       for (let i = 0; i < this.comments.length; i++) {
         let commentcomment = await fbservice.getCommentsComments(
-          "portfolios",
+          this.page,
           this.$route.params.did,
           this.comments[i].cid
         );
