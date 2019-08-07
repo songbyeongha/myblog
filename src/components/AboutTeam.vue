@@ -3,7 +3,8 @@
     :continuous="false"
     :cycle="cycle"
     :show-arrows="false"
-    height="500"
+    weight=100%;
+    max-height="400"
     hide-delimiter-background
     delimiter-icon="mdi-minus"
   >
@@ -27,12 +28,17 @@
               <v-flex de-flex xs6>
                 <v-flex xs12>
                   <v-card color="font-weight-bold font-italic text-left">
-                    <v-card-text class="px-0">{{name}}</v-card-text>
+                    <v-card-text class="px-5 cardText headline font-weight-bold font-italic text-left">{{name}}</v-card-text>
                   </v-card>
                 </v-flex>
                 <v-flex xs12>
                   <v-card>
-                    <v-card-text class="px-0">{{comments[i]}}</v-card-text>
+                    <v-card-text class="px-5">{{comments[i]}}</v-card-text>
+                  </v-card>
+                </v-flex>
+                <v-flex xs12>
+                  <v-card>
+                    <v-card-text class="px-5">{{emailAddress[i]}}</v-card-text>
                   </v-card>
                 </v-flex>
               </v-flex>
@@ -82,6 +88,12 @@
           {
             src: require('../assets/yoon.jpg'),
           },
+        ],
+        emailAddress:[
+          'GitLab : https://lab.ssafy.com/todal/webmobile-final',
+          'Email address : qudgk0006@naver.com',
+          'Email address : alstjr7388@naver.com',
+          'Email address : todal160122@gmail.com'
         ]
       }
     }
