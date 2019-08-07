@@ -324,7 +324,23 @@ export default {
           let user = res.user;
           user
             .updateProfile({ displayName: name })
-            .then(function() {})
+            .then(function() {
+              store.commit("loginInfo", {
+                loginCheckVal: false,
+                rankVal: "",
+                userNameVal: "",
+                userEmailVal: ""
+              });
+              firebase
+                .auth()
+                .signOut()
+                .then(function() {
+                  router.push("/");
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
+            })
             .catch(function(error) {
               console.error("userName 업데이트 실패 : ", error);
             });
@@ -485,6 +501,52 @@ export default {
       .then(function(result) {})
       .catch(function(err) {
         console.warn(err);
+      });
+  },
+  modifyMember(name) {
+    firebase
+      .auth()
+      .currentUser.updateProfile({
+        displayName: name
+        // photoURL: "https://example.com/jane-q-user/profile.jpg"
+      })
+      .then(function() {
+        store.state.userName = name;
+        console.log("update success");
+      })
+      .catch(function(error) {
+        console.log("update error");
+      });
+  },
+  deleteMember() {
+    var user = firebase.auth().currentUser;
+    console.log(user);
+    user
+      .delete()
+      .then(function() {
+        store.commit("loginInfo", {
+          loginCheckVal: false,
+          rankVal: "",
+          userNameVal: "",
+          userEmailVal: ""
+        });
+        console.log("success");
+      })
+      .catch(function(error) {
+        console.log("error");
+      });
+  },
+  passowrdEmail() {
+    firebase.auth().languageCode = "ko";
+    var currentEmail = store.state.userEmail;
+    firebase
+      .auth()
+      .sendPasswordResetEmail(currentEmail)
+      .then(function() {
+        console.log("success");
+      })
+      .catch(function(error) {
+        console.log("error");
       });
   }
 };
