@@ -94,6 +94,7 @@ export default {
   methods: {
     getImgURL() {
       this.imageUrl = store.state.imgUrl;
+      console.log(this.imageUrl);
     },
     send() {
       if (
