@@ -222,7 +222,7 @@
           v-model="text"
         ></v-textarea>
         <v-layout justify-end>
-          <v-btn color="primary" to="/portfolio">목록으로</v-btn>
+          <v-btn color="primary" :to="returnPage">목록으로</v-btn>
           <v-btn color="primary" @click="addComment()">작성</v-btn>
         </v-layout>
       </v-flex>
@@ -266,6 +266,7 @@ export default {
   methods: {
     async initialize() {
       this.editText = "";
+      this.currentPage = 1;
       this.comments = await fbservice.getInitComments(
         this.page,
         this.$route.params.did
@@ -364,29 +365,31 @@ export default {
       await this.initialize();
     },
     async loadAfterComment() {
+      this.loaded = false;
+      this.currentPage = this.currentPage + 1;
       let temp = await fbservice.getAfterCommentsPage(
         this.page,
         this.$route.params.did,
         new Date(this.comments[this.comments.length - 1].created_at)
       );
 
-      if (temp.length >= 1) {
-        this.comments = temp;
-        this.currentPage = this.currentPage + 1;
-        this.getCommentsComments();
-      }
+      this.comments = temp;
+      await this.getCommentsComments();
+      this.loaded = true;
       this.CanLoadNextComment();
     },
     async loadBeforeComment() {
       if (this.currentPage === 1) {
         return;
       }
+      this.loaded = false;
       this.comments = await fbservice.getBeforeCommentsPage(
         this.page,
         this.$route.params.did,
         new Date(this.comments[0].created_at)
       );
-      this.getCommentsComments();
+      await this.getCommentsComments();
+      this.loaded = true;
       this.currentPage = this.currentPage - 1;
       this.nextPage = true;
     },
@@ -465,6 +468,13 @@ export default {
   computed: {
     checkLoaded() {
       return this.loaded;
+    },
+    returnPage() {
+      if (this.page === "portfolios") {
+        return "/portfolio";
+      } else {
+        return "/post";
+      }
     }
   }
 };
