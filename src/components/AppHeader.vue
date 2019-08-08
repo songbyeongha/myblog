@@ -40,7 +40,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar app color="grey lighten-4">
-      <span class="hidden-sm-and-up">
+      <span class="hidden-md-and-up">
         <v-toolbar-side-icon @click="sidebar = !sidebar">
           <v-icon>menu</v-icon>
         </v-toolbar-side-icon>
@@ -51,7 +51,7 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items class="hidden-xs-only">
+      <v-toolbar-items class="hidden-sm-and-down">
         <v-card-text class="userNamePlace" v-if="userName">
           <i class="far fa-user"></i>
           {{ userName }}
@@ -171,7 +171,7 @@ export default {
     transform: translateY(-48px) !important;
   }
 }
-@media (max-width: 572px) {
+@media (max-width: 910px) {
   .v-toolbar {
     transform: translateY(-56px) !important;
   }
