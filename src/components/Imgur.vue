@@ -4,24 +4,11 @@
       <v-flex xs12 mg12 lg12 text-xs-center tit style="line-height:4rem;">
         <h2>Image Upload</h2>
       </v-flex>
-      <v-flex xs12 mg12 lg12>
-        <v-radio-group v-model="selectedRadio" row>
-          <v-radio
-            v-for="item in radioItems"
-            :key="item"
-            :label="item"
-            :value="item"
-          ></v-radio>
-        </v-radio-group>
-      </v-flex>
       <v-flex
-        v-if="selectedRadio === 'Upload'"
         xs12
-        md12
-        lg12
         class="text-xs-center text-sm-center text-md-center text-lg-center"
       >
-        <img :src="imageUrl" height="150" v-if="imageUrl" />
+        <img :src="imageUrl" width="100%" v-if="imageUrl" />
         <v-text-field
           label="Click Here to Select Image"
           @click="pickFile"
@@ -36,48 +23,20 @@
           accept="image/*"
           @change="onFilePicked"
         />
-        <v-text-field v-if="imgurLink" v-model="imgurLink"></v-text-field>
-        <div class="text-xs-center" style="margin-bottom: 2.5rem;">
-          <v-btn round color="primary" dark @click="uploadImg">Upload</v-btn>
-          <v-btn v-if="available" round color="pink" dark @click="addImgToAlbum"
-            >Add to Album</v-btn
-          >
+        <div class="text-xs-center" v-if="loading">
+          <v-progress-circular
+            indeterminate
+            color="primary"
+          ></v-progress-circular>
         </div>
-      </v-flex>
-      <v-flex
-        v-if="selectedRadio === 'Delete'"
-        xs12
-        md12
-        lg12
-        class="text-xs-center text-sm-center text-md-center text-lg-center"
-      >
-        <v-card class="scroll" v-if="selected === false">
-          <v-container fluid grid-list-md>
-            <v-layout row wrap>
-              <v-flex
-                xs6
-                md4
-                lg3
-                v-for="img in Album"
-                :key="img.id"
-                class="imgcard"
-                @click="selectImg(img)"
-              >
-                <v-card>
-                  <v-img :src="img.link" aspect-ratio="1.5"></v-img>
-                </v-card>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card>
-        <img :src="Imgurdata.link" height="150" v-if="selected" />
-        <div
-          class="text-xs-center"
-          style="margin-bottom: 2.5rem;"
-          v-if="selected"
-        >
-          <v-btn round color="pink" dark @click="deleteImg">Delete</v-btn>
-          <v-btn round color="primary" dark @click="another">Another</v-btn>
+        <span v-if="showImg" v-html="imgurLink"></span>
+        <div class="text-xs-center" style="margin-bottom: 2.5rem;">
+          <v-btn round color="primary" small dark @click="uploadImg"
+            >Upload</v-btn
+          >
+          <v-btn round color="primary" small dark @click="doCopy" v-if="showImg"
+            >Copy!</v-btn
+          >
         </div>
       </v-flex>
     </v-layout>
@@ -92,8 +51,6 @@ export default {
   components: {},
   data() {
     return {
-      selectedRadio: "",
-      radioItems: ["Upload", "Delete"],
       imageName: "",
       imageUrl: "",
       imageFile: "",
@@ -103,44 +60,26 @@ export default {
       acount_id: "110804443",
       clientId: "45b8c2ebe400ae8",
       clientSecret: "2d7e9f3a23e639663bc2ba8949410e7de8940d9a",
-      albumDeleteHash: "kOA1XvMpnAQy5L2",
-      albumId: "UlUclkt",
       Imgurdata: null,
       Album: [],
       selected: false,
-      uploaded: false
+      uploaded: false,
+      loading: false
     };
   },
-  mounted() {
-    let form = new FormData();
-
-    var settings = {
-      url: "https://api.imgur.com/3/album/" + this.albumId + "/images",
-      method: "GET",
-      timeout: 0,
-      headers: {
-        Authorization: "Client-ID " + this.clientId
-      },
-      processData: false,
-      mimeType: "multipart/form-data",
-      contentType: false,
-      data: form
-    };
-    axios(settings)
-      .then(response => {
-        this.Album = response.data.data;
-      })
-      .catch(() => {
-        alert("앨범 이미지 가져오기 실패");
-      });
-  },
+  mounted() {},
   computed: {
     available() {
       return this.uploaded;
+    },
+    showImg() {
+      return !this.loading && this.uploaded;
     }
   },
   methods: {
     pickFile() {
+      this.imgurLink = "";
+      this.uploaded = false;
       this.$refs.image.click();
     },
     onFilePicked(e) {
@@ -167,6 +106,7 @@ export default {
         alert("이미지를 선택해주세요.");
         return;
       }
+      this.loading = true;
       let form = new FormData();
       form.append("image", this.imageFile);
 
@@ -184,99 +124,23 @@ export default {
       };
       axios(settings)
         .then(response => {
-          this.Imgurdata = response.data.data;
+          this.imgurLink = response.data.data.link;
+          this.loading = false;
           this.uploaded = true;
         })
         .catch(() => {
           alert("이미지 업로드 실패");
         });
     },
-    addImgToAlbum() {
-      if (!this.Imgurdata.id) {
-        alert("이미지를 먼저 업로드 해주세요!");
-        return;
-      }
-
-      let form = new FormData();
-      form.append("deletehashes[]", this.Imgurdata.deletehash);
-
-      var settings = {
-        url: "https://api.imgur.com/3/album/" + this.albumDeleteHash + "/add",
-        method: "POST",
-        timeout: 0,
-        headers: {
-          Authorization: "Client-ID " + this.clientId
+    doCopy() {
+      this.$copyText(this.imgurLink).then(
+        function(e) {
+          alert("Copied");
         },
-        processData: false,
-        mimeType: "multipart/form-data",
-        contentType: false,
-        data: form
-      };
-      axios(settings)
-        .then(() => {
-          alert("이미지를 앨범에 추가하였습니다.");
-        })
-        .catch(() => {
-          alert("앨범에 이미지 추가 실패");
-        });
-    },
-    getAlbumImages() {
-      let form = new FormData();
-
-      var settings = {
-        url: "https://api.imgur.com/3/album/" + this.albumId + "/images",
-        method: "GET",
-        timeout: 0,
-        headers: {
-          Authorization: "Client-ID " + this.clientId
-        },
-        processData: false,
-        mimeType: "multipart/form-data",
-        contentType: false,
-        data: form
-      };
-      axios(settings)
-        .then(response => {
-          this.Album = response.data.data;
-        })
-        .catch(() => {
-          alert("앨범 이미지 가져오기 실패");
-        });
-    },
-    selectImg(img) {
-      this.Imgurdata = img;
-      this.selected = true;
-    },
-    deleteImg() {
-      if (!this.Imgurdata.id) {
-        alert("삭제할 이미지를 선택해주세요.");
-        return;
-      }
-
-      let form = new FormData();
-      form.append("ids[]", this.Imgurdata.id);
-      let settings = {
-        url: "https://api.imgur.com/3/image/" + this.Imgurdata.id,
-        method: "DELETE",
-        timeout: 0,
-        headers: {
-          Authorization: "Bearer " + this.accessToken
-        },
-        processData: false,
-        mimeType: "multipart/form-data",
-        contentType: false,
-        data: form
-      };
-      axios(settings)
-        .then(() => {
-          alert("앨범에서 해당 이미지를 삭제하였습니다.");
-        })
-        .catch(() => {
-          alert("앨범 이미지 삭제 실패");
-        });
-    },
-    another() {
-      this.selected = false;
+        function(e) {
+          alert("Can not copy");
+        }
+      );
     }
   }
 };
