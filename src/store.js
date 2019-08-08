@@ -9,6 +9,7 @@ export default new Vuex.Store({
     accessToken: "",
     user: "",
     imgUrl: "",
+    defaultImg: "",
     bannerImgUrl: "https://source.unsplash.com/collection/827743/1600x900",
     ModalLogin: false,
     ModalRegis: false,

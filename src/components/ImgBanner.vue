@@ -12,7 +12,7 @@
             top
             absolute
             color="grey lighten-4"
-            @click="showModal = true"
+            @click="showImgModal()"
           >
             <v-icon>photo</v-icon>
           </v-btn>
@@ -53,6 +53,10 @@ export default {
     },
     ifcancel() {
       this.showModal = false;
+    },
+    showImgModal() {
+      this.showModal = true;
+      this.$store.state.defaultImg = this.$store.state.bannerImgUrl;
     }
   }
 };

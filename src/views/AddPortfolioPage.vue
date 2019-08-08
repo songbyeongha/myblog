@@ -2,12 +2,12 @@
   <div>
     <ImgBanner>
       <div class="bannerText" slot="text">
-        {{bannerText}}
+        {{ bannerText }}
         <br />
       </div>
     </ImgBanner>
     <div class="container">
-      <ImgTool mode="port" @imgSelected="getImgURL"></ImgTool>
+      <ImgTool :mode="returnMode" @imgSelected="getImgURL"></ImgTool>
       <v-layout row wrap>
         <v-flex xs3 mg1 lg1 text-xs-center tit>
           <h2>Title</h2>
@@ -23,8 +23,17 @@
       </v-layout>
       <markdown-editor v-model="input"></markdown-editor>
       <div class="text-xs-center">
-        <v-btn v-if="mode=='write'" round color="primary" dark @click="send()">Add</v-btn>
-        <v-btn v-if="mode=='modify'" round color="primary" dark @click="modify()">modify</v-btn>
+        <v-btn v-if="mode == 'write'" round color="primary" dark @click="send()"
+          >Add</v-btn
+        >
+        <v-btn
+          v-if="mode == 'modify'"
+          round
+          color="primary"
+          dark
+          @click="modify()"
+          >modify</v-btn
+        >
       </div>
     </div>
   </div>
@@ -58,20 +67,20 @@ export default {
         title: "",
         created_at: ""
       },
-      bannerText : "",
+      bannerText: "",
       input: "",
       title: "",
       imageName: "",
       imageUrl: "",
       imageFile: "",
-      mode:""
+      mode: ""
     };
   },
-  mounted(){
-    if(this.$route.params.mode=="write"){
+  mounted() {
+    if (this.$route.params.mode == "write") {
       this.bannerText = "Write Portfolio";
       this.mode = "write";
-    }else{
+    } else {
       this.bannerText = "Modify Portfolio";
       this.mode = "modify";
       this.initialize();
@@ -80,6 +89,13 @@ export default {
   computed: {
     getUser() {
       return firebase.auth().currentUser;
+    },
+    returnMode() {
+      if (this.mode === "write") {
+        return "write";
+      } else {
+        return "modify";
+      }
     }
   },
   methods: {
@@ -105,7 +121,7 @@ export default {
       );
       this.$router.push("/portfolio");
     },
-    modify(){
+    modify() {
       FirebaseService.modifyPortfolio(
         this.$route.params.mode,
         this.title,
@@ -121,7 +137,8 @@ export default {
       this.portfolio = await FirebaseService.getOnePortfolio(id);
       this.title = this.portfolio.title;
       this.input = this.portfolio.body;
-      this.imageUrl = this.portfolio.img
+      this.imageUrl = this.portfolio.img;
+      store.state.defaultImg = this.portfolio.img;
     }
   }
 };
