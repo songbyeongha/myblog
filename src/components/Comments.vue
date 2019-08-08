@@ -10,7 +10,7 @@
         overflow-hidden
       >
         <v-layout row wrap>
-          <v-flex d-flex xs4 md2>
+          <v-flex d-flex md2>
             <v-card>
               <v-card-title>
                 <div>
@@ -23,7 +23,7 @@
               </v-card-title>
             </v-card>
           </v-flex>
-          <v-flex d-flex xs8 md10>
+          <v-flex d-flex md10>
             <v-card :class="{ overflow: overFlowed[ccount - i] }">
               <v-card-title class="commentText">
                 <div v-if="comments[ccount - i].deleted" class="grey--text">
@@ -35,7 +35,7 @@
                   class="hiddentext"
                 ></div>
               </v-card-title>
-              <v-card-actions text-xs-right class="commentManage">
+              <v-card-actions text-xs-left text-md-right class="commentManage">
                 <v-layout justify-start v-if="!comments[ccount - i].deleted">
                   <v-btn
                     v-if="overFlowed[ccount - i]"
@@ -84,7 +84,7 @@
             </v-card>
           </v-flex>
         </v-layout>
-        <v-flex xs12 v-if="originEditing[ccount - i]">
+        <v-flex md12 v-if="originEditing[ccount - i]">
           <v-card>
             <v-card-title class="commentText">
               <v-textarea
@@ -110,17 +110,17 @@
           <!--대댓글 -->
           <template>
             <v-flex
-              xs11
-              offset-xs1
+              md11
+              offset-md1
               v-for="j in comments[ccount - i].comments.length"
               :key="j.cid"
               class="comments"
             >
               <v-layout row wrap>
-                <v-flex xs2 md1>
+                <v-flex d-flex xs1 md1>
                   <v-icon large>subdirectory_arrow_right</v-icon>
                 </v-flex>
-                <v-flex d-flex xs4 md2>
+                <v-flex d-flex xs10 offset-xs1 offset-md0 md2>
                   <v-card>
                     <v-card-title>
                       <div>
@@ -139,7 +139,7 @@
                     </v-card-title>
                   </v-card>
                 </v-flex>
-                <v-flex d-flex xs6 md9>
+                <v-flex d-flex xs10 offset-xs2 offset-md0 md9>
                   <v-card>
                     <v-card-title class="commentText">
                       <div
@@ -149,7 +149,11 @@
                         class="hiddentext"
                       ></div>
                     </v-card-title>
-                    <v-card-actions text-xs-right class="commentManage">
+                    <v-card-actions
+                      text-xs-left
+                      text-md-right
+                      class="commentManage"
+                    >
                       <v-layout justify-end>
                         <v-btn
                           small
@@ -174,7 +178,7 @@
                   </v-card>
                 </v-flex>
               </v-layout>
-              <v-flex xs12 v-if="editing[ccount - i].editing[j - 1]">
+              <v-flex md12 v-if="editing[ccount - i].editing[j - 1]">
                 <v-card>
                   <v-card-title class="commentText">
                     <v-textarea
@@ -207,7 +211,7 @@
           icon
           flat
           v-on:click="loadBeforeComment()"
-          text-xs-center
+          text-md-center
           :disabled="currentPage === 1"
         >
           <v-icon>navigate_before</v-icon>
@@ -505,6 +509,13 @@ export default {
 </script>
 
 <style scoped>
+@media screen and (max-width: 600px) {
+  .v-card__title {
+    align-items: baseline;
+    padding: 1px;
+  }
+}
+
 .comments,
 .input {
   padding-top: 5px;

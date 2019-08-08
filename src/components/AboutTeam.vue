@@ -3,6 +3,7 @@
     :continuous="false"
     :cycle="cycle"
     :show-arrows="false"
+    hide-controls
     weight="100%;"
     max-height="400"
     hide-delimiter-background="false"
@@ -23,26 +24,24 @@
             <v-flex xs12 md6>
               <v-flex xs12>
                 <v-card color="text-left aboutName">
-                  <v-card-text class="px-5">{{ name }}</v-card-text>
+                  <v-card-text class>{{ name }}</v-card-text>
                 </v-card>
               </v-flex>
               <v-flex xs12>
                 <v-card>
-                  <v-card-text class="px-5 aboutComments">{{
+                  <v-card-text class="aboutComments">{{
                     comments[i]
                   }}</v-card-text>
                 </v-card>
               </v-flex>
               <v-flex xs12>
                 <v-card>
-                  <v-card-text class="px-5 aboutSkill">{{
-                    skills[i]
-                  }}</v-card-text>
+                  <v-card-text class="aboutSkill">{{ skills[i] }}</v-card-text>
                 </v-card>
               </v-flex>
               <v-flex xs12>
                 <v-card>
-                  <v-card-text class="px-5 aboutEmail">{{
+                  <v-card-text class="aboutEmail">{{
                     emailAddress[i]
                   }}</v-card-text>
                 </v-card>
@@ -103,6 +102,22 @@ export default {
 </script>
 <style>
 @import url("https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap");
+@media screen and (max-width: 600px) {
+  .aboutName .v-card__text {
+    font-size: 10vw;
+  }
+  .aboutComments.v-card__text {
+    font-size: 3vw;
+  }
+  .v-sheet .aboutContainer {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .flex .v-carousel {
+    height: 300px;
+  }
+}
+
 .aboutImage {
   width: 100%;
   height: -webkit-fill-available;
@@ -113,15 +128,16 @@ export default {
   color: #fff;
 }
 .aboutContainer {
-  padding: 55px;
+  padding-left: 40px;
+  padding-right: 40px;
   font-family: "Do Hyeon", sans-serif;
 }
 .aboutName {
   font-weight: bold;
-  font-size: xx-large;
+  font-size: 3vw;
 }
 .aboutComments {
-  font-size: large;
+  font-size: 2vw;
 }
 .aboutSkill {
   font-size: medium;
@@ -130,7 +146,7 @@ export default {
   font-size: medium;
 }
 .v-card__text {
-  padding: 20px;
+  padding: 5px;
   width: 100%;
 }
 .v-card {
