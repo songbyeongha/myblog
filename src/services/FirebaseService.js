@@ -555,7 +555,7 @@ export default {
       });
   },
   updateCommentComment(docname, docid, cid, cid2, text) {
-    var commentRef = firestore
+    let commentRef = firestore
       .collection(docname)
       .doc(docid)
       .collection(COMMENTS)
@@ -568,6 +568,22 @@ export default {
       .then(function() {})
       .catch(function(error) {
         console.error("Error updating Comments:", error);
+      });
+  },
+  markDeltedComment(docname, docid, cid) {
+    let commentRef = firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .doc(cid);
+
+    return commentRef
+      .update({ deleted: true })
+      .then(function(res) {
+        console.log(res);
+      })
+      .catch(function(error) {
+        console.log("Error updating Comments:" + error);
       });
   }
 };

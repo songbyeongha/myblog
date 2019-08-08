@@ -26,13 +26,17 @@
           <v-flex d-flex xs8 md10>
             <v-card :class="{ overflow: overFlowed[i - 1] }">
               <v-card-title class="commentText">
+                <div v-if="comments[i - 1].deleted" class="grey--text">
+                  삭제된 댓글입니다.
+                </div>
                 <div
+                  v-else
                   v-html="getText(comments[i - 1].text)"
                   class="hiddentext"
                 ></div>
               </v-card-title>
               <v-card-actions text-xs-right class="commentManage">
-                <v-layout justify-start>
+                <v-layout justify-start v-if="!comments[i - 1].deleted">
                   <v-btn
                     v-if="overFlowed[i - 1]"
                     small
@@ -50,7 +54,7 @@
                     >접기</v-btn
                   >
                 </v-layout>
-                <v-layout justify-end>
+                <v-layout justify-end v-if="!comments[i - 1].deleted">
                   <v-btn
                     small
                     flat
@@ -307,11 +311,19 @@ export default {
       let conf = confirm("댓글을 삭제하시겠습니까?");
       if (conf) {
         this.loaded = false;
-        fbservice.deleteComment(
-          this.page,
-          this.$route.params.did,
-          this.comments[i].cid
-        );
+        if (this.comments[i].comments) {
+          fbservice.markDeltedComment(
+            this.page,
+            this.$route.params.did,
+            this.comments[i].cid
+          );
+        } else {
+          fbservice.deleteComment(
+            this.page,
+            this.$route.params.did,
+            this.comments[i].cid
+          );
+        }
         this.initialize();
       }
     },
