@@ -431,7 +431,7 @@ export default {
       .collection(docname)
       .doc(docid)
       .collection(COMMENTS)
-      .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .endBefore(firstCreated_at)
       .limit(10);
 
@@ -451,7 +451,7 @@ export default {
       .collection(docname)
       .doc(docid)
       .collection(COMMENTS)
-      .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .startAfter(lastCreated_at)
       .limit(10);
 
@@ -475,7 +475,7 @@ export default {
       .collection(docname)
       .doc(docid)
       .collection(COMMENTS)
-      .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .limit(10);
 
     return data.get().then(function(docSnapshots) {

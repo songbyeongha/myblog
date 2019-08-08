@@ -14,35 +14,35 @@
             <v-card>
               <v-card-title>
                 <div>
-                  <div>{{ comments[i - 1].name }}</div>
+                  <div>{{ comments[ccount - i].name }}</div>
                   <div
                     class="grey--text"
-                    v-text="getDate(comments[i - 1].created_at)"
+                    v-text="getDate(comments[ccount - i].created_at)"
                   ></div>
                 </div>
               </v-card-title>
             </v-card>
           </v-flex>
           <v-flex d-flex xs8 md10>
-            <v-card :class="{ overflow: overFlowed[i - 1] }">
+            <v-card :class="{ overflow: overFlowed[ccount - i] }">
               <v-card-title class="commentText">
-                <div v-if="comments[i - 1].deleted" class="grey--text">
+                <div v-if="comments[ccount - i].deleted" class="grey--text">
                   삭제된 댓글입니다.
                 </div>
                 <div
                   v-else
-                  v-html="getText(comments[i - 1].text)"
+                  v-html="getText(comments[ccount - i].text)"
                   class="hiddentext"
                 ></div>
               </v-card-title>
               <v-card-actions text-xs-right class="commentManage">
-                <v-layout justify-start v-if="!comments[i - 1].deleted">
+                <v-layout justify-start v-if="!comments[ccount - i].deleted">
                   <v-btn
-                    v-if="overFlowed[i - 1]"
+                    v-if="overFlowed[ccount - i]"
                     small
                     flat
                     color="orange"
-                    @click="toggleOverFlow(i - 1)"
+                    @click="toggleOverFlow(ccount - i)"
                     >더보기</v-btn
                   >
                   <v-btn
@@ -50,33 +50,33 @@
                     small
                     flat
                     color="orange"
-                    @click="toggleOverFlow(i - 1)"
+                    @click="toggleOverFlow(ccount - i)"
                     >접기</v-btn
                   >
                 </v-layout>
-                <v-layout justify-end v-if="!comments[i - 1].deleted">
+                <v-layout justify-end v-if="!comments[ccount - i].deleted">
                   <v-btn
                     small
                     flat
                     color="orange"
                     v-if="canWrite"
-                    @click="toggleEditing(i - 1, 'comment')"
+                    @click="toggleEditing(ccount - i, 'comment')"
                     >답글 달기</v-btn
                   >
                   <v-btn
                     small
                     flat
                     color="orange"
-                    v-if="isWriter(i - 1)"
-                    @click="toggleEditing(i - 1, 'update')"
+                    v-if="isWriter(ccount - i)"
+                    @click="toggleEditing(ccount - i, 'update')"
                     >수정</v-btn
                   >
                   <v-btn
                     small
                     flat
                     color="orange"
-                    v-if="isWriter(i - 1)"
-                    @click="deleteComment(i - 1)"
+                    v-if="isWriter(ccount - i)"
+                    @click="deleteComment(ccount - i)"
                     >삭제</v-btn
                   >
                 </v-layout>
@@ -84,7 +84,7 @@
             </v-card>
           </v-flex>
         </v-layout>
-        <v-flex xs12 v-if="originEditing[i - 1]">
+        <v-flex xs12 v-if="originEditing[ccount - i]">
           <v-card>
             <v-card-title class="commentText">
               <v-textarea
@@ -100,46 +100,52 @@
                 flat
                 color="orange"
                 v-if="canWrite"
-                @click="updateComment(i - 1)"
+                @click="updateComment(ccount - i)"
                 >완료</v-btn
               >
             </v-layout>
           </v-card>
         </v-flex>
-        <template v-if="comments[i - 1].comments">
+        <template v-if="comments[ccount - i].comments">
           <!--대댓글 -->
           <template>
             <v-flex
               xs11
               offset-xs1
-              v-for="j in comments[i - 1].comments.length"
+              v-for="j in comments[ccount - i].comments.length"
               :key="j.cid"
               class="comments"
             >
               <v-layout row wrap>
-                <v-flex xs1>
+                <v-flex xs2 md1>
                   <v-icon large>subdirectory_arrow_right</v-icon>
                 </v-flex>
-                <v-flex d-flex xs3 md2>
+                <v-flex d-flex xs4 md2>
                   <v-card>
                     <v-card-title>
                       <div>
-                        <div>{{ comments[i - 1].comments[j - 1].name }}</div>
+                        <div>
+                          {{ comments[ccount - i].comments[j - 1].name }}
+                        </div>
                         <div
                           class="grey--text"
                           v-text="
-                            getDate(comments[i - 1].comments[j - 1].created_at)
+                            getDate(
+                              comments[ccount - i].comments[j - 1].created_at
+                            )
                           "
                         ></div>
                       </div>
                     </v-card-title>
                   </v-card>
                 </v-flex>
-                <v-flex d-flex xs8 md9>
+                <v-flex d-flex xs6 md9>
                   <v-card>
                     <v-card-title class="commentText">
                       <div
-                        v-html="getText(comments[i - 1].comments[j - 1].text)"
+                        v-html="
+                          getText(comments[ccount - i].comments[j - 1].text)
+                        "
                         class="hiddentext"
                       ></div>
                     </v-card-title>
@@ -149,16 +155,18 @@
                           small
                           flat
                           color="orange"
-                          v-if="isCommentWriter(i - 1, j - 1)"
-                          @click="toggleCommentEditing(i - 1, j - 1, 'update')"
+                          v-if="isCommentWriter(ccount - i, j - 1)"
+                          @click="
+                            toggleCommentEditing(ccount - i, j - 1, 'update')
+                          "
                           >수정</v-btn
                         >
                         <v-btn
                           small
                           flat
                           color="orange"
-                          v-if="isCommentWriter(i - 1, j - 1)"
-                          @click="deleteCommentComment(i - 1, j - 1)"
+                          v-if="isCommentWriter(ccount - i, j - 1)"
+                          @click="deleteCommentComment(ccount - i, j - 1)"
                           >삭제</v-btn
                         >
                       </v-layout>
@@ -166,7 +174,7 @@
                   </v-card>
                 </v-flex>
               </v-layout>
-              <v-flex xs12 v-if="editing[i - 1].editing[j - 1]">
+              <v-flex xs12 v-if="editing[ccount - i].editing[j - 1]">
                 <v-card>
                   <v-card-title class="commentText">
                     <v-textarea
@@ -182,7 +190,7 @@
                       flat
                       color="orange"
                       v-if="canWrite"
-                      @click="updateCommentComment(i - 1, j - 1)"
+                      @click="updateCommentComment(ccount - i, j - 1)"
                       >완료</v-btn
                     >
                   </v-layout>
@@ -261,7 +269,8 @@ export default {
       nocomments: false,
       originEditing: [],
       editing: [],
-      mode: ""
+      mode: "",
+      ccount: 0
     };
   },
   mounted() {
@@ -275,6 +284,7 @@ export default {
         this.page,
         this.$route.params.did
       );
+      this.ccount = await this.comments.length;
       if (this.$store.state.userName) {
         this.canWrite = true;
       }
@@ -386,6 +396,7 @@ export default {
       );
 
       this.comments = temp;
+      this.ccount = await this.comments.length;
       await this.getCommentsComments();
       this.loaded = true;
       this.CanLoadNextComment();
@@ -400,6 +411,7 @@ export default {
         this.$route.params.did,
         new Date(this.comments[0].created_at)
       );
+      this.ccount = await this.comments.length;
       await this.getCommentsComments();
       this.loaded = true;
       this.currentPage = this.currentPage - 1;
