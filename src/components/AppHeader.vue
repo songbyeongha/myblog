@@ -39,7 +39,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar app color="grey lighten-4">
-      <span class="hidden-sm-and-up">
+      <span class="hidden-md-and-up">
         <v-toolbar-side-icon @click="sidebar = !sidebar">
           <v-icon>menu</v-icon>
         </v-toolbar-side-icon>
@@ -50,7 +50,7 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items class="hidden-xs-only">
+      <v-toolbar-items class="hidden-sm-and-down">
         <v-btn flat class="userNamePlace" v-if="userName" :to="memberLink">
           <i class="far fa-user userInfo"></i>
           {{ userName }}
@@ -108,8 +108,9 @@ export default {
         { title: "home", path: "/", icon: "home" },
         { title: "Portfolio", path: "/portfolio", icon: "assignment" },
         { title: "Post", path: "/post", icon: "speaker_notes" },
-        { title: "Git Info", path: "/gitinfopage", icon: "calendar_today" }
-      ]
+        { title: "Git Info", path: "/gitinfopage", icon: "share" }
+      ],
+      showlogin: true
     };
   },
   components: {
@@ -172,7 +173,7 @@ export default {
     transform: translateY(-48px) !important;
   }
 }
-@media (max-width: 572px) {
+@media (max-width: 910px) {
   .v-toolbar {
     transform: translateY(-56px) !important;
   }
