@@ -89,6 +89,7 @@ export default {
           result.user.displayName,
           ""
         );
+        this.$store.state.rank = "visitor";
       } else {
         await FirebaseService.updateDeviceToken(result.user.uid);
       }
@@ -108,6 +109,7 @@ export default {
           result.user.displayName,
           ""
         );
+        this.$store.state.rank = "visitor";
       } else {
         await FirebaseService.updateDeviceToken(result.user.uid);
       }
@@ -128,6 +130,7 @@ export default {
           result.user.displayName,
           ""
         );
+        this.$store.state.rank = "visitor";
       } else {
         await FirebaseService.updateDeviceToken(result.user.uid);
       }

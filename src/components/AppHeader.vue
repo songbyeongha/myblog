@@ -2,20 +2,19 @@
   <div>
     <v-navigation-drawer v-model="sidebar" app disable-resize-watcher>
       <v-list>
-        <v-list-tile class="userNamePlace" v-if="userName">
+        <v-list-tile class="userNamePlace" v-if="userName" :to="memberLink">
           <v-list-tile-action>
             <v-icon>far fa-user</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>{{ userName }}</v-list-tile-content>
         </v-list-tile>
-
-        <v-list-tile v-if="showlogin" @click="login">
+        <v-list-tile v-if="!userCheck" @click="login">
           <v-list-tile-action>
             <v-icon>lock_open</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>login</v-list-tile-content>
         </v-list-tile>
-        <v-list-tile v-if="!showlogin" @click="logout">
+        <v-list-tile v-if="userCheck" @click="logout">
           <v-list-tile-action>
             <v-icon>lock</v-icon>
           </v-list-tile-action>
@@ -52,10 +51,10 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-card-text class="userNamePlace" v-if="userName">
-          <i class="far fa-user"></i>
+        <v-btn flat class="userNamePlace" v-if="userName" :to="memberLink">
+          <i class="far fa-user userInfo"></i>
           {{ userName }}
-        </v-card-text>
+        </v-btn>
         <v-btn flat v-for="item in menuItems" :key="item.title" :to="item.path">
           <v-icon left dark>{{ item.icon }}</v-icon>
           {{ item.title }}
@@ -64,7 +63,7 @@
           <v-icon left dark>build</v-icon>Admin
         </v-btn>
         <v-btn
-          v-if="!userName"
+          v-if="!userCheck"
           fab
           dark
           small
@@ -74,7 +73,7 @@
           <v-icon>lock_open</v-icon>
         </v-btn>
         <v-btn
-          v-if="userName"
+          v-if="userCheck"
           fab
           dark
           small
@@ -104,6 +103,7 @@ export default {
       appTitle: "MyBlog",
       sidebar: false,
       adminLink: "/MyConfig",
+      memberLink: "/memberInfo",
       menuItems: [
         { title: "home", path: "/", icon: "home" },
         { title: "Portfolio", path: "/portfolio", icon: "assignment" },
@@ -117,28 +117,27 @@ export default {
     LoginModal,
     Chat
   },
-  mounted: function() {},
   computed: {
     getRank() {
       return this.$store.state.rank;
     },
     userName() {
       return this.$store.state.userName;
-    }
+    },
+    userCheck() {
+      return this.$store.state.loginCheck;
+    },
   },
   methods: {
-    userCheck: function() {
-      this.showlogin = false;
-    },
     logout() {
-      this.showlogin = true;
+      FirebaseService.logout();
       store.commit("loginInfo",{
+          loginCheckVal : false,
           rankVal : "",
           userNameVal : "",
           userEmailVal : ""
       });
       alert("로그아웃되었습니다.");
-      FirebaseService.logout();
     },
     login() {
       this.$store.state.ModalLogin = true;
@@ -152,6 +151,9 @@ export default {
 
 #apptitle {
   font-family: "Jua", sans-serif;
+}
+.userInfo{
+  margin-right: 16px;
 }
 .v-toolbar {
   transform: translateY(-64px) !important;

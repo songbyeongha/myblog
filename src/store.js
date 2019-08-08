@@ -19,6 +19,7 @@ export default new Vuex.Store({
     GitMember: ["신민석", "송병하", "Yoon,EunSol"],
     ModalGitMember: [],
     rank: "",
+    loginCheck: false,
     portfoilio: null,
     deviceToken: "",
     userName: "",
@@ -27,6 +28,7 @@ export default new Vuex.Store({
   plugins: [createPersistedState()],
   mutations: {
     loginInfo: function(state, payload) {
+      state.loginCheck = payload.loginCheckVal;
       state.rank = payload.rankVal;
       state.userName = payload.userNameVal;
       state.userEmail = payload.userEmailVal;
