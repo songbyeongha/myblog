@@ -12,6 +12,7 @@ import ViewPortfolio from "./views/PortfolioViewPage";
 import ViewPost from "./views/PostViewPage";
 import MemberInfo from "./views/MemberInfo";
 import store from "./store";
+import NotFound from "./views/NotFound";
 
 Vue.use(Router);
 
@@ -94,6 +95,11 @@ export default new Router({
       path: "/memberInfo",
       name: "memberInfo",
       component: MemberInfo
+    },
+    {
+      path: "*",
+      name: "notFound",
+      component: NotFound
     }
   ]
 });

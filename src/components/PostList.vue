@@ -10,6 +10,7 @@
       class="noneCenter"
     >
       <Post
+        v-if="checkLoaded"
         class="ma-3"
         :date="posts[i - 1].modify_at"
         :title="posts[i - 1].title"
@@ -17,6 +18,10 @@
         @click.native="viewThis(posts[i - 1])"
       ></Post>
     </v-flex>
+    <v-progress-linear
+      :indeterminate="true"
+      v-if="!checkLoaded"
+    ></v-progress-linear>
     <v-flex xs12 text-xs-center round my-5 v-if="loadMore">
       <v-btn color="info" dark v-on:click="loadMorePosts">
         <v-icon size="25" class="mr-2">fa-plus</v-icon>더 보기
@@ -37,7 +42,8 @@ export default {
   data() {
     return {
       posts: [],
-      limits: 6
+      limits: 6,
+      checkLoaded: false
     };
   },
   components: {
@@ -49,6 +55,7 @@ export default {
   methods: {
     async getPosts() {
       this.posts = await FirebaseService.getPosts();
+      this.checkLoaded = await true;
     },
     loadMorePosts() {
       this.limits = this.limits + 6;
