@@ -82,7 +82,6 @@ export default {
       let conf = confirm("회원탈퇴하시겠습니까?");
       if (conf) {
         await firebaseService.deleteMember();
-        alert("회원탈퇴되었습니다.");
         this.$router.replace("/");
       }
     }

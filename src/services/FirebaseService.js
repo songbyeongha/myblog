@@ -518,23 +518,26 @@ export default {
         console.log("update error");
       });
   },
-  deleteMember() {
+  async deleteMember() {
     var user = firebase.auth().currentUser;
-    console.log(user);
-    user
-      .delete()
-      .then(function() {
-        store.commit("loginInfo", {
-          loginCheckVal: false,
-          rankVal: "",
-          userNameVal: "",
-          userEmailVal: ""
+    let item;
+    item = await firestore.collection(PERM).doc(user.uid);
+    item.delete().then(function() {
+      user
+        .delete()
+        .then(function() {
+          store.commit("loginInfo", {
+            loginCheckVal: false,
+            rankVal: "",
+            userNameVal: "",
+            userEmailVal: ""
+          });
+          alert("회원탈퇴되었습니다.");
+        })
+        .catch(function(error) {
+          console.log("error");
         });
-        console.log("success");
-      })
-      .catch(function(error) {
-        console.log("error");
-      });
+    });
   },
   passowrdEmail() {
     firebase.auth().languageCode = "ko";
