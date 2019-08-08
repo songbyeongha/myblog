@@ -7,7 +7,7 @@
     weight="100%;"
     max-height="400"
     hide-delimiter-background="false"
-    mandatory="false"
+    mandatory
     light
   >
     <v-carousel-item v-for="(name, i) in names" :key="i">
@@ -128,6 +128,7 @@ export default {
   color: #fff;
 }
 .aboutContainer {
+  padding-bottom: 40px;
   padding-left: 40px;
   padding-right: 40px;
   font-family: "Do Hyeon", sans-serif;
