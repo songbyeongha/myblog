@@ -11,6 +11,7 @@ import MyConfig from "./views/MyConfig";
 import ViewPortfolio from "./views/PortfolioViewPage";
 import ViewPost from "./views/PostViewPage";
 import store from "./store";
+import NotFound from "./views/NotFound";
 
 Vue.use(Router);
 
@@ -88,6 +89,11 @@ export default new Router({
       path: "/viewPost/:did",
       name: "viewPost",
       component: ViewPost
+    },
+    {
+      path: "*",
+      name: "notFound",
+      component: NotFound
     }
   ]
 });

@@ -1,13 +1,15 @@
 <template>
-  <v-card>
-    <v-card-title primary-title>
-      <div>
-        <div class="caption">{{ formatedDate }}</div>
-        <div class="headline">{{ title }}</div>
-        <span class="grey--text subText">{{ body }}</span>
-      </div>
-    </v-card-title>
-  </v-card>
+  <v-hover>
+    <v-card slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`">
+      <v-card-title primary-title>
+        <div>
+          <div class="caption">{{ formatedDate }}</div>
+          <div class="headline">{{ title }}</div>
+          <span class="grey--text subText">{{ body }}</span>
+        </div>
+      </v-card-title>
+    </v-card>
+  </v-hover>
 </template>
 
 <script>
@@ -26,5 +28,4 @@ export default {
   }
 };
 </script>
-<style>
-</style>
+<style></style>
