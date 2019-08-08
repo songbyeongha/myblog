@@ -8,7 +8,7 @@
     </ImgBanner>
 
     <v-container>
-      <!-- About Members -->
+      <!-- About Team -->
       <v-layout my-5>
         <v-flex xs12>
           <h2 class="headline my-5 text-xs-center">About Team</h2>
@@ -49,7 +49,6 @@ import ImgBanner from "../components/ImgBanner";
 import PortfolioList from "../components/PortfolioList";
 import PostList from "../components/PostList";
 import RepositoryList from "../components/RepositoryList";
-import AboutMembers from "../components/AboutMembers";
 import AboutTeam from "../components/AboutTeam";
 export default {
   name: "HomePage",
@@ -58,7 +57,6 @@ export default {
     PortfolioList,
     PostList,
     RepositoryList,
-    AboutMembers,
     AboutTeam
   },
   methods: {

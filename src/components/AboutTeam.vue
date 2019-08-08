@@ -5,40 +5,47 @@
     :show-arrows="false"
     weight=100%;
     max-height="400"
-    hide-delimiter-background
-    delimiter-icon="mdi-minus"
+    hide-delimiter-background="false"
+    mandatory="false"
+    light
   >
     <v-carousel-item
       v-for="(name, i) in names"
       :key="i"
     >
       <v-sheet
-        :color="colors[i]"
         height="100%"
         tile
       >
-        <v-container grid-list-md text-center>
+        <v-container grid-list-md text-center class="aboutContainer">
           <v-layout wrap>
             <v-flex d-flex xs6>
-              <v-card>
+              <v-card
+                color="#F9F9F9"
+              >
                 <img :src="items[i].src" class="aboutImage">
                 <v-card-text class="px-0"></v-card-text>
               </v-card>
             </v-flex>
               <v-flex de-flex xs6>
                 <v-flex xs12>
-                  <v-card color="font-weight-bold font-italic text-left">
-                    <v-card-text class="px-5 cardText headline font-weight-bold font-italic text-left">{{name}}</v-card-text>
+                  <v-card color="text-left aboutName">
+                    <v-card-text class="px-5">{{name}}</v-card-text>
                   </v-card>
                 </v-flex>
                 <v-flex xs12>
                   <v-card>
-                    <v-card-text class="px-5">{{comments[i]}}</v-card-text>
+                    <v-card-text class="px-5 aboutComments">{{comments[i]}}</v-card-text>
                   </v-card>
                 </v-flex>
                 <v-flex xs12>
                   <v-card>
-                    <v-card-text class="px-5">{{emailAddress[i]}}</v-card-text>
+                    <v-card-text class="px-5 aboutSkill">{{skills[i]}}</v-card-text>
+                  </v-card>
+                </v-flex>
+                <v-flex xs12>
+                  <v-card>
+                    <v-card-text class="px-5 aboutEmail">{{emailAddress[i]}}</v-card-text>
                   </v-card>
                 </v-flex>
               </v-flex>
@@ -52,16 +59,12 @@
 </template>
 
 <script>
+
   export default {
+    name: "AboutTeam",
     data () {
       return {
         cycle: false,
-        colors: [
-          'secondary',
-          'yellow darken-2',
-          'red',
-          'orange',
-        ],
         names: [
           '6조 My Blog팀',
           '송병하',
@@ -70,9 +73,9 @@
         ],
         comments:[
           '안녕하세요 6조입니다. 점점 팀원들이 사라지네요,,, 남은 팀원끼리 으쌰으쌰 하겠습니다',
-          '모두에게 인정 받는 개발자가 되고 싶습니다.배움에 있어 최선을 다하고, 활용에 있어 번뜩임을 보여주겠습니다.',
-          '안녕하세요, 여러분! 프론트엔드 개발자를 꿈꾸는 학생입니다. 지금은 vue.js를 배우고 있어요. 아직 미숙하지만 언젠가는 잘 할수 있을거라 믿습니다. 정말 신기하고 재미있네요!',
-          '성과를 확실히 내는 개발자'
+          '모두에게 인정 받는 개발자가 되고 싶습니다. 배움에 있어 최선을 다하고, 활용에 있어 번뜩임을 보여주겠습니다.',
+          '안녕하세요, 여러분! 프론트엔드 개발자를 꿈꾸는 민석입니다. 지금은 vue.js를 배우고 있어요. 아직 미숙하지만 언젠가는 잘 할수 있을거라 믿습니다. 정말 신기하고 재미있네요!',
+          '성과를 확실히 내는 개발자가 되겠습니다. 열심히 배우고 익혀 실전에서 활약할거에요. 화이팅입니다.'
         ],
         items:[
           {
@@ -94,20 +97,58 @@
           'Email address : qudgk0006@naver.com',
           'Email address : alstjr7388@naver.com',
           'Email address : todal160122@gmail.com'
+        ],
+        skills:[
+          '사용기술 : HTML, CSS, Javascript, ES6, Vue.js, firebase, danbee.ai, Api, Disqus',
+          '사용가능기술 : C, Java, PHP, Javascript, jQuery, HTML, CSS, Vue.js, Python, Spring',
+          '사용가능기술 : C, Java, C++, Javascript, HTML, CSS, Vue.js, Python, Spring',
+          '사용가능기술 : C, Java, Javascript, HTML, CSS, Vue.js, Node.js, Python, Spring',
         ]
       }
     }
   }
 </script>
 <style>
+@import url('https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap');
 .aboutImage{
   width: 100%;
-  height: inherit;
+  height: -webkit-fill-available;
 }
 .theme--dark.v-sheet {
     background-color: #0000;
     border-color: #0000;
     color: #fff;
 }
-
+.aboutContainer {
+    padding: 55px;
+    font-family: 'Do Hyeon', sans-serif;
+}
+.aboutName{
+  font-weight: bold;
+  font-size: xx-large;
+}
+.aboutComments{
+  font-size: large;
+}
+.aboutSkill{
+  font-size: medium;
+}
+.aboutEmail{
+  font-size: medium;
+}
+.v-card__text {
+    padding: 20px;
+    width: 100%;
+}
+.v-card{
+  box-shadow: none;
+}
+.v-carousel__controls {
+    background: none;
+    height: 30px;
+    bottom: 7px;
+}
+.v-card__text.px-0{
+  padding: unset;
+}
 </style>
