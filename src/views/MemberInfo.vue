@@ -18,10 +18,10 @@
                 <div>{{item.title}}</div>
               </template>
               <v-card v-if="item.modifyCk">
-                <v-text-field label="name" flat solo v-model="modifyName"></v-text-field>
+                <v-text-field label="name" flat solo v-model="modifyName" id="memberInfoInput"></v-text-field>
               </v-card>
               <v-card v-if="!item.modifyCk">
-                <v-card-text>{{item.value}}</v-card-text>
+                <v-card-text class="memberInfoValue">{{item.value}}</v-card-text>
               </v-card>
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -101,5 +101,9 @@ export default {
 }
 .toggle.v-input--is-disabled.v-text-field--outline .v-input__slot {
   border-color: #fff;
+}
+.memberInfoValue{
+  text-indent: 10px;
+  font-size: 17px;
 }
 </style>

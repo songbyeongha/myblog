@@ -9,11 +9,7 @@
           </v-flex>
           <v-flex v-for="(col, i) in rows" :key="i" xs12 md6 lg6>
             <span class="body-2" v-text="col.title.toUpperCase()"></span>
-            <div
-              v-for="(child, i) in col.children"
-              :key="i"
-              v-text="child"
-            ></div>
+            <div v-for="(child, i) in col.children" :key="i" v-text="child"></div>
             <div>
               GitLab :
               <a :href="gitLink">{{ gitLink }}</a>
@@ -21,10 +17,7 @@
           </v-flex>
         </v-layout>
       </v-card-text>
-      <v-card-actions
-        class="blue-grey darken-3 justify-center"
-        style="color:white"
-      >
+      <v-card-actions class="blue-grey darken-3 justify-center" style="color:white">
         &copy;2019 —
         <strong>Shin MinSeok</strong>
       </v-card-actions>

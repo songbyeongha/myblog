@@ -17,10 +17,7 @@
         @click.native="viewThis(portfolios[i - 1])"
       ></Portfolio>
     </v-flex>
-    <v-progress-linear
-      :indeterminate="true"
-      v-if="!checkLoaded"
-    ></v-progress-linear>
+    <v-progress-linear :indeterminate="true" v-if="!checkLoaded"></v-progress-linear>
     <v-flex xs12 text-xs-center round my-5 v-if="loadMore">
       <v-btn color="info" dark v-on:click="loadMorePortfolios">
         <v-icon size="25" class="mr-2">fa-plus</v-icon>더 보기
