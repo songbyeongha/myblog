@@ -2,11 +2,9 @@
   <v-hover>
     <v-card slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`">
       <v-card-title primary-title>
-        <div>
-          <div class="caption">{{ formatedDate }}</div>
-          <div class="headline">{{ title }}</div>
-          <span class="grey--text subText">{{ body }}</span>
-        </div>
+        <div class="caption">{{ formatedDate }}</div>
+        <div class="headline">{{ title }}</div>
+        <span class="grey--text subText postTextPlace">{{ body }}</span>
       </v-card-title>
     </v-card>
   </v-hover>
@@ -28,4 +26,8 @@ export default {
   }
 };
 </script>
-<style></style>
+<style>
+.postTextPlace{
+  height: 62.4px;
+}
+</style>
