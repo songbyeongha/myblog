@@ -23,31 +23,31 @@ exports.sendPortflioNotification = functions.firestore
   .document("portfolios/{portfolio}")
   .onCreate(async event => {
     var message = "New Portfolio : " + event.data().title;
-    return pushMessage(message,"team");
+    return pushMessage(message, "team");
   });
 
 exports.sendPostNotification = functions.firestore
   .document("posts/{post}")
   .onCreate(async event => {
     var message = "New Post : " + event.data().title;
-    return pushMessage(message,"team");
+    return pushMessage(message, "team");
   });
 
 exports.sendPortflioCommnetNotification = functions.firestore
   .document("portfolios/{portfolio}/comments/{comment}")
   .onCreate(async event => {
     var message = "New Portfolio Comment: " + event.data().text;
-    return pushMessage(message,"admin");
+    return pushMessage(message, "admin");
   });
 
 exports.sendPostCommentNotification = functions.firestore
   .document("posts/{post}/comments/{comment}")
   .onCreate(async event => {
     var message = "New Post Comment : " + event.data().text;
-    return pushMessage(message,"admin");
+    return pushMessage(message, "admin");
   });
 
-function pushMessage(message,permission) {
+function pushMessage(message, permission) {
   var payload = {
     notification: {
       title: message
