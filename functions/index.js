@@ -23,17 +23,31 @@ exports.sendPortflioNotification = functions.firestore
   .document("portfolios/{portfolio}")
   .onCreate(async event => {
     var message = "New Portfolio : " + event.data().title;
-    return pushMessage(message);
+    return pushMessage(message, "team");
   });
 
 exports.sendPostNotification = functions.firestore
   .document("posts/{post}")
   .onCreate(async event => {
     var message = "New Post : " + event.data().title;
-    return pushMessage(message);
+    return pushMessage(message, "team");
   });
 
-function pushMessage(message) {
+exports.sendPortflioCommnetNotification = functions.firestore
+  .document("portfolios/{portfolio}/comments/{comment}")
+  .onCreate(async event => {
+    var message = "New Portfolio Comment: " + event.data().text;
+    return pushMessage(message, "admin");
+  });
+
+exports.sendPostCommentNotification = functions.firestore
+  .document("posts/{post}/comments/{comment}")
+  .onCreate(async event => {
+    var message = "New Post Comment : " + event.data().text;
+    return pushMessage(message, "admin");
+  });
+
+function pushMessage(message, permission) {
   var payload = {
     notification: {
       title: message
@@ -44,7 +58,7 @@ function pushMessage(message) {
     .get()
     .then(snapshot => {
       snapshot.forEach(doc => {
-        if (doc.data().rank == "team" || doc.data().rank == "admin") {
+        if (doc.data().rank == permission || doc.data().rank == "admin") {
           token = doc.data().deviceToken;
           console.log("전송 : ", token);
           admin.messaging().sendToDevice(token, payload);

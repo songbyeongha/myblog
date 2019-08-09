@@ -6,14 +6,7 @@
           <span class="text-shadow display-2 font-weight-light bannerText">
             <slot name="text" />
           </span>
-          <v-btn
-            id="changeBtn"
-            right
-            top
-            absolute
-            color="grey lighten-4"
-            @click="showImgModal()"
-          >
+          <v-btn id="changeBtn" right top absolute color="grey lighten-4" @click="showImgModal()">
             <v-icon>photo</v-icon>
           </v-btn>
         </v-flex>

@@ -20,11 +20,7 @@
           </v-list-tile-action>
           <v-list-tile-content>logout</v-list-tile-content>
         </v-list-tile>
-        <v-list-tile
-          v-for="item in menuItems"
-          :key="item.title"
-          :to="item.path"
-        >
+        <v-list-tile v-for="item in menuItems" :key="item.title" :to="item.path">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -62,24 +58,10 @@
         <v-btn flat v-if="getRank === 'admin'" :to="adminLink">
           <v-icon left dark>build</v-icon>Admin
         </v-btn>
-        <v-btn
-          v-if="!userCheck"
-          fab
-          dark
-          small
-          color="whitesmoke"
-          @click="login"
-        >
+        <v-btn v-if="!userCheck" fab dark small color="whitesmoke" @click="login">
           <v-icon>lock_open</v-icon>
         </v-btn>
-        <v-btn
-          v-if="userCheck"
-          fab
-          dark
-          small
-          color="whitesmoke"
-          @click="logout"
-        >
+        <v-btn v-if="userCheck" fab dark small color="whitesmoke" @click="logout">
           <v-icon>lock</v-icon>
         </v-btn>
       </v-toolbar-items>
@@ -126,16 +108,16 @@ export default {
     },
     userCheck() {
       return this.$store.state.loginCheck;
-    },
+    }
   },
   methods: {
     logout() {
       FirebaseService.logout();
-      store.commit("loginInfo",{
-          loginCheckVal : false,
-          rankVal : "",
-          userNameVal : "",
-          userEmailVal : ""
+      store.commit("loginInfo", {
+        loginCheckVal: false,
+        rankVal: "",
+        userNameVal: "",
+        userEmailVal: ""
       });
       alert("로그아웃되었습니다.");
     },
@@ -152,7 +134,7 @@ export default {
 #apptitle {
   font-family: "Jua", sans-serif;
 }
-.userInfo{
+.userInfo {
   margin-right: 16px;
 }
 .v-toolbar {

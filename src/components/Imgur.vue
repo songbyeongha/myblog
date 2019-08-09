@@ -4,10 +4,7 @@
       <v-flex xs12 mg12 lg12 text-xs-center tit style="line-height:4rem;">
         <h2>Image Upload</h2>
       </v-flex>
-      <v-flex
-        xs12
-        class="text-xs-center text-sm-center text-md-center text-lg-center"
-      >
+      <v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
         <img :src="imageUrl" width="100%" v-if="imageUrl" />
         <v-text-field
           label="Click Here to Select Image"
@@ -24,19 +21,12 @@
           @change="onFilePicked"
         />
         <div class="text-xs-center" v-if="loading">
-          <v-progress-circular
-            indeterminate
-            color="primary"
-          ></v-progress-circular>
+          <v-progress-circular indeterminate color="primary"></v-progress-circular>
         </div>
         <span v-if="showImg" v-html="imgurLink"></span>
         <div class="text-xs-center" style="margin-bottom: 2.5rem;">
-          <v-btn round color="primary" small dark @click="uploadImg"
-            >Upload</v-btn
-          >
-          <v-btn round color="primary" small dark @click="doCopy" v-if="showImg"
-            >Copy!</v-btn
-          >
+          <v-btn round color="primary" small dark @click="uploadImg">Upload</v-btn>
+          <v-btn round color="primary" small dark @click="doCopy" v-if="showImg">Copy!</v-btn>
         </div>
       </v-flex>
     </v-layout>

@@ -379,6 +379,7 @@ export default {
   updateDeviceToken(id) {
     var idRef = firestore.collection(PERM).doc(id);
     var deviceToken = "";
+    if (messaging == null) return;
     messaging
       .requestPermission()
       .then(function() {
