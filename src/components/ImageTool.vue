@@ -80,16 +80,8 @@ export default {
     };
   },
   mounted() {
-    if (this.mode === "modify") {
-      this.radioItems.push("Default");
-      this.defaultImg = store.state.defaultImg;
-      this.selectedRadio = "Default";
-    }
-    if (this.mode === "banner") {
-      this.radioItems.push("Default");
-      this.defaultImg = store.state.defaultImg;
-      this.selectedRadio = "Default";
-    }
+    this.radioItems.push("Default");
+    this.defaultImg = store.state.defaultImg;
   },
   computed: {
     getImgUrl() {
@@ -116,7 +108,11 @@ export default {
             Math.floor(Math.random() * 600) +
             800;
         } else if (this.mode === "modify") {
-          store.state.imgUrl = this.defaultImg;
+          store.state.imgUrl = "";
+          store.state.imgUrl =
+            "https://source.unsplash.com/random/" +
+            Math.floor(Math.random() * 600) +
+            800;
         }
         this.imageUrl = this.getImgUrl;
         this.selected = false;

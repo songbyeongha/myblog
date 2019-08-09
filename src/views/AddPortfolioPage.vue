@@ -101,6 +101,7 @@ export default {
   methods: {
     getImgURL() {
       this.imageUrl = store.state.imgUrl;
+      console.log("ho");
     },
     send() {
       if (
@@ -111,8 +112,9 @@ export default {
       ) {
         alert("권한이 필요한 기능입니다.");
       }
-      if (!this.imgUrl) {
+      if (!this.imageUrl) {
         alert("이미지를 선택해 주세요.");
+        return;
       }
       FirebaseService.postPortfolio(
         this.title,
