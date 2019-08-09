@@ -44,7 +44,7 @@ $(document).ready(function() {
       // Query for properties.
       queryProperties(firstAccountId);
     } else {
-      console.log("No accounts found for this user.");
+      alert("접근 권한이 없습니다. 관리자에레 문의하세요.");
     }
   }
 

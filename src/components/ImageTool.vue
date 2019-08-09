@@ -17,7 +17,7 @@
       lg12
       class="text-xs-center text-sm-center text-md-center text-lg-center"
     >
-      <img :src="imageUrl" width="100%" v-if="imageUrl" />
+      <v-img :src="imageUrl" aspect-ratio="1.7" v-if="imageUrl" />
     </v-flex>
     <v-flex
       v-if="selectedRadio === 'Default'"
@@ -26,7 +26,7 @@
       lg12
       class="text-xs-center text-sm-center text-md-center text-lg-center"
     >
-      <img :src="defaultImg" width="100%" />
+      <v-img :src="defaultImg" aspect-ratio="1.7" />
     </v-flex>
     <v-flex
       v-if="selectedRadio === 'From Link'"
@@ -35,10 +35,10 @@
       lg12
       class="text-xs-center text-sm-center text-md-center text-lg-center"
     >
-      <img :src="getImgUrl" width="100%" v-if="imageUrl" />
+      <v-img :src="getImgUrl" aspect-ratio="1.7" v-if="imageUrl" />
       <v-flex xs12>
         <v-text-field
-          label="Outline"
+          label="ex) https://source.unsplash.com/random"
           placeholder="input your image link here"
           v-model="imageUrl"
           outline
@@ -75,16 +75,8 @@ export default {
     };
   },
   mounted() {
-    if (this.mode === "modify") {
-      this.radioItems.push("Default");
-      this.defaultImg = store.state.defaultImg;
-      this.selectedRadio = "Default";
-    }
-    if (this.mode === "banner") {
-      this.radioItems.push("Default");
-      this.defaultImg = store.state.defaultImg;
-      this.selectedRadio = "Default";
-    }
+    this.radioItems.push("Default");
+    this.defaultImg = store.state.defaultImg;
   },
   computed: {
     getImgUrl() {
@@ -111,16 +103,26 @@ export default {
             Math.floor(Math.random() * 600) +
             800;
         } else if (this.mode === "modify") {
-          store.state.imgUrl = this.defaultImg;
+          store.state.imgUrl = "";
+          store.state.imgUrl =
+            "https://source.unsplash.com/random/" +
+            Math.floor(Math.random() * 600) +
+            800;
         }
         this.imageUrl = this.getImgUrl;
         this.selected = false;
-        this.$emit("imgSelected");
       } else if (this.selectedRadio === "Default") {
-        store.state.bannerImgUrl = this.defaultImg;
+        if (this.mode === "banner") {
+          store.state.bannerImgUrl = this.defaultImg;
+        } else if (this.mode === "modify") {
+          store.state.imgUrl = this.defaultImg;
+        } else if (this.mode === "write") {
+          store.state.imgUrl = store.state.bannerImgUrl;
+        }
       } else {
         this.imageUrl = "";
       }
+      this.$emit("imgSelected");
     },
     getImgData(data) {
       this.imageName = data.imageName;
