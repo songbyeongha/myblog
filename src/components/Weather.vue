@@ -54,9 +54,6 @@ export default {
               response.data.weather[0].icon +
               "@2x.png";
           })
-          .catch(ex => {
-            console.log("ERR!!!!! : ", ex);
-          });
       });
     }
   }
