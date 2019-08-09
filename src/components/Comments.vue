@@ -72,8 +72,7 @@
           <!--대댓글 -->
           <template>
             <v-flex
-              md11
-              offset-md1
+              md12
               v-for="j in comments[ccount - i].comments.length"
               :key="j.cid"
               class="comments"
