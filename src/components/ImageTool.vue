@@ -6,12 +6,7 @@
       </v-flex>
       <v-flex xs12 mg12 lg12>
         <v-radio-group v-model="selectedRadio" @click="radioChanged" row>
-          <v-radio
-            v-for="item in radioItems"
-            :key="item"
-            :label="item"
-            :value="item"
-          ></v-radio>
+          <v-radio v-for="item in radioItems" :key="item" :label="item" :value="item"></v-radio>
         </v-radio-group>
       </v-flex>
     </v-layout>

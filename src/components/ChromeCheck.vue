@@ -9,8 +9,7 @@
       left
       color="alert"
       @click="hide"
-      >해당 사이트는 크롬 브라우저에 최적화 되어있습니다.</v-btn
-    >
+    >해당 사이트는 크롬 브라우저에 최적화 되어있습니다.</v-btn>
   </div>
 </template>
 

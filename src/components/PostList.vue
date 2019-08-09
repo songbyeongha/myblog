@@ -18,10 +18,7 @@
         @click.native="viewThis(posts[i - 1])"
       ></Post>
     </v-flex>
-    <v-progress-linear
-      :indeterminate="true"
-      v-if="!checkLoaded"
-    ></v-progress-linear>
+    <v-progress-linear :indeterminate="true" v-if="!checkLoaded"></v-progress-linear>
     <v-flex xs12 text-xs-center round my-5 v-if="loadMore">
       <v-btn color="info" dark v-on:click="loadMorePosts">
         <v-icon size="25" class="mr-2">fa-plus</v-icon>더 보기
