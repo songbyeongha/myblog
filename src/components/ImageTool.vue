@@ -43,7 +43,7 @@
       <img :src="getImgUrl" width="100%" v-if="imageUrl" />
       <v-flex xs12>
         <v-text-field
-          label="Outline"
+          label="ex) https://source.unsplash.com/random"
           placeholder="input your image link here"
           v-model="imageUrl"
           outline

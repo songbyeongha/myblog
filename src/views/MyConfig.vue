@@ -3,94 +3,80 @@
     <ImgBanner>
       <div class="bannerText" slot="text">Admin Configuration</div>
     </ImgBanner>
-  <v-app id="inspire">
-    <v-card>
-      <v-tabs vertical>
-        <v-tab>
-          사용자목록
-        </v-tab>
+    <v-app id="inspire">
+      <v-card>
+        <v-tabs vertical>
+          <v-tab>사용자목록</v-tab>
 
-        <v-tab>
-          전체게시글
-        </v-tab>
+          <v-tab>전체게시글</v-tab>
 
-        <v-tab>  
-          G.A.
-        </v-tab>
+          <v-tab>G.A.</v-tab>
 
-        <v-tab>
-          Seesion
-        </v-tab>
+          <v-tab>Seesion</v-tab>
 
-        <v-tab>
-          Country
-        </v-tab>
-  
-        <v-tab>
-          Vender
-        </v-tab>
+          <v-tab>Country</v-tab>
 
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <!-- Table -->
-              <v-flex xs12 mg12 lg12 text-xs-center>
-                <h2>사용자 권한 설정</h2>
-              </v-flex>
-              <UserTable></UserTable>      
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
+          <v-tab>Vender</v-tab>
 
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <!-- 게시글수 -->
-              <PostCounter></PostCounter>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <!-- Table -->
+                <v-flex xs12 mg12 lg12 text-xs-center>
+                  <h2>사용자 권한 설정</h2>
+                </v-flex>
+                <UserTable></UserTable>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
 
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <!-- 게시글수 -->
+                <PostCounter></PostCounter>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
 
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <!-- GA api call -->
-              <!-- <GoogleAnalytics></GoogleAnalytics> -->
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <!-- GA api call -->
+                <GoogleAnalytics></GoogleAnalytics>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
 
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <!-- 세션차트 -->
-                <!-- <GaSessionChart></GaSessionChart> -->
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <!-- 세션차트 -->
+                <GaSessionChart></GaSessionChart>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
 
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <!-- 나라차트 -->
-                <!-- <GaCountryChart></GaCountryChart> -->
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <!-- 나라차트 -->
+                <GaCountryChart></GaCountryChart>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
 
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <!-- 벤더통계 -->
-                <!-- <GaVender></GaVender> -->
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-
-      </v-tabs>
-    </v-card>
-  </v-app>
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <!-- 벤더통계 -->
+                <GaVender></GaVender>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+        </v-tabs>
+      </v-card>
+    </v-app>
   </div>
 </template>
 
@@ -99,10 +85,10 @@ import ImgBanner from "../components/ImgBanner";
 import UserTable from "../components/UserTable";
 import fbservice from "@/services/FirebaseService.js";
 import PostCounter from "../components/PostCounter.vue";
-// import GoogleAnalytics from "../components/GoogleAnalytics.vue";
-// import GaSessionChart from "../components/GoogleAnalysticsSession.vue";
-// import GaCountryChart from "../components/GoogleAnalyticsCountry.vue";
-// import GaVender from '../components/GoogleAnalysticsVender.vue';
+import GoogleAnalytics from "../components/GoogleAnalytics.vue";
+import GaSessionChart from "../components/GoogleAnalysticsSession.vue";
+import GaCountryChart from "../components/GoogleAnalyticsCountry.vue";
+import GaVender from "../components/GoogleAnalysticsVender.vue";
 import { clearInterval } from "timers";
 
 export default {
@@ -111,13 +97,11 @@ export default {
     ImgBanner,
     UserTable,
     PostCounter,
-    // GoogleAnalytics,
-    // GaSessionChart,
-    // GaCountryChart,
-    // GaVender,
-
-  },
-  
+    GoogleAnalytics,
+    GaSessionChart,
+    GaCountryChart,
+    GaVender
+  }
 };
 </script>
 
