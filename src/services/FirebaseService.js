@@ -528,6 +528,8 @@ export default {
     if (category == "post") item = await firestore.collection(POSTS).doc(path);
     else if (category == "portfolio")
       item = await firestore.collection(PORTFOLIOS).doc(path);
+    else if (category == "calendar")
+      item = await firestore.collection("calendar").doc(path);
     item.delete();
     var deleteFn = firebase.functions().httpsCallable("recursiveDelete");
     deleteFn({ path: pathFull })
@@ -651,5 +653,35 @@ export default {
       .catch(function(error) {
         console.log("Error updating Comments:" + error);
       });
+  },
+  postCalendar(email, YYYYMM, event) {
+    return firestore
+      .collection("calendar")
+      .doc(email)
+      .collection(YYYYMM)
+      .add(event);
+  },
+  getCalendar(email, YYYYMM) {
+    let data = firestore
+      .collection("calendar")
+      .doc(email)
+      .collection(YYYYMM);
+
+    return data.get().then(function(docSnapshots) {
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        data.date = new Date(data.date.toDate());
+        data.cid = doc.id;
+        return data;
+      });
+    });
+  },
+  async deleteCalendar(email, YYYYMM, cid) {
+    let comment = await firestore
+      .collection("calendar")
+      .doc(email)
+      .collection(YYYYMM)
+      .doc(cid);
+    comment.delete();
   }
 };

@@ -11,6 +11,7 @@ import MyConfig from "./views/MyConfig";
 import ViewPortfolio from "./views/PortfolioViewPage";
 import ViewPost from "./views/PostViewPage";
 import MemberInfo from "./views/MemberInfo";
+import Calendar from "./views/CalendarPage";
 import store from "./store";
 import NotFound from "./views/NotFound";
 
@@ -25,12 +26,30 @@ const requireAuth = () => (to, from, next) => {
   }
 };
 
-const requireLogin = () => (to, from, next) => {
+const requireLoginPort = () => (to, from, next) => {
   if (store.state.rank == "admin" || store.state.rank == "team") {
     return next();
   } else {
     alert("포트폴리오는 팀원이나 관리자만 작성이 가능합니다.");
     next("/portfolio");
+  }
+};
+
+const requireLoginPost = () => (to, from, next) => {
+  if (store.state.rank == "admin" || store.state.rank == "team") {
+    return next();
+  } else {
+    alert("포스트는 팀원이나 관리자만 작성이 가능합니다.");
+    next("/post");
+  }
+};
+
+const requireLoginCalendar = () => (to, from, next) => {
+  if (store.state.rank) {
+    return next();
+  } else {
+    alert("로그인이 필요한 기능입니다.");
+    next("/");
   }
 };
 
@@ -62,13 +81,13 @@ export default new Router({
       path: "/portfolio-add/:mode",
       name: "addportfolio",
       component: AddPortfolioPage,
-      beforeEnter: requireLogin()
+      beforeEnter: requireLoginPort()
     },
     {
       path: "/post-add/:mode",
       name: "addpost",
       component: AddPostPage,
-      beforeEnter: requireLogin()
+      beforeEnter: requireLoginPost()
     },
     {
       path: "/gitinfopage",
@@ -95,6 +114,12 @@ export default new Router({
       path: "/memberInfo",
       name: "memberInfo",
       component: MemberInfo
+    },
+    {
+      path: "/Calendar",
+      name: "calendar",
+      component: Calendar,
+      beforeEnter: requireLoginCalendar()
     },
     {
       path: "*",

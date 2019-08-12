@@ -40,7 +40,7 @@
       lg12
       class="text-xs-center text-sm-center text-md-center text-lg-center"
     >
-      <v-img :src="getImgUrl" aspect-ratio="1.7" v-if="imageUrl" />
+      <v-img :src="imageUrl" aspect-ratio="1.7" v-if="imageUrl" />
       <v-flex xs12>
         <v-text-field
           label="ex) https://source.unsplash.com/random"

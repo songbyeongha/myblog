@@ -13,7 +13,6 @@ import store from "./store";
 import "./registerServiceWorker";
 import vueResource from "vue-resource";
 import VueClipboard from "vue-clipboard2";
-
 Vue.use(VueClipboard);
 
 Vue.config.productionTip = false;
