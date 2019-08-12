@@ -1,15 +1,12 @@
 <template>
   <div>
-    <button id="auth-button">Authorize</button>
-    <h1>Hello Analytics</h1>
-    <textarea cols="80" rows="20" id="query-output"></textarea>
+    <body style="margin:30px;padding:0px;overflow:hidden;">
+      <iframe src="https://datastudio.google.com/embed/reporting/1RWVstu6OqAGLCRknQeBShctG1-QrPsdo/page/RWKx" frameborder="0" style="overflow:hidden;height: 71vw;width:100%" height="100%" width="100%" allowfullscreen></iframe>
+    </body>
   </div>
 </template>
 
 <script>
-import { setTimeout } from "timers";
-import GA from "../services/googleAnalytics.js";
-
 export default {};
 </script>
 
