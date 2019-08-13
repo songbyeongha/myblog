@@ -265,15 +265,19 @@ export default {
               alert("환영합니다");
               return result;
             },
-            function(err) {
-              alert("아이디/비밀번호가 일치하지 않습니다.");
+          ).catch(function(error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            if ( errorCode === 'auth/user-not-found' ) {
+              alert("아이디가 일치하지 않습니다.");
+            } else if (errorCode === "auth/wrong-password") {
+              alert("비밀번호가 일치하지 않습니다.");
+            } else {
+              alert("이이디가 Email형식이 아닙니다.");
             }
-          );
-      })
-      .catch(function(error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
+          });
       });
+      
   },
   async logout() {
     let email = firebase.auth().currentUser.email;
