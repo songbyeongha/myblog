@@ -40,7 +40,7 @@ export default {
         axios({
           method: "GET",
           url:
-            "http://api.openweathermap.org/data/2.5/weather?lat=" +
+            "https://api.openweathermap.org/data/2.5/weather?lat=" +
             this.lat +
             "&lon=" +
             this.lon +
@@ -50,7 +50,7 @@ export default {
             this.temp = Math.round(response.data.main.temp - 273) + "°C";
             this.description = response.data.weather[0].description;
             this.imgUrl =
-              "http://openweathermap.org/img/wn/" +
+              "https://openweathermap.org/img/wn/" +
               response.data.weather[0].icon +
               "@2x.png";
           })
