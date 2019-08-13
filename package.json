@@ -23,6 +23,7 @@
     "moment": "^2.24.0",
     "popper.js": "^1.15.0",
     "register-service-worker": "^1.6.2",
+    "v-calendar-scheduler": "^0.7.4",
     "v-markdown-editor": "^1.0.8",
     "vue": "^2.6.6",
     "vue-analytics": "^5.17.0",

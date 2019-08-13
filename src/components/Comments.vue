@@ -2,14 +2,23 @@
   <div>
     <v-layout row wrap justify-center v-if="checkLoaded">
       <h1>COMMENTS</h1>
-      <v-flex xs11 v-for="i in comments.length" :key="i.cid" class="comments" overflow-hidden>
+      <v-flex
+        xs11
+        v-for="i in comments.length"
+        :key="i.cid"
+        class="comments"
+        overflow-hidden
+      >
         <v-layout row wrap>
           <v-flex d-flex md2>
             <v-card>
               <v-card-title>
                 <div>
                   <div>{{ comments[ccount - i].name }}</div>
-                  <div class="grey--text" v-text="getDate(comments[ccount - i].created_at)"></div>
+                  <div
+                    class="grey--text"
+                    v-text="getDate(comments[ccount - i].created_at)"
+                  ></div>
                 </div>
               </v-card-title>
             </v-card>
@@ -17,8 +26,14 @@
           <v-flex d-flex md10>
             <v-card :class="{ overflow: overFlowed[ccount - i] }">
               <v-card-title class="commentText">
-                <div v-if="comments[ccount - i].deleted" class="grey--text">삭제된 댓글입니다.</div>
-                <div v-else v-html="getText(comments[ccount - i].text)" class="hiddentext"></div>
+                <div v-if="comments[ccount - i].deleted" class="grey--text">
+                  삭제된 댓글입니다.
+                </div>
+                <div
+                  v-else
+                  v-html="getText(comments[ccount - i].text)"
+                  class="hiddentext"
+                ></div>
               </v-card-title>
               <v-card-actions text-xs-left text-md-right class="commentManage">
                 <v-layout justify-start v-if="!comments[ccount - i].deleted">
@@ -28,8 +43,16 @@
                     flat
                     color="orange"
                     @click="toggleOverFlow(ccount - i)"
-                  >더보기</v-btn>
-                  <v-btn v-else small flat color="orange" @click="toggleOverFlow(ccount - i)">접기</v-btn>
+                    >더보기</v-btn
+                  >
+                  <v-btn
+                    v-else
+                    small
+                    flat
+                    color="orange"
+                    @click="toggleOverFlow(ccount - i)"
+                    >접기</v-btn
+                  >
                 </v-layout>
                 <v-layout justify-end v-if="!comments[ccount - i].deleted">
                   <v-btn
@@ -38,21 +61,24 @@
                     color="orange"
                     v-if="canWrite"
                     @click="toggleEditing(ccount - i, 'comment')"
-                  >답글 달기</v-btn>
+                    >답글 달기</v-btn
+                  >
                   <v-btn
                     small
                     flat
                     color="orange"
                     v-if="isWriter(ccount - i)"
                     @click="toggleEditing(ccount - i, 'update')"
-                  >수정</v-btn>
+                    >수정</v-btn
+                  >
                   <v-btn
                     small
                     flat
                     color="orange"
                     v-if="isWriter(ccount - i)"
                     @click="deleteComment(ccount - i)"
-                  >삭제</v-btn>
+                    >삭제</v-btn
+                  >
                 </v-layout>
               </v-card-actions>
             </v-card>
@@ -61,10 +87,22 @@
         <v-flex md12 v-if="originEditing[ccount - i]">
           <v-card>
             <v-card-title class="commentText">
-              <v-textarea height="70" outline label="댓글을 입력하세요" v-model="editText"></v-textarea>
+              <v-textarea
+                height="70"
+                outline
+                label="댓글을 입력하세요"
+                v-model="editText"
+              ></v-textarea>
             </v-card-title>
             <v-layout justify-end>
-              <v-btn small flat color="orange" v-if="canWrite" @click="updateComment(ccount - i)">완료</v-btn>
+              <v-btn
+                small
+                flat
+                color="orange"
+                v-if="canWrite"
+                @click="updateComment(ccount - i)"
+                >완료</v-btn
+              >
             </v-layout>
           </v-card>
         </v-flex>
@@ -84,7 +122,9 @@
                   <v-card>
                     <v-card-title>
                       <div>
-                        <div>{{ comments[ccount - i].comments[j - 1].name }}</div>
+                        <div>
+                          {{ comments[ccount - i].comments[j - 1].name }}
+                        </div>
                         <div
                           class="grey--text"
                           v-text="
@@ -107,7 +147,11 @@
                         class="hiddentext"
                       ></div>
                     </v-card-title>
-                    <v-card-actions text-xs-left text-md-right class="commentManage">
+                    <v-card-actions
+                      text-xs-left
+                      text-md-right
+                      class="commentManage"
+                    >
                       <v-layout justify-end>
                         <v-btn
                           small
@@ -117,14 +161,16 @@
                           @click="
                             toggleCommentEditing(ccount - i, j - 1, 'update')
                           "
-                        >수정</v-btn>
+                          >수정</v-btn
+                        >
                         <v-btn
                           small
                           flat
                           color="orange"
                           v-if="isCommentWriter(ccount - i, j - 1)"
                           @click="deleteCommentComment(ccount - i, j - 1)"
-                        >삭제</v-btn>
+                          >삭제</v-btn
+                        >
                       </v-layout>
                     </v-card-actions>
                   </v-card>
@@ -133,7 +179,12 @@
               <v-flex md12 v-if="editing[ccount - i].editing[j - 1]">
                 <v-card>
                   <v-card-title class="commentText">
-                    <v-textarea height="70" outline label="댓글을 입력하세요" v-model="editText"></v-textarea>
+                    <v-textarea
+                      height="70"
+                      outline
+                      label="댓글을 입력하세요"
+                      v-model="editText"
+                    ></v-textarea>
                   </v-card-title>
                   <v-layout justify-end>
                     <v-btn
@@ -142,7 +193,8 @@
                       color="orange"
                       v-if="canWrite"
                       @click="updateCommentComment(ccount - i, j - 1)"
-                    >완료</v-btn>
+                      >완료</v-btn
+                    >
                   </v-layout>
                 </v-card>
               </v-flex>
@@ -177,14 +229,22 @@
       </v-flex>
       <h2 v-if="nocomments">등록된 댓글이 없습니다.</h2>
       <v-flex xs11 class="input">
-        <v-textarea height="100" outline label="댓글 쓰기" v-model="text"></v-textarea>
+        <v-textarea
+          height="100"
+          outline
+          label="댓글 쓰기"
+          v-model="text"
+        ></v-textarea>
         <v-layout justify-end>
           <v-btn color="primary" :to="returnPage">목록으로</v-btn>
           <v-btn color="primary" @click="addComment()">작성</v-btn>
         </v-layout>
       </v-flex>
     </v-layout>
-    <v-progress-linear :indeterminate="true" v-if="!checkLoaded"></v-progress-linear>
+    <v-progress-linear
+      :indeterminate="true"
+      v-if="!checkLoaded"
+    ></v-progress-linear>
   </div>
 </template>
 
