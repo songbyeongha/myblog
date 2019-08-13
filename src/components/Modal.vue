@@ -3,12 +3,9 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-          <!-- 모달 헤더 -->
           <div class="modal-header">
             <slot name="header">default header</slot>
           </div>
-
-          <!-- 모달 바디 -->
           <div class="modal-body">
             <slot name="body">default body</slot>
           </div>

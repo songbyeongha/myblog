@@ -40,20 +40,19 @@ export default {
         axios({
           method: "GET",
           url:
-            "http://api.openweathermap.org/data/2.5/weather?lat=" +
+            "https://api.openweathermap.org/data/2.5/weather?lat=" +
             this.lat +
             "&lon=" +
             this.lon +
             "&lang=kr&appid=fe5db9c3c3d867c810fbc9031ffc655f"
-        })
-          .then(response => {
-            this.temp = Math.round(response.data.main.temp - 273) + "°C";
-            this.description = response.data.weather[0].description;
-            this.imgUrl =
-              "http://openweathermap.org/img/wn/" +
-              response.data.weather[0].icon +
-              "@2x.png";
-          })
+        }).then(response => {
+          this.temp = Math.round(response.data.main.temp - 273) + "°C";
+          this.description = response.data.weather[0].description;
+          this.imgUrl =
+            "https://openweathermap.org/img/wn/" +
+            response.data.weather[0].icon +
+            "@2x.png";
+        });
       });
     }
   }

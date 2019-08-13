@@ -28,20 +28,7 @@ const firestore = firebase.firestore();
 var signInLog = firebase.functions().httpsCallable("signInLog");
 var signOutLog = firebase.functions().httpsCallable("signOutLog");
 
-firebase
-  .firestore()
-  .enablePersistence()
-  .catch(function(err) {
-    if (err.code == "failed-precondition") {
-      // Multiple tabs open, persistence can only be enabled
-      // in one tab at a a time.
-      // ...
-    } else if (err.code == "unimplemented") {
-      // The current browser does not support all of the
-      // features required to enable persistence
-      // ...
-    }
-  });
+firebase.firestore().enablePersistence();
 
 let messaging = null;
 if (firebase.messaging.isSupported()) {
@@ -144,7 +131,6 @@ export default {
     const userCollection = firestore.collection("permissions");
     return userCollection.get().then(docSnapshots => {
       return docSnapshots.docs.map(doc => {
-        //console.log(doc.data());
         let data = doc.data();
         return data;
       });
@@ -160,8 +146,6 @@ export default {
           data.created_at = new Date(data.created_at.toDate());
           data.modify_at = new Date(data.modify_at.toDate());
           return data;
-        } else {
-          // doc.data() will be undefined in this case
         }
       })
       .catch(function(error) {
@@ -178,8 +162,6 @@ export default {
           data.created_at = new Date(data.created_at.toDate());
           data.modify_at = new Date(data.modify_at.toDate());
           return data;
-        } else {
-          // doc.data() will be undefined in this case
         }
       })
       .catch(function(error) {
@@ -193,8 +175,6 @@ export default {
       .then(function(doc) {
         if (doc.exists) {
           return doc.data().rank;
-        } else {
-          // doc.data() will be undefined in this case
         }
       })
       .catch(function(error) {
@@ -215,20 +195,17 @@ export default {
   },
   updatePermission(id, permission) {
     var idRef = firestore.collection(PERM).doc(id);
-    // Set the "rank" field of the city 'permission' ( team , visitor )
     return idRef
       .update({
         rank: permission
       })
       .then(function() {})
       .catch(function(error) {
-        // The document probably doesn't exist.
         console.error("Error updating rank: ", error);
       });
   },
   updatePortfolilo(docid, title, img, body) {
     var idRef = firestore.collection(PORTFOLIOS).doc(docid);
-    // Set the "rank" field of the city 'permission' ( team , visitor )
     return idRef
       .update({
         title: title,
@@ -238,7 +215,6 @@ export default {
       })
       .then(function() {})
       .catch(function(error) {
-        // The document probably doesn't exist.
         console.error("Error updating rank: ", error);
       });
   },
@@ -252,7 +228,6 @@ export default {
         let accessToken = result.credential.accessToken;
         let user = result.user;
         signInLog({ loginMsg: "Google로그인" }).then(function(result) {});
-
         return result;
       })
       .catch(function(error) {
@@ -269,7 +244,6 @@ export default {
         let accessToken = result.credential.accessToken;
         let user = result.user;
         signInLog({ loginMsg: "Facebook로그인" }).then(function(result) {});
-
         return result;
       })
       .catch(function(error) {
@@ -289,7 +263,6 @@ export default {
               store.state.ModalLogin = false;
               signInLog({ loginMsg: "메일로그인" }).then(function(result) {});
               alert("환영합니다");
-
               return result;
             },
             function(err) {
@@ -353,11 +326,8 @@ export default {
         }
       );
   },
-  // user 정보 업데이트하는 함수
   getUser(name) {
     var user = firebase.auth().currentUser;
-    console.log(user);
-    console.log(name + "이름");
 
     user
       .updateProfile({
@@ -399,7 +369,6 @@ export default {
       });
   },
   getComments(docname, docid) {
-    //docname = post | portfolio , docid = postid | portfolioid
     const commentsCollection = firestore
       .collection(docname)
       .doc(docid)
@@ -417,7 +386,6 @@ export default {
       });
   },
   postComment(docname, docid, name, email, text) {
-    //docname = post | portfolio , docid = postid | portfolioid
     return firestore
       .collection(docname)
       .doc(docid)
@@ -453,7 +421,6 @@ export default {
       .limit(10);
 
     return data.get().then(function(docSnapshots) {
-      // Get the last visible document
       return docSnapshots.docs.map(doc => {
         let data = doc.data();
         data.created_at = new Date(data.created_at.toDate());
@@ -475,7 +442,6 @@ export default {
     return data
       .get()
       .then(function(docSnapshots) {
-        // Get the last visible document
         return docSnapshots.docs.map(doc => {
           let data = doc.data();
           data.created_at = new Date(data.created_at.toDate());
@@ -496,7 +462,6 @@ export default {
       .limit(10);
 
     return data.get().then(function(docSnapshots) {
-      // Get the last visible document
       return docSnapshots.docs.map(doc => {
         let data = doc.data();
         data.created_at = new Date(data.created_at.toDate());
@@ -543,7 +508,6 @@ export default {
       .auth()
       .currentUser.updateProfile({
         displayName: name
-        // photoURL: "https://example.com/jane-q-user/profile.jpg"
       })
       .then(function() {
         store.state.userName = name;
@@ -611,14 +575,12 @@ export default {
       .doc(docid)
       .collection(COMMENTS)
       .doc(cid);
-    // Set the "rank" field of the city 'permission' ( team , visitor )
     return commentRef
       .update({
         text: text
       })
       .then(function() {})
       .catch(function(error) {
-        // The document probably doesn't exist.
         console.error("Error updating Comments: ", error);
       });
   },

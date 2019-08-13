@@ -102,7 +102,7 @@ export default {
 .toggle.v-input--is-disabled.v-text-field--outline .v-input__slot {
   border-color: #fff;
 }
-.memberInfoValue{
+.memberInfoValue {
   text-indent: 10px;
   font-size: 17px;
 }

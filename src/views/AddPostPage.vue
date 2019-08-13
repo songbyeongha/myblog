@@ -12,12 +12,7 @@
           <h2>Title</h2>
         </v-flex>
         <v-flex xs9 mg11 lg11>
-          <v-text-field
-            label="Title"
-            single-line
-            outline
-            v-model="title"
-          ></v-text-field>
+          <v-text-field label="Title" single-line outline v-model="title"></v-text-field>
         </v-flex>
       </v-layout>
       <markdown-editor v-model="input"></markdown-editor>
@@ -42,7 +37,7 @@ Vue.use(Editor);
 
 export default {
   name: "AddPost",
-    components: {
+  components: {
     ImgBanner
   },
   data() {
@@ -54,17 +49,17 @@ export default {
         title: "",
         created_at: ""
       },
-      bannerText : "",
+      bannerText: "",
       input: "",
       title: "",
-      mode:""
+      mode: ""
     };
   },
-  mounted(){
-    if(this.$route.params.mode=="write"){
+  mounted() {
+    if (this.$route.params.mode == "write") {
       this.bannerText = "Write Post";
       this.mode = "write";
-    }else{
+    } else {
       this.bannerText = "Modify Post";
       this.mode = "modify";
       this.initialize();
@@ -88,7 +83,7 @@ export default {
       );
       this.$router.push("/post");
     },
-    modify(){
+    modify() {
       FirebaseService.modifyPost(
         this.$route.params.mode,
         this.title,

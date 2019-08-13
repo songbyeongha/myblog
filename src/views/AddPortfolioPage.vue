@@ -13,27 +13,13 @@
           <h2>Title</h2>
         </v-flex>
         <v-flex xs9 mg11 lg11>
-          <v-text-field
-            label="Title"
-            single-line
-            outline
-            v-model="title"
-          ></v-text-field>
+          <v-text-field label="Title" single-line outline v-model="title"></v-text-field>
         </v-flex>
       </v-layout>
       <markdown-editor v-model="input"></markdown-editor>
       <div class="text-xs-center">
-        <v-btn v-if="mode == 'write'" round color="primary" dark @click="send()"
-          >Add</v-btn
-        >
-        <v-btn
-          v-if="mode == 'modify'"
-          round
-          color="primary"
-          dark
-          @click="modify()"
-          >modify</v-btn
-        >
+        <v-btn v-if="mode == 'write'" round color="primary" dark @click="send()">Add</v-btn>
+        <v-btn v-if="mode == 'modify'" round color="primary" dark @click="modify()">modify</v-btn>
       </div>
     </div>
   </div>

@@ -5,7 +5,7 @@
     </ImgBanner>
     <v-container>
       <v-layout id="gitgraphdata">
-        <GitGraph3></GitGraph3>
+        <GitGraph></GitGraph>
       </v-layout>
       <v-layout>
         <GitMembers></GitMembers>
@@ -15,18 +15,12 @@
       </v-layout>
     </v-container>
 
-    <Modal
-      v-if="this.$store.state.ModalGit == true"
-      @close="closeModal"
-      id="size"
-    >
+    <Modal v-if="this.$store.state.ModalGit == true" @close="closeModal" id="size">
       <h3 slot="header">
         Git이력
         <i class="closeBtn fas fa-times" @click="closeModal"></i>
       </h3>
       <div slot="body">
-        <!-- {{ this.$store.state.ModalIndex }} -->
-        <!-- {{ this.$store.state.GitMember }} -->
         <table>
           <tr>
             <th>Img</th>
@@ -34,7 +28,7 @@
             <th>Role Permission</th>
             <th>Girlab URL</th>
           </tr>
-          <tr v-for="member in getName" v-if="member.name === SaveName[modify]">
+          <tr :key="member.id" v-for="member in getName">
             <td>
               <v-img :src="member.avatar_url" class="resize" />
             </td>
@@ -52,16 +46,10 @@
             <th>Latest Commit</th>
             <th>Created At</th>
           </tr>
-          <tr
-            v-for="i in commitData.length > 30 ? 30 : commitData.length"
-            v-if="
-              commitData[i - 1].action_name == 'pushed to' &&
-                commitData[i - 1].author.name === member[modify]
-            "
-          >
-            <td>{{ commitData[i - 1].author.name }}</td>
-            <td>{{ commitData[i - 1].push_data.commit_title }}</td>
-            <td>{{ commitData[i - 1].created_at.slice(0, 10) }}</td>
+          <tr :key="item.id" v-for="item in getCommitEventLimit">
+            <td>{{ item.author.name }}</td>
+            <td>{{ item.push_data.commit_title }}</td>
+            <td>{{ item.created_at.slice(0, 10) }}</td>
           </tr>
         </table>
       </div>
@@ -71,7 +59,7 @@
 
 <script>
 import ImgBanner from "../components/ImgBanner";
-import GitGraph3 from "../components/GitGraph3";
+import GitGraph from "../components/GitGraph";
 import GitMembers from "../components/GitMembers";
 import GitCommitEvents from "../components/GitCommitEvents";
 import Modal from "../components/Modal.vue";
@@ -89,10 +77,13 @@ export default {
   },
   components: {
     ImgBanner,
-    GitGraph3,
+    GitGraph,
     GitMembers,
     GitCommitEvents,
     Modal
+  },
+  mounted() {
+    store.state.ModalGit = false;
   },
   methods: {
     closeModal() {
@@ -104,14 +95,25 @@ export default {
     }
   },
   computed: {
-    modify() {
+    getModalIdx() {
       return this.$store.state.ModalIndex;
     },
     getName() {
       this.SaveName[0] = this.$store.state.ModalGitMember[1].name;
       this.SaveName[1] = this.$store.state.ModalGitMember[2].name;
       this.SaveName[2] = this.$store.state.ModalGitMember[0].name;
-      return this.$store.state.ModalGitMember;
+      return this.$store.state.ModalGitMember.filter(
+        item => item.name === this.SaveName[this.getModalIdx]
+      );
+    },
+    getCommitEventLimit: function() {
+      return this.commitData
+        .slice(0, 30)
+        .filter(
+          item =>
+            item.action_name == "pushed to" &&
+            item.author.name === this.SaveName[this.getModalIdx]
+        );
     }
   }
 };

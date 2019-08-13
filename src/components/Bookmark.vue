@@ -28,19 +28,15 @@ export default {
       let triggerDefault = false;
 
       if (window.sidebar && window.sidebar.addPanel) {
-        // FireFox version < 23
         window.sidebar.addPanel(bookmarkTitle, bookmarkURL, "");
       } else if (
         (window.sidebar &&
           navigator.userAgent.toLowerCase().indexOf("firefox") > -1) ||
         (window.opera && window.print)
       ) {
-        // FireFox version >= 23 and Opera Hotlist
       } else if (window.external && "AddFavorite" in window.external) {
-        // IE Favorite
         window.external.AddFavorite(bookmarkURL, bookmarkTitle);
       } else {
-        // Webkit - Safari/Chrome
         alert(
           (navigator.userAgent.toLowerCase().indexOf("max") != -1
             ? "Cmd"

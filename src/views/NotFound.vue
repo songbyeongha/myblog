@@ -4,7 +4,8 @@
       <div class="bannerText" slot="text">
         404 Not Found.
         <br />
-        <br />주소가 정확한지 <br />확인해 보세요.
+        <br />주소가 정확한지
+        <br />확인해 보세요.
       </div>
     </ImgBanner>
     <v-container>

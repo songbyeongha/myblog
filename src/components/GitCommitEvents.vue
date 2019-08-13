@@ -2,9 +2,6 @@
   <v-layout column px-4>
     <h2 class="headline mb-5 mx-auto mt-5">Latest Commit</h2>
     <div style="overflow-x:auto">
-      <!-- <v-flex v-for="i in 4">
-      <p>{{gitmembers[i-1].name}}</p>-->
-      <!-- <Repository :repos="gitmembers[i - 1]"></Repository> -->
       <table>
         <tr>
           <th>USERNAME</th>
@@ -13,13 +10,13 @@
           <th>Created At</th>
         </tr>
         <tr
-          v-for="i in gitcommitevents.length > 25 ? 25 : gitcommitevents.length"
-          v-if="gitcommitevents[i - 1].action_name == 'pushed to'"
+          v-bind:key="item.created_at"
+          v-for="item in gitCommitEventLimit"
         >
-          <td>{{ gitcommitevents[i - 1].author.name }}</td>
-          <td>{{ gitcommitevents[i - 1].push_data.commit_title }}</td>
-          <td>{{ gitcommitevents[i - 1].push_data.ref }}</td>
-          <td>{{ gitcommitevents[i - 1].created_at.slice(0, 10) }}</td>
+          <td>{{ item.author.name }}</td>
+          <td>{{ item.push_data.commit_title }}</td>
+          <td>{{ item.push_data.ref }}</td>
+          <td>{{ item.created_at.slice(0, 10) }}</td>
         </tr>
       </table>
     </div>
@@ -29,21 +26,22 @@
 
 <script>
 import GitlabService from "@/services/GitlabService";
-import GitCommitEvents from "@/components/GitCommitEvents";
 import store from "../store.js";
 export default {
   name: "GitCommitEvents",
   props: {},
   data() {
     return {
-      gitcommitevents: []
+      gitCommitEvents: []
     };
-  },
-  components: {
-    GitCommitEvents
   },
   mounted() {
     this.getCommitEvents("7550");
+  },
+  computed:{
+    gitCommitEventLimit : function(){
+      return this.gitCommitEvents.slice(0,25).filter(item => item.action_name == 'pushed to');
+    }
   },
   methods: {
     async getCommitEvents(teamName) {
@@ -51,9 +49,9 @@ export default {
       if (response.status !== 200) {
         return;
       }
-      this.gitcommitevents = response.data;
-      this.$emit("gitCommitEvent", this.gitcommitevents);
-      store.state.GitFindMember = this.gitcommitevents;
+      this.gitCommitEvents = response.data;
+      this.$emit("gitCommitEvent", this.gitCommitEvents);
+      store.state.GitFindMember = this.gitCommitEvents;
     }
   }
 };

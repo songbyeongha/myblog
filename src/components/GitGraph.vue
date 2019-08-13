@@ -68,9 +68,6 @@ export default {
         chart: {
           events: {
             dataPointSelection: function(event, chartContext, config) {
-              //dataPointIndex 값에 label을 가져오기
-              // console.log(config.dataPointIndex);
-              // showModal(config.dataPointIndex)
               store.state.ModalGit = true;
               store.state.ModalIndex = config.dataPointIndex;
             }
