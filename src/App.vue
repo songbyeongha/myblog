@@ -10,10 +10,7 @@
     </v-content>
   </v-app>
 </template>
-<!-- test -->
 <script>
-window.onload = function() {};
-
 import store from "./store";
 import AppHeader from "../src/components/AppHeader.vue";
 import AppFooter from "../src/components/AppFooter.vue";
@@ -38,13 +35,12 @@ export default {
   async mounted() {
     firebase.auth().onAuthStateChanged(async function(user) {
       if (user) {
-        // 로그인됨
         user.displayName == null ? "아무개" : user.displayName;
-        store.commit("loginInfo",{
-          loginCheckVal : true,
-          rankVal : await fbservice.getPermission(user.uid),
-          userNameVal : user.displayName,
-          userEmailVal : user.email
+        store.commit("loginInfo", {
+          loginCheckVal: true,
+          rankVal: await fbservice.getPermission(user.uid),
+          userNameVal: user.displayName,
+          userEmailVal: user.email
         });
       }
     });

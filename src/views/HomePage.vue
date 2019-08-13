@@ -6,33 +6,25 @@
         <br />We always have.
       </div>
     </ImgBanner>
-
     <v-container>
-      <!-- About Team -->
       <v-layout my-5>
         <v-flex xs12>
           <h2 class="headline my-5 text-xs-center">About Team</h2>
           <AboutTeam></AboutTeam>
         </v-flex>
       </v-layout>
-
-      <!-- Portfolio -->
       <v-layout my-5>
         <v-flex xs12>
           <h2 class="headline my-5 text-xs-center">Portfolio</h2>
           <PortfolioList></PortfolioList>
         </v-flex>
       </v-layout>
-
-      <!-- Post -->
       <v-layout my-5>
         <v-flex xs12>
           <h2 class="headline my-5 text-xs-center">Post</h2>
           <PostList :column="2"></PostList>
         </v-flex>
       </v-layout>
-
-      <!-- Github -->
       <v-layout my-5>
         <v-flex xs12>
           <h2 class="headline my-5 text-xs-center">Project</h2>

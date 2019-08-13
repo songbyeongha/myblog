@@ -10,7 +10,6 @@
       </div>
     </Modal>
 
-    <!-- 회원가입 모달 -->
     <Modal v-if="this.$store.state.ModalRegis" @close="closeRegis">
       <h3 slot="header">
         회원가입

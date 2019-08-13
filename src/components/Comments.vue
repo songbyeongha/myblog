@@ -69,7 +69,6 @@
           </v-card>
         </v-flex>
         <template v-if="comments[ccount - i].comments">
-          <!--대댓글 -->
           <template>
             <v-flex
               md12

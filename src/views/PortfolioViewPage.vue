@@ -9,21 +9,19 @@
           <v-card>
             <v-card-title>
               <v-layout row wrap class="portfolioTitle">
-                <v-flex xs12 sm12 md8 class="pTitle">{{
+                <v-flex xs12 sm12 md8 class="pTitle">
+                  {{
                   getPortfolio.title
-                }}</v-flex>
+                  }}
+                </v-flex>
                 <v-flex xs12 sm12 md4 class="pWriter">
-                  <span class="subText subDate"
-                    >{{ getDate }} &nbsp;&nbsp;&nbsp;
-                    {{ getPortfolio.name }}</span
-                  >
+                  <span class="subText subDate">
+                    {{ getDate }} &nbsp;&nbsp;&nbsp;
+                    {{ getPortfolio.name }}
+                  </span>
                 </v-flex>
               </v-layout>
-              <v-img
-                class="white--text bannerImg"
-                aspect-ratio="1.7"
-                :src="getPortfolio.img"
-              ></v-img>
+              <v-img class="white--text bannerImg" aspect-ratio="1.7" :src="getPortfolio.img"></v-img>
               <br />
               <div v-html="compiledMarkdown" class="subTextarea"></div>
             </v-card-title>

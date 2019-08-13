@@ -4,10 +4,7 @@
       <div class="bannerText" slot="text">Portfolio</div>
     </ImgBanner>
     <v-container>
-      <v-btn v-if="userCheck" block color="primary" :to="addlink" dark
-        >Write Portfolio</v-btn
-      >
-      <!-- Portfolio -->
+      <v-btn v-if="userCheck" block color="primary" :to="addlink" dark>Write Portfolio</v-btn>
       <v-layout>
         <v-flex xs12>
           <PortfolioList :limits="cnt" :load-more="true"></PortfolioList>

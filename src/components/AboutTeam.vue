@@ -15,11 +15,7 @@
         <v-container grid-list-md text-center class="aboutContainer">
           <v-layout wrap>
             <v-flex md6 hidden-sm-and-down>
-              <v-img
-                :src="items[i].src"
-                class="aboutImage"
-                aspect-ratio="1.7"
-              />
+              <v-img :src="items[i].src" class="aboutImage" aspect-ratio="1.7" />
             </v-flex>
             <v-flex xs12 md6>
               <v-flex xs12>
@@ -29,9 +25,11 @@
               </v-flex>
               <v-flex xs12>
                 <v-card>
-                  <v-card-text class="aboutComments">{{
+                  <v-card-text class="aboutComments">
+                    {{
                     comments[i]
-                  }}</v-card-text>
+                    }}
+                  </v-card-text>
                 </v-card>
               </v-flex>
               <v-flex xs12>
@@ -41,9 +39,11 @@
               </v-flex>
               <v-flex xs12>
                 <v-card>
-                  <v-card-text class="aboutEmail">{{
+                  <v-card-text class="aboutEmail">
+                    {{
                     emailAddress[i]
-                  }}</v-card-text>
+                    }}
+                  </v-card-text>
                 </v-card>
               </v-flex>
             </v-flex>

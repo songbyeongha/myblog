@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Total Count -->
     <v-layout row wrap style="margin-top: 20px;">
       <v-flex xs6 mg6 lg6 text-xs-center>
         <h2>총 게시글 수</h2>

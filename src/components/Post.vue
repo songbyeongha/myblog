@@ -27,7 +27,7 @@ export default {
 };
 </script>
 <style>
-.postTextPlace{
+.postTextPlace {
   height: 62.4px;
 }
 </style>

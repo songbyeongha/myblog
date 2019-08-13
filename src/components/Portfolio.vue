@@ -18,11 +18,6 @@ export default {
     title: { type: String },
     body: { type: String },
     imgSrc: { type: String }
-  },
-  data() {
-    return {
-      //
-    };
   }
 };
 </script>

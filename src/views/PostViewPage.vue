@@ -9,20 +9,17 @@
           <v-card>
             <v-card-title>
               <v-layout row wrap class="postTitle">
-                <v-flex xs12 sm12 md8 class="pTitle">{{
+                <v-flex xs12 sm12 md8 class="pTitle">
+                  {{
                   getPost.title
-                }}</v-flex>
+                  }}
+                </v-flex>
                 <v-flex xs12 sm12 md4 class="pWriter">
-                  <span class="subText subDate"
-                    >{{ getDate }} &nbsp;&nbsp;&nbsp; {{ getPost.name }}</span
-                  >
+                  <span class="subText subDate">{{ getDate }} &nbsp;&nbsp;&nbsp; {{ getPost.name }}</span>
                 </v-flex>
               </v-layout>
               <br />
-              <span
-                v-html="compiledMarkdown"
-                class="subText subTextarea"
-              ></span>
+              <span v-html="compiledMarkdown" class="subText subTextarea"></span>
             </v-card-title>
             <v-card v-if="userCheck" class="buttonPlace">
               <v-btn color="primary" :to="addlink">수정</v-btn>
