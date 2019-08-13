@@ -141,7 +141,6 @@ export default {
       this.title = this.portfolio.title;
       this.input = this.portfolio.body;
       this.imageUrl = this.portfolio.img;
-      store.state.defaultImg = this.portfolio.img;
     }
   }
 };

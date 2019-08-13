@@ -6,7 +6,12 @@
       </v-flex>
       <v-flex xs12 mg12 lg12>
         <v-radio-group v-model="selectedRadio" @click="radioChanged" row>
-          <v-radio v-for="item in radioItems" :key="item" :label="item" :value="item"></v-radio>
+          <v-radio
+            v-for="item in radioItems"
+            :key="item"
+            :label="item"
+            :value="item"
+          ></v-radio>
         </v-radio-group>
       </v-flex>
     </v-layout>
@@ -35,7 +40,7 @@
       lg12
       class="text-xs-center text-sm-center text-md-center text-lg-center"
     >
-      <v-img :src="getImgUrl" aspect-ratio="1.7" v-if="imageUrl" />
+      <v-img :src="imageUrl" aspect-ratio="1.7" v-if="imageUrl" />
       <v-flex xs12>
         <v-text-field
           label="ex) https://source.unsplash.com/random"
@@ -51,6 +56,7 @@
 <script>
 import axios from "axios";
 import store from "../store.js";
+import FirebaseService from "../services/FirebaseService";
 
 export default {
   name: "ImageTool",
@@ -76,7 +82,11 @@ export default {
   },
   mounted() {
     this.radioItems.push("Default");
-    this.defaultImg = store.state.defaultImg;
+    if (this.$route.params.mode === "write") {
+      this.defaultImg = store.state.bannerImgUrl;
+    } else {
+      this.getImage();
+    }
   },
   computed: {
     getImgUrl() {
@@ -124,10 +134,12 @@ export default {
       }
       this.$emit("imgSelected");
     },
-    getImgData(data) {
-      this.imageName = data.imageName;
-      this.imageUrl = data.imageUrl;
-      this.imageFile = data.imageFile;
+    async getImage() {
+      let id = this.$route.params.mode;
+      let portfolio = await FirebaseService.getOnePortfolio(
+        this.$route.params.mode
+      );
+      this.defaultImg = portfolio.img;
     }
   }
 };
