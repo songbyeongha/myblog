@@ -1,15 +1,6 @@
 <template>
   <div>
-    <v-btn
-      id="goTop"
-      v-scroll="onScroll"
-      v-show="fab"
-      fab
-      dark
-      small
-      color="green"
-      @click="toTop"
-    >
+    <v-btn id="goTop" v-scroll="onScroll" v-show="fab" fab dark small color="green" @click="toTop">
       <v-icon>keyboard_arrow_up</v-icon>
     </v-btn>
   </div>

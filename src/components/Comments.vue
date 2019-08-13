@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-layout row wrap justify-center>
+    <v-layout row wrap justify-center v-if="checkLoaded">
       <h1>COMMENTS</h1>
       <v-flex
         xs11
@@ -10,35 +10,39 @@
         overflow-hidden
       >
         <v-layout row wrap>
-          <v-flex d-flex xs4 md2>
+          <v-flex d-flex md2>
             <v-card>
               <v-card-title>
                 <div>
-                  <div>{{ comments[i - 1].name }}</div>
+                  <div>{{ comments[ccount - i].name }}</div>
                   <div
                     class="grey--text"
-                    v-text="getDate(comments[i - 1].created_at)"
+                    v-text="getDate(comments[ccount - i].created_at)"
                   ></div>
                 </div>
               </v-card-title>
             </v-card>
           </v-flex>
-          <v-flex d-flex xs8 md10>
-            <v-card :class="{ overflow: overFlowed[i - 1] }">
+          <v-flex d-flex md10>
+            <v-card :class="{ overflow: overFlowed[ccount - i] }">
               <v-card-title class="commentText">
+                <div v-if="comments[ccount - i].deleted" class="grey--text">
+                  삭제된 댓글입니다.
+                </div>
                 <div
-                  v-html="getText(comments[i - 1].text)"
+                  v-else
+                  v-html="getText(comments[ccount - i].text)"
                   class="hiddentext"
                 ></div>
               </v-card-title>
-              <v-card-actions text-xs-right class="commentManage">
-                <v-layout justify-start>
+              <v-card-actions text-xs-left text-md-right class="commentManage">
+                <v-layout justify-start v-if="!comments[ccount - i].deleted">
                   <v-btn
-                    v-if="overFlowed[i - 1]"
+                    v-if="overFlowed[ccount - i]"
                     small
                     flat
                     color="orange"
-                    @click="toggleOverFlow(i - 1)"
+                    @click="toggleOverFlow(ccount - i)"
                     >더보기</v-btn
                   >
                   <v-btn
@@ -46,15 +50,33 @@
                     small
                     flat
                     color="orange"
-                    @click="toggleOverFlow(i - 1)"
+                    @click="toggleOverFlow(ccount - i)"
                     >접기</v-btn
                   >
                 </v-layout>
-                <v-layout justify-end>
-                  <v-btn small flat color="orange" v-if="isWriter(i - 1)"
+                <v-layout justify-end v-if="!comments[ccount - i].deleted">
+                  <v-btn
+                    small
+                    flat
+                    color="orange"
+                    v-if="canWrite"
+                    @click="toggleEditing(ccount - i, 'comment')"
+                    >답글 달기</v-btn
+                  >
+                  <v-btn
+                    small
+                    flat
+                    color="orange"
+                    v-if="isWriter(ccount - i)"
+                    @click="toggleEditing(ccount - i, 'update')"
                     >수정</v-btn
                   >
-                  <v-btn small flat color="orange" v-if="isWriter(i - 1)"
+                  <v-btn
+                    small
+                    flat
+                    color="orange"
+                    v-if="isWriter(ccount - i)"
+                    @click="deleteComment(ccount - i)"
                     >삭제</v-btn
                   >
                 </v-layout>
@@ -62,6 +84,123 @@
             </v-card>
           </v-flex>
         </v-layout>
+        <v-flex md12 v-if="originEditing[ccount - i]">
+          <v-card>
+            <v-card-title class="commentText">
+              <v-textarea
+                height="70"
+                outline
+                label="댓글을 입력하세요"
+                v-model="editText"
+              ></v-textarea>
+            </v-card-title>
+            <v-layout justify-end>
+              <v-btn
+                small
+                flat
+                color="orange"
+                v-if="canWrite"
+                @click="updateComment(ccount - i)"
+                >완료</v-btn
+              >
+            </v-layout>
+          </v-card>
+        </v-flex>
+        <template v-if="comments[ccount - i].comments">
+          <template>
+            <v-flex
+              md12
+              v-for="j in comments[ccount - i].comments.length"
+              :key="j.cid"
+              class="comments"
+            >
+              <v-layout row wrap>
+                <v-flex d-flex xs1 md1>
+                  <v-icon large>subdirectory_arrow_right</v-icon>
+                </v-flex>
+                <v-flex d-flex xs10 offset-xs1 offset-md0 md2>
+                  <v-card>
+                    <v-card-title>
+                      <div>
+                        <div>
+                          {{ comments[ccount - i].comments[j - 1].name }}
+                        </div>
+                        <div
+                          class="grey--text"
+                          v-text="
+                            getDate(
+                              comments[ccount - i].comments[j - 1].created_at
+                            )
+                          "
+                        ></div>
+                      </div>
+                    </v-card-title>
+                  </v-card>
+                </v-flex>
+                <v-flex d-flex xs10 offset-xs2 offset-md0 md9>
+                  <v-card>
+                    <v-card-title class="commentText">
+                      <div
+                        v-html="
+                          getText(comments[ccount - i].comments[j - 1].text)
+                        "
+                        class="hiddentext"
+                      ></div>
+                    </v-card-title>
+                    <v-card-actions
+                      text-xs-left
+                      text-md-right
+                      class="commentManage"
+                    >
+                      <v-layout justify-end>
+                        <v-btn
+                          small
+                          flat
+                          color="orange"
+                          v-if="isCommentWriter(ccount - i, j - 1)"
+                          @click="
+                            toggleCommentEditing(ccount - i, j - 1, 'update')
+                          "
+                          >수정</v-btn
+                        >
+                        <v-btn
+                          small
+                          flat
+                          color="orange"
+                          v-if="isCommentWriter(ccount - i, j - 1)"
+                          @click="deleteCommentComment(ccount - i, j - 1)"
+                          >삭제</v-btn
+                        >
+                      </v-layout>
+                    </v-card-actions>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+              <v-flex md12 v-if="editing[ccount - i].editing[j - 1]">
+                <v-card>
+                  <v-card-title class="commentText">
+                    <v-textarea
+                      height="70"
+                      outline
+                      label="댓글을 입력하세요"
+                      v-model="editText"
+                    ></v-textarea>
+                  </v-card-title>
+                  <v-layout justify-end>
+                    <v-btn
+                      small
+                      flat
+                      color="orange"
+                      v-if="canWrite"
+                      @click="updateCommentComment(ccount - i, j - 1)"
+                      >완료</v-btn
+                    >
+                  </v-layout>
+                </v-card>
+              </v-flex>
+            </v-flex>
+          </template>
+        </template>
       </v-flex>
       <v-flex xs11 text-xs-center>
         <v-btn
@@ -70,12 +209,12 @@
           icon
           flat
           v-on:click="loadBeforeComment()"
-          text-xs-center
+          text-md-center
           :disabled="currentPage === 1"
         >
           <v-icon>navigate_before</v-icon>
         </v-btn>
-        {{ currentPage }}
+        <span v-if="!nocomments">{{ currentPage }}</span>
         <v-btn
           color="info"
           dark
@@ -88,6 +227,7 @@
           <v-icon>navigate_next</v-icon>
         </v-btn>
       </v-flex>
+      <h2 v-if="nocomments">등록된 댓글이 없습니다.</h2>
       <v-flex xs11 class="input">
         <v-textarea
           height="100"
@@ -96,11 +236,15 @@
           v-model="text"
         ></v-textarea>
         <v-layout justify-end>
-          <v-btn color="primary" to="/portfolio">목록으로</v-btn>
+          <v-btn color="primary" :to="returnPage">목록으로</v-btn>
           <v-btn color="primary" @click="addComment()">작성</v-btn>
         </v-layout>
       </v-flex>
     </v-layout>
+    <v-progress-linear
+      :indeterminate="true"
+      v-if="!checkLoaded"
+    ></v-progress-linear>
   </div>
 </template>
 
@@ -110,15 +254,25 @@ import fbservice from "../services/FirebaseService";
 
 export default {
   name: "Comments",
+  props: {
+    page: { type: String }
+  },
   data() {
     return {
       canWrite: false,
       text: "",
+      editText: "",
       comments: [],
       currentPage: 1,
       nextPage: true,
       overFlowed: [],
-      bool: true
+      bool: true,
+      loaded: false,
+      nocomments: false,
+      originEditing: [],
+      editing: [],
+      mode: "",
+      ccount: 0
     };
   },
   mounted() {
@@ -126,22 +280,37 @@ export default {
   },
   methods: {
     async initialize() {
+      this.editText = "";
+      this.currentPage = 1;
       this.comments = await fbservice.getInitComments(
-        "portfolios",
+        this.page,
         this.$route.params.did
       );
-      for (let i = 0; i < this.comments.length; i++) {
-        this.overFlowed.push(true);
+      this.ccount = await this.comments.length;
+      if (this.$store.state.userName) {
+        this.canWrite = true;
+      }
+      if (this.comments.length === 0) {
+        this.nocomments = true;
+        this.loaded = true;
+        this.nextPage = false;
+        return;
+      }
+      if (this.comments.length > 0) {
+        await this.getCommentsComments();
       }
       this.CanLoadNextComment();
+      this.loaded = true;
     },
     addComment() {
+      this.loaded = false;
       if (!this.canWrite) {
         alert("로그인이 필요한 기능입니다.");
+        this.loaded = true;
         return;
       }
       fbservice.postComment(
-        "portfolios",
+        this.page,
         this.$route.params.did,
         store.state.userName,
         store.state.userEmail,
@@ -150,33 +319,113 @@ export default {
       this.text = "";
       this.initialize();
     },
+    deleteComment(i) {
+      let conf = confirm("댓글을 삭제하시겠습니까?");
+      if (conf) {
+        this.loaded = false;
+        if (this.comments[i].comments) {
+          fbservice.markDeltedComment(
+            this.page,
+            this.$route.params.did,
+            this.comments[i].cid
+          );
+        } else {
+          fbservice.deleteComment(
+            this.page,
+            this.$route.params.did,
+            this.comments[i].cid
+          );
+        }
+        this.initialize();
+      }
+    },
+    deleteCommentComment(i, j) {
+      let conf = confirm("댓글을 삭제하시겠습니까?");
+      if (conf) {
+        this.loaded = false;
+        fbservice.deleteCommentComment(
+          this.page,
+          this.$route.params.did,
+          this.comments[i].cid,
+          this.comments[i].comments[j].cid
+        );
+        this.initialize();
+      }
+    },
+    async updateComment(i) {
+      if (this.mode === "update") {
+        fbservice.updateComment(
+          this.page,
+          this.$route.params.did,
+          this.comments[i].cid,
+          this.editText
+        );
+      } else if (this.mode === "comment") {
+        fbservice.postCommentComment(
+          this.page,
+          this.$route.params.did,
+          this.comments[i].cid,
+          store.state.userName,
+          store.state.userEmail,
+          this.editText
+        );
+      }
+      this.loaded = false;
+      this.originEditing[i] = false;
+      await this.initialize();
+    },
+    async updateCommentComment(i, j) {
+      if (this.mode === "update") {
+        fbservice.updateCommentComment(
+          this.page,
+          this.$route.params.did,
+          this.comments[i].cid,
+          this.comments[i].comments[j].cid,
+          this.editText
+        );
+      }
+      this.loaded = false;
+      this.editing[i].editing[j] = false;
+      await this.initialize();
+    },
     async loadAfterComment() {
+      this.loaded = false;
+      this.currentPage = this.currentPage + 1;
       let temp = await fbservice.getAfterCommentsPage(
-        "portfolios",
+        this.page,
         this.$route.params.did,
         new Date(this.comments[this.comments.length - 1].created_at)
       );
-      if (temp.length >= 1) {
-        this.comments = temp;
-        this.currentPage = this.currentPage + 1;
-      }
+
+      this.comments = temp;
+      this.ccount = await this.comments.length;
+      await this.getCommentsComments();
+      this.loaded = true;
       this.CanLoadNextComment();
     },
     async loadBeforeComment() {
       if (this.currentPage === 1) {
         return;
       }
+      this.loaded = false;
       this.comments = await fbservice.getBeforeCommentsPage(
-        "portfolios",
+        this.page,
         this.$route.params.did,
         new Date(this.comments[0].created_at)
       );
+      this.ccount = await this.comments.length;
+      await this.getCommentsComments();
+      this.loaded = true;
       this.currentPage = this.currentPage - 1;
       this.nextPage = true;
     },
     async CanLoadNextComment() {
+      if (this.comments.length === 0) {
+        this.nextPage = false;
+        return;
+      }
       let next = await fbservice.getAfterCommentsPage(
-        "portfolios",
+        this.page,
         this.$route.params.did,
         new Date(await this.comments[this.comments.length - 1].created_at)
       );
@@ -184,6 +433,30 @@ export default {
         this.nextPage = false;
       } else {
         this.nextPage = true;
+      }
+    },
+    async getCommentsComments() {
+      this.overFlowed = [];
+      this.editing = [];
+      for (let i = 0; i < this.comments.length; i++) {
+        this.overFlowed.push(true);
+        this.editing.push({ editing: [] });
+        this.originEditing.push(false);
+      }
+      for (let i = 0; i < this.comments.length; i++) {
+        let commentcomment = await fbservice.getCommentsComments(
+          this.page,
+          this.$route.params.did,
+          this.comments[i].cid
+        );
+        if (commentcomment.length > 0) {
+          let temp = [];
+          for (let j = 0; j < commentcomment.length; j++) {
+            temp.push(false);
+          }
+          this.editing[i].editing = temp;
+          this.comments[i].comments = commentcomment;
+        }
       }
     },
     getDate(date) {
@@ -195,15 +468,52 @@ export default {
     toggleOverFlow(index) {
       this.$set(this.overFlowed, index, !this.overFlowed[index]);
     },
+    toggleEditing(index, mode) {
+      this.$set(this.originEditing, index, !this.originEditing[index]);
+      this.mode = mode;
+      this.editText = "";
+    },
+    toggleCommentEditing(i, j, mode) {
+      this.$set(this.editing[i].editing, j, !this.editing[i].editing[j]);
+      this.mode = mode;
+      this.editText = "";
+    },
     isWriter(i) {
-      return this.$store.state.userEmail === this.comments[i].email;
+      return (
+        this.$store.state.userEmail === this.comments[i].email &&
+        this.$store.state.userName === this.comments[i].name
+      );
+    },
+    isCommentWriter(i, j) {
+      return (
+        this.$store.state.userName === this.comments[i].comments[j].name &&
+        this.$store.state.userEmail === this.comments[i].comments[j].email
+      );
     }
   },
-  computed: {}
+  computed: {
+    checkLoaded() {
+      return this.loaded;
+    },
+    returnPage() {
+      if (this.page === "portfolios") {
+        return "/portfolio";
+      } else {
+        return "/post";
+      }
+    }
+  }
 };
 </script>
 
 <style scoped>
+@media screen and (max-width: 600px) {
+  .v-card__title {
+    align-items: baseline;
+    padding: 1px;
+  }
+}
+
 .comments,
 .input {
   padding-top: 5px;

@@ -1,11 +1,13 @@
 <template>
-  <v-card>
-    <v-img :src="imgSrc" height="200px"></v-img>
-    <v-card-title primary-title>
-      <div class="headline">{{ title }}</div>
-      <span class="grey--text subText">{{ body }}</span>
-    </v-card-title>
-  </v-card>
+  <v-hover>
+    <v-card slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`">
+      <v-img :src="imgSrc" height="200px"></v-img>
+      <v-card-title primary-title class="portfolioTextPlace">
+        <div class="headline">{{ title }}</div>
+        <span class="grey--text subText">{{ body }}</span>
+      </v-card-title>
+    </v-card>
+  </v-hover>
 </template>
 
 <script>
@@ -16,11 +18,6 @@ export default {
     title: { type: String },
     body: { type: String },
     imgSrc: { type: String }
-  },
-  data() {
-    return {
-      //
-    };
   }
 };
 </script>
@@ -43,5 +40,8 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+.portfolioTextPlace {
+  height: 134.4px;
 }
 </style>

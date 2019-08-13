@@ -28,20 +28,7 @@ const firestore = firebase.firestore();
 var signInLog = firebase.functions().httpsCallable("signInLog");
 var signOutLog = firebase.functions().httpsCallable("signOutLog");
 
-firebase
-  .firestore()
-  .enablePersistence()
-  .catch(function(err) {
-    if (err.code == "failed-precondition") {
-      // Multiple tabs open, persistence can only be enabled
-      // in one tab at a a time.
-      // ...
-    } else if (err.code == "unimplemented") {
-      // The current browser does not support all of the
-      // features required to enable persistence
-      // ...
-    }
-  });
+firebase.firestore().enablePersistence();
 
 let messaging = null;
 if (firebase.messaging.isSupported()) {
@@ -61,6 +48,7 @@ export default {
         return docSnapshots.docs.map(doc => {
           let data = doc.data();
           data.created_at = new Date(data.created_at.toDate());
+          data.modify_at = new Date(data.modify_at.toDate());
           data.did = doc.id;
           return data;
         });
@@ -72,10 +60,11 @@ export default {
       body,
       email,
       name,
-      created_at: new Date()
+      created_at: new Date(),
+      modify_at: new Date()
     });
   },
-  modifyPost(id, title, body, email, name){
+  modifyPost(id, title, body, email, name) {
     var idRef = firestore.collection(POSTS).doc(id);
     return idRef.update({
       title,
@@ -102,6 +91,7 @@ export default {
         return docSnapshots.docs.map(doc => {
           let data = doc.data();
           data.created_at = new Date(data.created_at.toDate());
+          data.modify_at = new Date(data.modify_at.toDate());
           data.did = doc.id;
           return data;
         });
@@ -114,7 +104,19 @@ export default {
       img,
       email,
       name,
-      created_at: new Date()
+      created_at: new Date(),
+      modify_at: new Date()
+    });
+  },
+  modifyPortfolio(id, title, body, img, email, name) {
+    var idRef = firestore.collection(PORTFOLIOS).doc(id);
+    return idRef.update({
+      title,
+      body,
+      img,
+      email,
+      name,
+      modify_at: new Date()
     });
   },
   countPortfolio() {
@@ -129,7 +131,6 @@ export default {
     const userCollection = firestore.collection("permissions");
     return userCollection.get().then(docSnapshots => {
       return docSnapshots.docs.map(doc => {
-        //console.log(doc.data());
         let data = doc.data();
         return data;
       });
@@ -143,9 +144,8 @@ export default {
         if (doc.exists) {
           let data = doc.data();
           data.created_at = new Date(data.created_at.toDate());
+          data.modify_at = new Date(data.modify_at.toDate());
           return data;
-        } else {
-          // doc.data() will be undefined in this case
         }
       })
       .catch(function(error) {
@@ -160,9 +160,8 @@ export default {
         if (doc.exists) {
           let data = doc.data();
           data.created_at = new Date(data.created_at.toDate());
+          data.modify_at = new Date(data.modify_at.toDate());
           return data;
-        } else {
-          // doc.data() will be undefined in this case
         }
       })
       .catch(function(error) {
@@ -176,8 +175,6 @@ export default {
       .then(function(doc) {
         if (doc.exists) {
           return doc.data().rank;
-        } else {
-          // doc.data() will be undefined in this case
         }
       })
       .catch(function(error) {
@@ -198,25 +195,26 @@ export default {
   },
   updatePermission(id, permission) {
     var idRef = firestore.collection(PERM).doc(id);
-    idRef
-      .get()
-      .then(function(doc) {
-        if (doc.data().rank !== "admin") {
-          // 권한 등급이 admin이 아니면 권한 등급 조절 불가!!
-          return;
-        }
-      })
-      .catch(function(error) {
-        console.log("Error getting rank:", error);
-      });
-    // Set the "rank" field of the city 'permission' ( team , visitor )
     return idRef
       .update({
         rank: permission
       })
       .then(function() {})
       .catch(function(error) {
-        // The document probably doesn't exist.
+        console.error("Error updating rank: ", error);
+      });
+  },
+  updatePortfolilo(docid, title, img, body) {
+    var idRef = firestore.collection(PORTFOLIOS).doc(docid);
+    return idRef
+      .update({
+        title: title,
+        body: body,
+        img: img,
+        created_at: new Date()
+      })
+      .then(function() {})
+      .catch(function(error) {
         console.error("Error updating rank: ", error);
       });
   },
@@ -230,7 +228,6 @@ export default {
         let accessToken = result.credential.accessToken;
         let user = result.user;
         signInLog({ loginMsg: "Google로그인" }).then(function(result) {});
-
         return result;
       })
       .catch(function(error) {
@@ -247,7 +244,6 @@ export default {
         let accessToken = result.credential.accessToken;
         let user = result.user;
         signInLog({ loginMsg: "Facebook로그인" }).then(function(result) {});
-
         return result;
       })
       .catch(function(error) {
@@ -267,18 +263,21 @@ export default {
               store.state.ModalLogin = false;
               signInLog({ loginMsg: "메일로그인" }).then(function(result) {});
               alert("환영합니다");
-
               return result;
             },
-            function(err) {
-              alert("아이디/비밀번호가 일치하지 않습니다.");
+          ).catch(function(error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            if ( errorCode === 'auth/user-not-found' ) {
+              alert("아이디가 일치하지 않습니다.");
+            } else if (errorCode === "auth/wrong-password") {
+              alert("비밀번호가 일치하지 않습니다.");
+            } else {
+              alert("이이디가 Email형식이 아닙니다.");
             }
-          );
-      })
-      .catch(function(error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
+          });
       });
+      
   },
   async logout() {
     let email = firebase.auth().currentUser.email;
@@ -302,7 +301,23 @@ export default {
           let user = res.user;
           user
             .updateProfile({ displayName: name })
-            .then(function() {})
+            .then(function() {
+              store.commit("loginInfo", {
+                loginCheckVal: false,
+                rankVal: "",
+                userNameVal: "",
+                userEmailVal: ""
+              });
+              firebase
+                .auth()
+                .signOut()
+                .then(function() {
+                  router.push("/");
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
+            })
             .catch(function(error) {
               console.error("userName 업데이트 실패 : ", error);
             });
@@ -315,11 +330,8 @@ export default {
         }
       );
   },
-  // user 정보 업데이트하는 함수
   getUser(name) {
     var user = firebase.auth().currentUser;
-    console.log(user);
-    console.log(name + "이름");
 
     user
       .updateProfile({
@@ -341,6 +353,7 @@ export default {
   updateDeviceToken(id) {
     var idRef = firestore.collection(PERM).doc(id);
     var deviceToken = "";
+    if (messaging == null) return;
     messaging
       .requestPermission()
       .then(function() {
@@ -360,7 +373,6 @@ export default {
       });
   },
   getComments(docname, docid) {
-    //docname = post | portfolio , docid = postid | portfolioid
     const commentsCollection = firestore
       .collection(docname)
       .doc(docid)
@@ -378,10 +390,23 @@ export default {
       });
   },
   postComment(docname, docid, name, email, text) {
-    //docname = post | portfolio , docid = postid | portfolioid
     return firestore
       .collection(docname)
       .doc(docid)
+      .collection(COMMENTS)
+      .add({
+        name,
+        email,
+        text,
+        created_at: new Date()
+      });
+  },
+  postCommentComment(docname, docid, cid, name, email, text) {
+    return firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .doc(cid)
       .collection(COMMENTS)
       .add({
         name,
@@ -400,7 +425,6 @@ export default {
       .limit(10);
 
     return data.get().then(function(docSnapshots) {
-      // Get the last visible document
       return docSnapshots.docs.map(doc => {
         let data = doc.data();
         data.created_at = new Date(data.created_at.toDate());
@@ -422,7 +446,6 @@ export default {
     return data
       .get()
       .then(function(docSnapshots) {
-        // Get the last visible document
         return docSnapshots.docs.map(doc => {
           let data = doc.data();
           data.created_at = new Date(data.created_at.toDate());
@@ -443,7 +466,6 @@ export default {
       .limit(10);
 
     return data.get().then(function(docSnapshots) {
-      // Get the last visible document
       return docSnapshots.docs.map(doc => {
         let data = doc.data();
         data.created_at = new Date(data.created_at.toDate());
@@ -451,5 +473,181 @@ export default {
         return data;
       });
     });
+  },
+  getCommentsComments(docname, docid, cid) {
+    let data = firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .doc(cid)
+      .collection(COMMENTS)
+      .orderBy("created_at", "asc");
+
+    return data.get().then(function(docSnapshots) {
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        data.created_at = new Date(data.created_at.toDate());
+        data.cid = doc.id;
+        return data;
+      });
+    });
+  },
+  async deleteAtPath(category, path, pathFull) {
+    let item;
+    if (category == "post") item = await firestore.collection(POSTS).doc(path);
+    else if (category == "portfolio")
+      item = await firestore.collection(PORTFOLIOS).doc(path);
+    else if (category == "calendar")
+      item = await firestore.collection("calendar").doc(path);
+    item.delete();
+    var deleteFn = firebase.functions().httpsCallable("recursiveDelete");
+    deleteFn({ path: pathFull })
+      .then(function(result) {})
+      .catch(function(err) {
+        console.warn(err);
+      });
+  },
+  modifyMember(name) {
+    firebase
+      .auth()
+      .currentUser.updateProfile({
+        displayName: name
+      })
+      .then(function() {
+        store.state.userName = name;
+        console.log("update success");
+      })
+      .catch(function(error) {
+        console.log("update error");
+      });
+  },
+  async deleteMember() {
+    var user = firebase.auth().currentUser;
+    let item;
+    item = await firestore.collection(PERM).doc(user.uid);
+    item.delete().then(function() {
+      user
+        .delete()
+        .then(function() {
+          store.commit("loginInfo", {
+            loginCheckVal: false,
+            rankVal: "",
+            userNameVal: "",
+            userEmailVal: ""
+          });
+          alert("회원탈퇴되었습니다.");
+        })
+        .catch(function(error) {
+          console.log("error");
+        });
+    });
+  },
+  passowrdEmail() {
+    firebase.auth().languageCode = "ko";
+    var currentEmail = store.state.userEmail;
+    firebase
+      .auth()
+      .sendPasswordResetEmail(currentEmail)
+      .then(function() {
+        console.log("success");
+      })
+      .catch(function(error) {
+        console.log("error");
+      });
+  },
+  async deleteComment(docname, docid, cid) {
+    let comment = await firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .doc(cid);
+    comment.delete();
+  },
+  async deleteCommentComment(docname, docid, cid, cid2) {
+    let commentcomment = await firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .doc(cid)
+      .collection(COMMENTS)
+      .doc(cid2);
+    commentcomment.delete();
+  },
+  updateComment(docname, docid, cid, text) {
+    var commentRef = firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .doc(cid);
+    return commentRef
+      .update({
+        text: text
+      })
+      .then(function() {})
+      .catch(function(error) {
+        console.error("Error updating Comments: ", error);
+      });
+  },
+  updateCommentComment(docname, docid, cid, cid2, text) {
+    let commentRef = firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .doc(cid)
+      .collection(COMMENTS)
+      .doc(cid2);
+
+    return commentRef
+      .update({ text: text })
+      .then(function() {})
+      .catch(function(error) {
+        console.error("Error updating Comments:", error);
+      });
+  },
+  markDeltedComment(docname, docid, cid) {
+    let commentRef = firestore
+      .collection(docname)
+      .doc(docid)
+      .collection(COMMENTS)
+      .doc(cid);
+
+    return commentRef
+      .update({ deleted: true })
+      .then(function(res) {
+        console.log(res);
+      })
+      .catch(function(error) {
+        console.log("Error updating Comments:" + error);
+      });
+  },
+  postCalendar(email, YYYYMM, event) {
+    return firestore
+      .collection("calendar")
+      .doc(email)
+      .collection(YYYYMM)
+      .add(event);
+  },
+  getCalendar(email, YYYYMM) {
+    let data = firestore
+      .collection("calendar")
+      .doc(email)
+      .collection(YYYYMM);
+
+    return data.get().then(function(docSnapshots) {
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        data.date = new Date(data.date.toDate());
+        data.cid = doc.id;
+        return data;
+      });
+    });
+  },
+  async deleteCalendar(email, YYYYMM, cid) {
+    let comment = await firestore
+      .collection("calendar")
+      .doc(email)
+      .collection(YYYYMM)
+      .doc(cid);
+    comment.delete();
   }
 };

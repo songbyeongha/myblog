@@ -3,9 +3,18 @@
     <v-card flat tile class="flex">
       <v-card-text class="indigo lighten-4">
         <v-layout row wrap>
-          <v-flex xs12 md6 lg6>
+          <v-flex xs12 md3 lg3>
             <span class="body-2">Weather</span>
             <weather></weather>
+          </v-flex>
+          <v-flex xs12 md3 lg3>
+            <span class="body-2">Scehdule Calender</span>
+            <h4>Today</h4>
+            <h4>{{ getDate }}</h4>
+            <v-btn color="blue-grey" class="white--text" to="/calendar">
+              Calendar
+              <v-icon right dark>event_note</v-icon>
+            </v-btn>
           </v-flex>
           <v-flex v-for="(col, i) in rows" :key="i" xs12 md6 lg6>
             <span class="body-2" v-text="col.title.toUpperCase()"></span>
@@ -50,6 +59,11 @@ export default {
   },
   components: {
     weather
+  },
+  computed: {
+    getDate() {
+      return this.$moment(new Date()).format("YYYY-MM-DD HH:mm");
+    }
   }
 };
 </script>

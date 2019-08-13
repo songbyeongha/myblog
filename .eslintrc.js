@@ -5,6 +5,7 @@ module.exports = {
 		"node": true
 	},
 	"extends": [
+		"plugin:airbnb-base",
 		"plugin:prettier/recommended",
 		"plugin:vue/essential"
 	],

@@ -10,7 +10,6 @@
       </div>
     </Modal>
 
-    <!-- 회원가입 모달 -->
     <Modal v-if="this.$store.state.ModalRegis" @close="closeRegis">
       <h3 slot="header">
         회원가입
@@ -23,36 +22,21 @@
               <label>아이디</label>
             </v-flex>
             <v-flex xs8>
-              <input
-                class="inputBox"
-                type="text"
-                v-model="email"
-                placeholder="Email"
-              />
+              <input class="inputBox" type="text" v-model="email" placeholder="Email" />
               <br />
             </v-flex>
             <v-flex xs4 text-xs-center>
               <label>이름</label>
             </v-flex>
             <v-flex xs8>
-              <input
-                class="inputBox"
-                type="text"
-                v-model="name"
-                placeholder="Name"
-              />
+              <input class="inputBox" type="text" v-model="name" placeholder="Name" />
               <br />
             </v-flex>
             <v-flex xs4 text-xs-center>
               <label>비밀번호</label>
             </v-flex>
             <v-flex xs8>
-              <input
-                class="inputBox"
-                type="password"
-                v-model="password"
-                placeholder="Password"
-              />
+              <input class="inputBox" type="password" v-model="password" placeholder="Password" />
             </v-flex>
             <v-flex xs4 text-xs-center>
               <label>비번확인</label>

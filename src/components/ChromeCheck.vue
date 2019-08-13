@@ -9,8 +9,7 @@
       left
       color="alert"
       @click="hide"
-      >해당 사이트는 크롬 브라우저에 최적화 되어있습니다.</v-btn
-    >
+    >해당 사이트는 크롬 브라우저에 최적화 되어있습니다.</v-btn>
   </div>
 </template>
 
@@ -23,12 +22,14 @@ export default {
     };
   },
   created() {
+    let browse = navigator.userAgent.toLowerCase();
     this.isChrome =
-      !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+      (navigator.appName == 'Netscape' && browse.indexOf('trident') != -1) || (browse.indexOf("msie") != -1) || (browse.indexOf("chrome") == -1) || (browse.indexOf("edge") != -1);
+
   },
   computed: {
     notChrome() {
-      return !this.isChrome;
+      return this.isChrome;
     }
   },
   methods: {

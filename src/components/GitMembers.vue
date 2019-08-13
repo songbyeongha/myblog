@@ -2,9 +2,6 @@
   <v-layout column px-4>
     <h2 class="headline mb-5 mx-auto">Information of Members</h2>
     <div style="overflow-x:auto">
-      <!-- <v-flex v-for="i in 4">
-      <p>{{gitmembers[i-1].name}}</p>-->
-      <!-- <Repository :repos="gitmembers[i - 1]"></Repository> -->
       <table>
         <tr>
           <th></th>
@@ -13,7 +10,7 @@
           <th>Role Permission</th>
           <th>Girlab URL</th>
         </tr>
-        <tr v-for="member in gitmembers">
+        <tr v-bind:key="member.id" v-for="member in gitmembers">
           <td>
             <v-img :src="member.avatar_url" class="resize" />
           </td>
@@ -32,7 +29,6 @@
 
 <script>
 import GitlabService from "@/services/GitlabService";
-import GitMembers from "@/components/GitMembers";
 import store from "../store.js";
 export default {
   name: "GitMembers",
@@ -41,9 +37,6 @@ export default {
     return {
       gitmembers: []
     };
-  },
-  components: {
-    GitMembers
   },
   mounted() {
     this.getMembers("7550");
@@ -54,7 +47,6 @@ export default {
       if (response.status !== 200) {
         return;
       }
-
       this.gitmembers = response.data;
       store.state.ModalGitMember = this.gitmembers;
     }

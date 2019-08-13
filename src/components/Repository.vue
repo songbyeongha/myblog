@@ -3,13 +3,11 @@
     <v-layout>
       <v-flex xs12 md12 lg12>
         <h2 class="font-weight-regular header">
-          <a v-bind:href="repos.http_url_to_repo">
-            {{ repos.path_with_namespace }}
-          </a>
+          <a v-bind:href="repos.http_url_to_repo">{{ repos.path_with_namespace }}</a>
         </h2>
-        <p class="subheading mb-1 grey--text text--darken-1 font-weight-light">
-          {{ repos.namespace.name }}
-        </p>
+        <p
+          class="subheading mb-1 grey--text text--darken-1 font-weight-light"
+        >{{ repos.namespace.name }}</p>
       </v-flex>
     </v-layout>
   </div>

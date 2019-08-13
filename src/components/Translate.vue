@@ -1,23 +1,6 @@
 <template>
   <div>
-    <!-- <v-btn
-          fab
-          dark
-          small
-          color="blue"
-          @click="Transmodal"
-        >
-          <v-icon>g_translate</v-icon>
-        </v-btn>
-        <Modal v-if="translateModal" @close="translateModal=false">
-          <h3 slot="header">
-          번역
-          <i class="closeBtn fas fa-times" @click="translateModal = false"></i>
-          </h3>
-    <div slot='body'>-->
     <div id="google_translate_element"></div>
-    <!-- </div>
-    </Modal>-->
   </div>
 </template>
 

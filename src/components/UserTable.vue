@@ -9,19 +9,10 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm12 md12>
-                <v-text-field
-                  :value="editedItem.email"
-                  label="email"
-                  outline
-                  readonly
-                ></v-text-field>
+                <v-text-field :value="editedItem.email" label="email" outline readonly></v-text-field>
               </v-flex>
               <v-flex xs12 sm12 md12>
-                <v-autocomplete
-                  :items="ranks"
-                  v-model="editedItem.rank"
-                  label="Permission"
-                ></v-autocomplete>
+                <v-autocomplete :items="ranks" v-model="editedItem.rank" label="Permission"></v-autocomplete>
               </v-flex>
             </v-layout>
           </v-container>
@@ -33,12 +24,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-data-table
-      :headers="headers"
-      :items="users"
-      hide-actions
-      class="elevation-1"
-    >
+    <v-data-table :headers="headers" :items="users" hide-actions class="elevation-1">
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.email }}</td>
         <td class="text-xs-left">{{ props.item.name }}</td>
@@ -50,10 +36,7 @@
         </td>
       </template>
       <template slot="no-data">
-        <v-progress-circular
-          indeterminate
-          color="primary"
-        ></v-progress-circular>
+        <v-progress-circular indeterminate color="primary"></v-progress-circular>
       </template>
     </v-data-table>
   </div>
