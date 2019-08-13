@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     notChrome() {
-      return !this.isChrome;
+      return this.isChrome;
     }
   },
   methods: {
