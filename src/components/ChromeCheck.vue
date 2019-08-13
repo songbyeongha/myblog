@@ -22,8 +22,10 @@ export default {
     };
   },
   created() {
+    let browse = navigator.userAgent.toLowerCase();
     this.isChrome =
-      !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+      (navigator.appName == 'Netscape' && browse.indexOf('trident') != -1) || (browse.indexOf("msie") != -1) || (browse.indexOf("chrome") == -1) || (browse.indexOf("edge") != -1);
+
   },
   computed: {
     notChrome() {
