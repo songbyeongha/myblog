@@ -106,18 +106,20 @@ export default {
         this.email,
         this.password
       );
-      const res = await FirebaseService.getPermission(result.user.uid);
-      if (!res) {
-        await FirebaseService.postPermission(
-          result.user.uid,
-          "visitor",
-          result.user.email,
-          result.user.displayName,
-          ""
-        );
-        this.$store.state.rank = "visitor";
-      } else {
-        await FirebaseService.updateDeviceToken(result.user.uid);
+      if(result){
+        const res = await FirebaseService.getPermission(result.user.uid);
+        if (!res) {
+          await FirebaseService.postPermission(
+            result.user.uid,
+            "visitor",
+            result.user.email,
+            result.user.displayName,
+            ""
+          );
+          this.$store.state.rank = "visitor";
+        } else {
+          await FirebaseService.updateDeviceToken(result.user.uid);
+        }
       }
       this.loading = false;
     },
