@@ -26,6 +26,17 @@
       :events="events"
       :event-dialog-config="dialogConfig"
     />
+    <cmodal
+      v-if="showModal"
+      :title="selectedEvent.name"
+      :startTime="selectedEvent.startTime"
+      :endTime="selectedEvent.endTime"
+      :comment="selectedEvent.comments"
+      :YYYYMM="makeYYYYMM(selectedEvent.date)"
+      :cid="selectedEvent.cid"
+      @delete="deleteCalendar()"
+      @cancel="showModal = false"
+    ></cmodal>
   </div>
 </template>
 
@@ -34,10 +45,12 @@ import Vue from "vue";
 import VueScheduler from "v-calendar-scheduler";
 import "v-calendar-scheduler/lib/main.css";
 import fbservice from "../services/FirebaseService";
+import cmodal from "../components/CalendarModal";
 
 Vue.use(VueScheduler);
 
 export default {
+  name: "Calendar",
   data() {
     return {
       dialogConfig: {
@@ -56,8 +69,13 @@ export default {
           }
         ]
       },
-      events: []
+      events: [],
+      selectedEvent: null,
+      showModal: false
     };
+  },
+  components: {
+    cmodal
   },
   mounted() {
     this.initialize();
@@ -74,7 +92,11 @@ export default {
     eventDisplay(event) {
       return event.name;
     },
-    eventClicked(event) {},
+    eventClicked(event) {
+      this.selectedEvent = event;
+      this.showModal = true;
+      console.log(event);
+    },
     eventCreated(event) {
       console.log(this.makeYYYYMM(event.date));
       fbservice.postCalendar(
@@ -89,6 +111,10 @@ export default {
     },
     makeYYYYMM(date) {
       return this.$moment(date).format("YYYYMM");
+    },
+    deleteCalendar() {
+      this.initialize();
+      this.showModal = false;
     }
   },
   computed: {
