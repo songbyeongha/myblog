@@ -1,7 +1,6 @@
 <template>
   <div>
     <vue-scheduler
-      @month-changed="monthChanged"
       @event-clicked="eventClicked"
       @event-created="eventCreated"
       locale="kr"
@@ -87,7 +86,6 @@ export default {
         this.$store.state.userEmail,
         YYYYMM
       );
-      console.log(this.events);
     },
     eventDisplay(event) {
       return event.name;
@@ -95,19 +93,14 @@ export default {
     eventClicked(event) {
       this.selectedEvent = event;
       this.showModal = true;
-      console.log(event);
     },
     eventCreated(event) {
-      console.log(this.makeYYYYMM(event.date));
       fbservice.postCalendar(
         this.$store.state.userEmail,
         this.makeYYYYMM(event.date),
         event
       );
       this.initialize();
-    },
-    monthChanged(newDate) {
-      console.log(newDate.getMonth() + 1);
     },
     makeYYYYMM(date) {
       return this.$moment(date).format("YYYYMM");
@@ -131,5 +124,8 @@ export default {
 <style>
 .v-cal-content.v-cal-content--month .v-cal-days .v-cal-day.v-cal-day--month {
   overflow: unset;
+}
+.v-cal-header__actions .actions-right {
+  display: none;
 }
 </style>

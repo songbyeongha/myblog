@@ -59,7 +59,6 @@ export default {
   methods: {
     async loginWithGoogle() {
       this.loading = true;
-      console.log(this.loading);
       const result = await FirebaseService.loginWithGoogle();
       const res = await FirebaseService.getPermission(result.user.uid);
 
