@@ -5,7 +5,7 @@
     </ImgBanner>
     <v-container>
       <v-layout id="gitgraphdata">
-        <GitGraph></GitGraph>
+        <GitGraph class="hidden-sm-and-down"></GitGraph>
       </v-layout>
       <v-layout>
         <GitMembers></GitMembers>
