@@ -60,7 +60,7 @@ export default {
   name: "AboutTeam",
   data() {
     return {
-      cycle: false,
+      cycle: true,
       names: ["6조 My Blog팀", "송병하", "신민석", "윤은솔"],
       comments: [
         "안녕하세요 6조입니다. 점점 팀원들이 사라지네요,,, 남은 팀원끼리 으쌰으쌰 하겠습니다",
