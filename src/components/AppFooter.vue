@@ -1,7 +1,7 @@
 <template>
   <v-footer height="auto">
     <v-card flat tile class="flex">
-      <v-card-text class="indigo lighten-4">
+      <v-card-text class="indigo lighten-4 topPadding">
         <v-layout row wrap>
           <v-flex xs12 md3 lg3>
             <span class="body-2">Weather</span>
@@ -35,7 +35,7 @@
         style="color:white"
       >
         &copy;2019 —
-        <strong>Shin MinSeok</strong>
+        <strong>MinSeok Shin, ByeongHa Song, EunSol Yoon</strong>
       </v-card-actions>
     </v-card>
   </v-footer>
@@ -69,6 +69,9 @@ export default {
 </script>
 
 <style scoped>
+.topPadding {
+  padding-top: 30px;
+}
 @media screen and (max-width: 600px) {
   .layout.column,
   .body-2 {
