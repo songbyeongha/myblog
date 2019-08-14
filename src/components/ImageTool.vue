@@ -82,7 +82,9 @@ export default {
   },
   mounted() {
     this.radioItems.push("Default");
-    if (this.$route.params.mode === "write") {
+    if (!this.$route.params.mode) {
+      this.defaultImg = store.state.bannerImgUrl;
+    } else if (this.$route.params.mode === "write") {
       this.defaultImg = store.state.bannerImgUrl;
     } else {
       this.getImage();
