@@ -1,4 +1,4 @@
-# ssafy
+# myblog
 
 ## Project setup
 ```
