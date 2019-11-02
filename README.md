@@ -1,16 +1,41 @@
-# myblog
+## My Blog Release
 
-## Project setup
-```
-npm install
-```
+소규모 개발팀의 업무와 커뮤니케이션을 도와주기 위한 목적으로 제작 된 사이트입니다.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+저는 주로 1, 2, 3, 4, 7번을 담당하였습니다.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+1. **회원 CURD**
+2. **개인 포트폴리오 기능: 개발자 소개 페이지 CURD**
+3. **포스트 CURD**
+4. 관리자 도구: **사이트 분석도구**(방문자 수, 접속자 수), 회원관리
+5.  Q&A 챗봇
+6. 깃 플로우 차트 시각화
+7. firebase : **push 알람, function trigger,** Cloud Firestore
+
+### 사용된 기술
+
+- 백엔드: **FireBase**(BaaS)
+- 프론트엔드 프레임워크 : **Vue** CLI 3.0, **Vuetify** 1.5.16 
+- 프론트엔드 서버: **NodeJS**
+
+### 프로젝트 상세 기술
+
+- **Firebase**를 사용한 Serverless 방식의 백엔드
+  - NoSQL인 Cloud Firestore를 사용하여 데이터를 주고 받음
+  - Function Trigger를 사용하여 데이터 변경될 시 이벤트 발생
+- PWA(Progressive Web App )
+  - Service Worker 를 사용하여 **오프라인** 상태에서도 캐싱된 데이터로 사이트 이용 가능
+  - 게시글이 등록될 때마다 알림을 허용한 장치들에 한하여 **푸시 알림** 전송
+- 반응형 하이브리드 웹 앱
+  - 프론트 프레임웍인 **Vuetify** 를 사용하여 모바일과 데스크탑에 맞는 CSS 제공
+- 관리자를 위한 대시 보드 제공
+  - **네비게이션 가드**를 사용하여 허가된 사용자만 접근 가능
+  - 회원 정보와 구글 데이터스튜디오를 사용한 **사이트 분석도구**를 제공
+- GitLab 정보 제공
+  - GitLab 커밋 기록과 현재 기여도 를 제공
+- 포트폴리오 기능
+  - 개발자가 개발한 포트폴리오를 마크다운 에디터를 적용하여 올릴 수 있는 포트폴리오 제공
+- 포스트 기능
+  - 개발자간의 소통을 위해 마크다운 에디터를 적용한 포스트 제공
+- Q&A 챗봇
+  - **챗봇 단비**를 사용하여 사이트 안내 서비스 제공
